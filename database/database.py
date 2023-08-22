@@ -1,88 +1,46 @@
-import sqlite3
+import mysql.connector
+from config import Config
 
-class MetadataDB:
-    def __init__(self, db_name='face_metadata.db'):
-        self.db_name = db_name
-        self.conn = sqlite3.connect(self.db_name)
+class Database:
+    def __init__(self):
+        self.conn = mysql.connector.connect(
+            host=Config.db_host,
+            user=Config.db_user,
+            password=Config.db_password,
+            database=Config.db_name
+        )
         self.cursor = self.conn.cursor()
 
-        self.create_tables()
-
-    def create_tables(self):
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS human_locations (
-                id INTEGER PRIMARY KEY,
-                image_path TEXT,
-                x INTEGER,
-                y INTEGER,
-                width INTEGER,
-                height INTEGER
-            )
-        ''')
-
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS face_landmarks (
-                id INTEGER PRIMARY KEY,
-                image_path TEXT,
-                landmark_name TEXT,
-                x INTEGER,
-                y INTEGER
-            )
-        ''')
-
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS face_locations (
-                id INTEGER PRIMARY KEY,
-                image_path TEXT,
-                x INTEGER,
-                y INTEGER,
-                width INTEGER,
-                height INTEGER
-            )
-        ''')
-
+    def insert_face_location(self, image_name, face_location):
+        query = "INSERT INTO face_location (image_name, face_location) VALUES (%s, %s)"
+        values = (image_name, str(face_location))
+        self.cursor.execute(query, values)
         self.conn.commit()
 
-    def insert_human_location(self, image_path, x, y, width, height):
-        query = '''
-            INSERT INTO human_locations (image_path, x, y, width, height)
-            VALUES (?, ?, ?, ?, ?)
-        '''
-        self.cursor.execute(query, (image_path, x, y, width, height))
+    def insert_human_location(self, image_name, boxes, weights):
+        query = "INSERT INTO human_location (image_name, human_location_boxes, human_location_weights) VALUES (%s, %s, %s)"
+        values = (image_name, str(boxes), str(weights))
+        self.cursor.execute(query, values)
         self.conn.commit()
 
-    def insert_face_landmark(self, image_path, landmark_name, x, y):
-        query = '''
-            INSERT INTO face_landmarks (image_path, landmark_name, x, y)
-            VALUES (?, ?, ?, ?)
-        '''
-        self.cursor.execute(query, (image_path, landmark_name, x, y))
+    def insert_face_landmark(self, image_name, landmarks):
+        query = "INSERT INTO face_landmark (image_name, bottom_lip, chin, left_eye, left_eyebrow, nose_bridge, nose_tip, right_eye, right_eyebrow, top_lip) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (
+            image_name,
+            str(landmarks['bottom_lip']),
+            str(landmarks['chin']),
+            str(landmarks['left_eye']),
+            str(landmarks['left_eyebrow']),
+            str(landmarks['nose_bridge']),
+            str(landmarks['nose_tip']),
+            str(landmarks['right_eye']),
+            str(landmarks['right_eyebrow']),
+            str(landmarks['top_lip'])
+        )
+        self.cursor.execute(query, values)
         self.conn.commit()
-
-    def insert_face_location(self, image_path, x, y, width, height):
-        query = '''
-            INSERT INTO face_locations (image_path, x, y, width, height)
-            VALUES (?, ?, ?, ?, ?)
-        '''
-        self.cursor.execute(query, (image_path, x, y, width, height))
-        self.conn.commit()
-
-    def insert_face_location_data(self, image_path, face_locations):
-        for location in face_locations:
-            x, y, w, h = location
-            self.insert_face_location(image_path, x, y, w, h)
-
-    def insert_human_location_data(self, image_path, boxes):
-        for box in boxes:
-            x, y, w, h = box
-            self.insert_human_location(image_path, x, y, w, h)
-
-    def insert_face_landmarks_data(self, image_path, face_landmarks_list):
-        for landmarks in face_landmarks_list:
-            for landmark_name, points in landmarks.items():
-                for point in points:
-                    x, y = point
-                    self.insert_face_landmark(image_path, landmark_name, x, y)
 
     def close_connection(self):
-        self.conn.close()
+        if self.conn.is_connected():
+            self.cursor.close()
+            self.conn.close()
