@@ -10,4 +10,4 @@ class Config:
     db_host ='localhost'
     db_user = 'root'
     db_password = ''
-    db_name = "face_metadata" 
+    db_name = "metadata"
