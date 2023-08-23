@@ -9,7 +9,7 @@ database_router = Blueprint('database_router', __name__)
 # Create instances of the function classes
 human_detector = HumanDetection()
 face_detector = FaceLocationDetection()
-face_landmark_detector = FaceLandmarksDetection()
+face_landmarks_detector = FaceLandmarksDetection()
 
 @database_router.route('/save_face_location', methods=['POST'])
 def save_face_location():
@@ -31,29 +31,36 @@ def save_face_location():
 
 @database_router.route('/save_human_location', methods=['POST'])
 def save_human_location():
-    human_location_boxes, human_location_weights = human_detector.humanlocation()
-    db = Database()
     image_path = request.args.get('img_path')  # Get the image path from query parameter
     if image_path is None:
         return jsonify({'error': 'img_path parameter is missing'}), 400
     img_name = os.path.basename(image_path)
-    db.insert_human_location(img_name, human_location_boxes, human_location_weights)
-    db.close_connection()
 
+    # Load the image file using PIL
+    with open(image_path, 'rb') as img_file:
+        human_detector.image_path = image_path  # Pass the image path instead of the file object
+        human_boxes, human_weights = human_detector.humanlocation()
+
+    db = Database()
+    db.insert_human_location(img_name, human_boxes, human_weights)
+    db.close_connection()
     return jsonify({"message": f"Human location metadata of {img_name} saved successfully"})
 
+
+# Route to save face landmark metadata
 @database_router.route('/save_face_landmark', methods=['POST'])
 def save_face_landmark():
-    face_landmarks = face_landmark_detector.facelandmarks()
-    db = Database()
     image_path = request.args.get('img_path')  # Get the image path from query parameter
     if image_path is None:
         return jsonify({'error': 'img_path parameter is missing'}), 400
     img_name = os.path.basename(image_path)
+
+    # Load the image file using PIL
+    with open(image_path, 'rb') as img_file:
+        face_landmarks_detector.image_path = img_file
+        face_landmarks = face_landmarks_detector.facelandmarks()
+
+    db = Database()
     db.insert_face_landmark(img_name, face_landmarks)
     db.close_connection()
-
     return jsonify({"message": f"Face landmark metadata of {img_name} saved successfully"})
-
-
-
