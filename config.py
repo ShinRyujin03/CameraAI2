@@ -1,6 +1,6 @@
 import os
 class Config:
-    img_path = "/Users/macbookairm1/Desktop/K-Pop/IU/pic/IU.PNG"
+    img_path = " "
     img_name = os.path.basename(img_path)
     # host and port
     host = '0.0.0.0'

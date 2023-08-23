@@ -1,9 +1,9 @@
 import face_recognition
-from config import Config
-from database.database import Database
+import os
 class FaceLocationDetection:
     def __init__(self):
-        self.image_path = Config.img_path
+        self.image_path = ''
+        self.img_name = os.path.basename(self.image_path)
 
     def facelocation(self):
         image = face_recognition.load_image_file(self.image_path)
