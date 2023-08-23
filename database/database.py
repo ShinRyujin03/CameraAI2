@@ -23,21 +23,33 @@ class Database:
         self.cursor.execute(query, values)
         self.conn.commit()
 
-    def insert_face_landmark(self, image_name, landmarks):
-        query = "INSERT INTO face_landmark (image_name, bottom_lip, chin, left_eye, left_eyebrow, nose_bridge, nose_tip, right_eye, right_eyebrow, top_lip) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        values = (
-            image_name,
-            str(landmarks['bottom_lip']),
-            str(landmarks['chin']),
-            str(landmarks['left_eye']),
-            str(landmarks['left_eyebrow']),
-            str(landmarks['nose_bridge']),
-            str(landmarks['nose_tip']),
-            str(landmarks['right_eye']),
-            str(landmarks['right_eyebrow']),
-            str(landmarks['top_lip'])
-        )
-        self.cursor.execute(query, values)
+    def insert_face_landmark(self, image_name, landmarks_data):
+        for landmarks in landmarks_data:
+            bottom_lip = str(landmarks.get('bottom_lip'))
+            chin = str(landmarks.get('chin'))
+            left_eye = str(landmarks.get('left_eye'))
+            left_eyebrow = str(landmarks.get('left_eyebrow'))
+            nose_bridge = str(landmarks.get('nose_bridge'))
+            nose_tip = str(landmarks.get('nose_tip'))
+            right_eye = str(landmarks.get('right_eye'))
+            right_eyebrow = str(landmarks.get('right_eyebrow'))
+            top_lip = str(landmarks.get('top_lip'))
+
+            query = "INSERT INTO face_landmark (image_name, bottom_lip, chin, left_eye, left_eyebrow, nose_bridge, nose_tip, right_eye, right_eyebrow, top_lip) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            values = (
+                image_name,
+                bottom_lip,
+                chin,
+                left_eye,
+                left_eyebrow,
+                nose_bridge,
+                nose_tip,
+                right_eye,
+                right_eyebrow,
+                top_lip
+            )
+
+            self.cursor.execute(query, values)
         self.conn.commit()
 
     def close_connection(self):
