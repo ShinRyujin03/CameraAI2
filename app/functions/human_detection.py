@@ -1,20 +1,19 @@
 import cv2
-import os
+import numpy as np
+
 class HumanDetection:
     def __init__(self):
-        self.image_path = ''
-        self.img_name = os.path.basename(self.image_path)
+        self.image_data = None
+
     def humanlocation(self):
-        # initialize the HOG descriptor/person detector
         hog = cv2.HOGDescriptor()
         hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-        image = cv2.imread(self.image_path)
-        # using a greyscale picture, also for faster detection
-        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
-        # detect people in the image
-        # returns the bounding boxes for the detected objects
-        boxes, weights = hog.detectMultiScale(image, winStride=(8, 8))
+        # Convert image data to numpy array
+        image_np = np.frombuffer(self.image_data, np.uint8)
+        image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        boxes, weights = hog.detectMultiScale(gray, winStride=(8, 8), padding=(16, 16))
 
         # Filter the results based on weights >= 0.5
         filtered_boxes = []
@@ -25,4 +24,3 @@ class HumanDetection:
                 filtered_weights.append(weight)
 
         return filtered_boxes, filtered_weights
-
