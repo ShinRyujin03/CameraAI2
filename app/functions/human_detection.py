@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from config import Config
 class HumanDetection:
     def __init__(self):
         self.image_data = None
@@ -19,7 +19,7 @@ class HumanDetection:
         filtered_boxes = []
         filtered_weights = []
         for box, weight in zip(boxes, weights):
-            if weight >= 0.5:
+            if weight >= Config.detection_weights:
                 filtered_boxes.append(box.tolist())
                 filtered_weights.append(weight)
 

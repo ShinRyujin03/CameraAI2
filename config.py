@@ -1,7 +1,6 @@
 import os
 class Config:
-    img_path = " "
-    img_name = os.path.basename(img_path)
+    detection_weights = 0.5
     # host and port
     host = '0.0.0.0'
     port = 1102
