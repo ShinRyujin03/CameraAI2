@@ -1,4 +1,4 @@
-from routers.functions_routers import functions_router
+from app.routers.functions_routers import functions_router
 from flask import Flask
 from config import Config
 app = Flask(__name__)
