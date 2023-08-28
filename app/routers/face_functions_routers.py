@@ -1,3 +1,6 @@
+from app.handle import db_error
+from app.handle.app_error import *
+from app.handle.db_error import *
 from flask import Blueprint, jsonify, request
 from werkzeug.utils import secure_filename
 from schema import SchemaError
@@ -38,6 +41,10 @@ def get_face_landmarks():
     except SchemaError as e:
         error_msg = str(e)
         return jsonify({'error': error_msg}), 400
+    except DatabaseError as e:
+        return db_error.handle_database_error(e)
+    except Exception as e:
+        return handle_generic_error(e)
 
 # Route for face location
 @face_router.route('/face_location', methods=['POST'])
@@ -66,3 +73,7 @@ def get_face_location():
     except SchemaError as e:
         error_msg = str(e)
         return jsonify({'error': error_msg}), 400
+    except DatabaseError as e:
+        return db_error.handle_database_error(e)
+    except Exception as e:
+        return handle_generic_error(e)
