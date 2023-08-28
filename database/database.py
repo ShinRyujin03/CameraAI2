@@ -1,5 +1,5 @@
 import mysql.connector
-from config import Config
+from app.config.db_config import Config
 
 class Database:
     def __init__(self):
