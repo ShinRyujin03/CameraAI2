@@ -1,5 +1,5 @@
 from app.routers.face_functions_routers import face_router
-from app.routers.object_function_routers import objects_router
+from app.routers.human_detection_routers import objects_router
 from flask import Flask,jsonify
 from app.config.db_config import Config
 from app.handle.app_error import handle_generic_error

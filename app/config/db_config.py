@@ -1,5 +1,4 @@
-import os
-class Config:
+class DB_config:
     # host and port
     host = '0.0.0.0'
     port = 1102

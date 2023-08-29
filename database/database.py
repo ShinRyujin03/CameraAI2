@@ -1,13 +1,13 @@
 import mysql.connector
-from app.config.db_config import Config
+from app.config.db_config import DB_config
 
 class Database:
     def __init__(self):
         self.conn = mysql.connector.connect(
-            host=Config.db_host,
-            user=Config.db_user,
-            password=Config.db_password,
-            database=Config.db_name
+            host=DB_config.db_host,
+            user=DB_config.db_user,
+            password=DB_config.db_password,
+            database=DB_config.db_name
         )
         self.cursor = self.conn.cursor()
 
