@@ -15,16 +15,16 @@ landmarks_detector = FaceLandmarksDetection()
 # Route for face landmarks
 @face_router.route('/face_landmarks', methods=['POST'])
 def get_face_landmarks():
-    try:
-        image_file = request.files['image']  # Access the uploaded file
-        if not image_file:
-            raise NoImageError
+    image_file = request.files['image']  # Access the uploaded file
+    if not image_file:
+        raise NoImageError
 
-        # Check if the uploaded file has a valid image extension
-        allowed_extensions = Face_config.path
-        filename, extension = os.path.splitext(image_file.filename)
-        if extension[1:].lower() not in allowed_extensions:
-            raise InvalidImageError
+    # Check if the uploaded file has a valid image extension
+    allowed_extensions = Face_config.path
+    filename, extension = os.path.splitext(image_file.filename)
+    if extension[1:].lower() not in allowed_extensions:
+        raise InvalidImageError
+    try:
         # Read the image data from the file
         image_data = image_file.read()
         image_name = secure_filename(image_file.filename)
@@ -49,16 +49,16 @@ def get_face_landmarks():
 # Route for face location
 @face_router.route('/face_location', methods=['POST'])
 def get_face_location():
-    try:
-        image_file = request.files['image']  # Access the uploaded file
-        if not image_file:
-            raise NoImageError
+    image_file = request.files['image']  # Access the uploaded file
+    if not image_file:
+        raise NoImageError
 
-        # Check if the uploaded file has a valid image extension
-        allowed_extensions = Face_config.path
-        filename, extension = os.path.splitext(image_file.filename)
-        if extension[1:].lower() not in allowed_extensions:
-            raise InvalidImageError
+    # Check if the uploaded file has a valid image extension
+    allowed_extensions = Face_config.path
+    filename, extension = os.path.splitext(image_file.filename)
+    if extension[1:].lower() not in allowed_extensions:
+        raise InvalidImageError
+    try:
         # Read the image data from the file
         image_data = image_file.read()
         image_name = secure_filename(image_file.filename)

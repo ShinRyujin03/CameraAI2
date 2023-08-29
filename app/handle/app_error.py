@@ -8,7 +8,7 @@ class AppError(Exception):
 class CustomError:
     INVALID_IMAGE = {'code': "i01", 'message': 'Invalid image file format'}
     NO_IMAGE = {'code': "i02", 'message': 'No image file uploaded'}
-    DATABASE_IS_NONE = {'code': "d01", 'message': 'Can not connect database'}
+    DATABASE_IS_NONE = {'code': "d01", 'message': 'Can not connect to thw database'}
     # Add more custom errors as needed
 
 class InvalidImageError(AppError):

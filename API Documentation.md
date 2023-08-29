@@ -46,47 +46,74 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected human locations.
 
-## Model Library
+## Model - Library
+### Face detection and face landmarks detection
 - **Library name**: face-recognition
 - **Version**: 1.3.0
 - **Install command line**: `pip install face-recognition`
-- **Library Project description**: https://pypi.org/project/face-recognition/
+- **import syntax** :`import face_recognition`
+- **Project documentation**: https://pypi.org/project/face-recognition/
 
+### Human detection
+- **Model name**:YOLO
+- **Version**: v8 nano
+- **Install command line**: `pip install ltralytics` 
+- **import syntax** :`from ultralytics import YOLO`
+- **Project documentation**: https://docs.ultralytics.com/
 ## Endpoints
 
 ### Human Detection
-- **Endpoint**: `/functions/human_location`
+- **Endpoint**: `/objects/human_location`
 - **Data**: `image`
 - **Method**: POST
 - **Description**: Detect human locations in images and save metadata to the database.
 - **Response**: List of detected human locations.
 
 ### Face Location
-- **Endpoint**: `/functions/face_location`
+- **Endpoint**: `/face/face_location`
 - **Data**: `image`
 - **Method**: POST
 - **Description**: Detect face locations in images and save metadata to the database.
 - **Response**: List of detected face locations.
 
 ### Face Landmarks
-- **Endpoint**: `/functions/face_landmarks`
+- **Endpoint**: `/face/face_landmarks`
 - **Data**: `image`
 - **Method**: POST
 - **Description**: Encode face landmarks to an array and save metadata to the database.
 - **Response**: List of encoded face landmarks.
 
+## Error Handle
+### Image code status - iXX
+- **INVALID_IMAGE** 
+  - Code: "i01"
+  - message: Invalid image file format
+- **NO_IMAGE**
+  - Code: "i02"
+  - 'message': No image file uploaded
+### Database code status - dXX
+- **DATABASE_IS_NONE**
+  - Code: "d01"
+  - 'message': Can not connect to thw database
 ## Usage
 
 ### Human Detection
 - To detect human locations, upload the `image` and make a POST request to `/functions/human_location`. The metadata will save in the `human_location Table`
-
+- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result=3`)
+- You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 ### Face Location
 - To detect face locations, upload the `image` and make a POST request to `/functions/face_location`. The metadata will save in the `face_location Table`
 
 ### Face Landmarks
 - To encode face landmarks, upload the `image` and make a POST request to `/functions/face_landmarks`. The metadata will save in the `face_landmarks Table`
-## Variables
+
+
+## Variables with default values
 - `baseUrl`: `http://localhost:1102`
 - `db_host` = `localhost`
 - `db_user` = `root`
 - `db_name` = `metadata`
+- `path` = `{'png', 'jpg', 'jpeg'}`
+- `model_path` = `cameraAI2/model/yolov8n.pt` 
+- `round_result` = `3` 
+- `label_class` = `0`
