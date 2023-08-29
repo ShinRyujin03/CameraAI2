@@ -1,12 +1,11 @@
 from flask import Blueprint, jsonify, request
 from werkzeug.utils import secure_filename
-from schema import SchemaError
 import cv2
 import numpy as np
 from ultralytics import YOLO
 from database.database import Database
-import os
-from app.handle.app_error import InvalidImageError, NoImageError,DatabaseNoneError
+from app.camera_schema import *
+from app.handle.app_error import DatabaseNoneError
 from app.config.human_detection_config import Human_config
 objects_router = Blueprint('object_router', __name__)
 
@@ -42,33 +41,26 @@ class HumanDetection:
 def get_human_location():
     human_detector = HumanDetection()
     image_file = request.files['image']  # Access the uploaded file
-    if not image_file:
-        raise NoImageError
+    if schema_test(image_file) == True:
+        try:
+            # Read the image data from the file
+            image_data = image_file.read()
+            image_name = secure_filename(image_file.filename)
 
-    # Check if the uploaded file has a valid image extension
-    allowed_extensions = Human_config.path
-    filename, extension = os.path.splitext(image_file.filename)
-    if extension[1:].lower() not in allowed_extensions:
-        raise InvalidImageError
-    try:
-        # Read the image data from the file
-        image_data = image_file.read()
-        image_name = secure_filename(image_file.filename)
+            # Process the image using human_detector
+            human_detector.image_data = image_data
+            detected_boxes, detected_weights = human_detector.humanlocation()
 
-        # Process the image using human_detector
-        human_detector.image_data = image_data
-        detected_boxes, detected_weights = human_detector.humanlocation()
-
-        # You can return the results as needed
-        result = {
-            'image_name': image_name,
-            'detections': [{'box': box, 'weight': weight} for box, weight in
-                           zip(detected_boxes, detected_weights)]
-        }
-        db = Database()
-        db.insert_human_location(image_name, detected_boxes, detected_weights)
-        db.close_connection()
-    except:
-        raise DatabaseNoneError()
-    else:
-        return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+            # You can return the results as needed
+            result = {
+                'image_name': image_name,
+                'detections': [{'box': box, 'weight': weight} for box, weight in
+                               zip(detected_boxes, detected_weights)]
+            }
+            db = Database()
+            db.insert_human_location(image_name, detected_boxes, detected_weights)
+            db.close_connection()
+        except:
+            raise DatabaseNoneError()
+        else:
+            return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
