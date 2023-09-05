@@ -21,20 +21,9 @@ class FaceLocationDetection:
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         face_locations = face_recognition.face_locations(image)
         return face_locations
-class FaceLandmarksDetection:
-    def __init__(self):
-        self.image_data = None
 
-    def facelandmarks(self):
-        image_np = np.frombuffer(self.image_data, np.uint8)
-        image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-        face_landmarks_list = face_recognition.face_landmarks(image)
-        return face_landmarks_list
-# Route for face location
-@face_router.route('/face_location', methods=['POST'])
-def get_face_location():
+    def get_face_location(self,image_file):
         face_detector = FaceLocationDetection()
-        image_file = request.files['image']  # Access the uploaded file
         if schema_test(image_file) == True:
             try:
                 # Read the image data from the file
@@ -57,13 +46,18 @@ def get_face_location():
                 raise DatabaseNoneError
             else:
                 return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+class FaceLandmarksDetection:
+    def __init__(self):
+        self.image_data = None
 
+    def facelandmarks(self):
+        image_np = np.frombuffer(self.image_data, np.uint8)
+        image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+        face_landmarks_list = face_recognition.face_landmarks(image)
+        return face_landmarks_list
 
-# Route for face landmarks
-@face_router.route('/face_landmarks', methods=['POST'])
-def get_face_landmarks():
+    def get_face_landmarks(self,image_file):
         landmarks_detector = FaceLandmarksDetection()
-        image_file = request.files['image']  # Access the uploaded file
         if schema_test(image_file) == True:
             try:
                 # Read the image data from the file
@@ -85,4 +79,19 @@ def get_face_landmarks():
                 raise DatabaseNoneError
             else:
                 return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
+# Route for face location
+@face_router.route('/face_location', methods=['POST'])
+def request_face_location():
+    image_file = request.files['image']  # Access the uploaded file
+    face_detector = FaceLocationDetection()
+    face_result = face_detector.get_face_location(image_file)
+    return face_result
+
+# Route for face landmarks
+@face_router.route('/face_landmarks', methods=['POST'])
+def request_face_landmarks():
+    image_file = request.files['image']  # Access the uploaded file
+    face_landmarks = FaceLandmarksDetection()
+    landmarks_result = face_landmarks.get_face_landmarks(image_file)
+    return landmarks_result
 
