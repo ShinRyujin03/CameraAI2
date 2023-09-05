@@ -41,7 +41,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT, NOT NULL, Primary Key
   - `image_name`: VARCHAR(255), NOT NULL
-  - `human_location_boxes`: VARCHAR(255), NOT NULL
+  - `human_location_boxes`: VARCHAR(500), NOT NULL
   - `human_location_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected human locations.
