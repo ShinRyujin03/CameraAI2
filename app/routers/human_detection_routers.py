@@ -36,37 +36,31 @@ class HumanDetection:
 
         return detected_boxes, detected_weights
 
-    def get_human_location(self, image_file):
-        human_detector = HumanDetection()
-        if schema_test(image_file) == True:
-            try:
-                # Read the image data from the file
-                image_data = image_file.read()
-                image_name = secure_filename(image_file.filename)
-
-                # Process the image using human_detector
-                human_detector.image_data = image_data
-                detected_boxes, detected_weights = human_detector.humanlocation()
-
-                # You can return the results as needed
-                result = {
-                    'image_name': image_name,
-                    'detections': [{'box': box, 'weight': weight} for box, weight in
-                                   zip(detected_boxes, detected_weights)]
-                }
-                db = Database()
-                db.insert_human_location(image_name, detected_boxes, detected_weights)
-                db.close_connection()
-            except:
-                raise DatabaseNoneError()
-            else:
-                return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
-
 
 @objects_router.route('/human_location', methods=['POST'])
-def request_human_location():
+def get_human_location():
+    human_detector = HumanDetection()
     image_file = request.files['image']  # Access the uploaded file
-    human_location = HumanDetection()
-    human_result = human_location.get_human_location(image_file)
-    return human_result
+    if schema_test(image_file) == True:
+        try:
+            # Read the image data from the file
+            image_data = image_file.read()
+            image_name = secure_filename(image_file.filename)
 
+            # Process the image using human_detector
+            human_detector.image_data = image_data
+            detected_boxes, detected_weights = human_detector.humanlocation()
+
+            # You can return the results as needed
+            result = {
+                'image_name': image_name,
+                'detections': [{'box': box, 'weight': weight} for box, weight in
+                               zip(detected_boxes, detected_weights)]
+            }
+            db = Database()
+            db.insert_human_location(image_name, detected_boxes, detected_weights)
+            db.close_connection()
+        except:
+            raise DatabaseNoneError()
+        else:
+            return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
