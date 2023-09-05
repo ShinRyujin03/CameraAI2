@@ -38,7 +38,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Description**: Stores information about detected face landmarks.
 
 ### human_location Table
-- **Fields**:
+                        - **Fields**:
   - `id`: INT, NOT NULL, Primary Key
   - `image_name`: VARCHAR(255), NOT NULL
   - `human_location_boxes`: VARCHAR(500), NOT NULL

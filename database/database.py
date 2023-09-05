@@ -1,13 +1,24 @@
 import mysql.connector
-from app.config.db_config import DB_config
+import configparser
+import os
+
+
+# Get the current directory of your script
+script_directory = os.path.dirname(os.path.realpath("config/config.ini"))
+
+# Construct the relative path to config.ini
+config_path = os.path.join(script_directory,'config.ini')
+# Create a configuration object
+config = configparser.ConfigParser()
+config.read(config_path)
 
 class Database:
     def __init__(self):
         self.conn = mysql.connector.connect(
-            host=DB_config.db_host,
-            user=DB_config.db_user,
-            password=DB_config.db_password,
-            database=DB_config.db_name
+            host=config.get('db_config', 'db_host'),
+            user=config.get('db_config', 'db_user'),
+            password=config.get('db_config', 'db_password'),
+            database=config.get('db_config', 'db_name')
         )
         self.cursor = self.conn.cursor()
 
