@@ -16,7 +16,7 @@ def schema_test(image_file):
         raise NoImageError
     else:
         # Check if the uploaded file has a valid image extension
-        allowed_extensions = config.get('face_function_config', 'path')
+        allowed_extensions = config.get('function_config', 'path')
         filename, extension = os.path.splitext(image_file.filename)
         if extension[1:].lower() not in allowed_extensions:
             raise InvalidImageError

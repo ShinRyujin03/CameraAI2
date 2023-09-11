@@ -38,7 +38,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Description**: Stores information about detected face landmarks.
 
 ### human_location Table
-                        - **Fields**:
+- **Fields**:
   - `id`: INT, NOT NULL, Primary Key
   - `image_name`: VARCHAR(255), NOT NULL
   - `human_location_boxes`: VARCHAR(500), NOT NULL
@@ -60,8 +60,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Install command line**: `pip install ltralytics` 
 - **import syntax** :`from ultralytics import YOLO`
 - **Project documentation**: https://docs.ultralytics.com/
-## Endpoints
 
+## Endpoints
 ### Human Detection
 - **Endpoint**: `/objects/human_location`
 - **Data**: `image`
@@ -86,17 +86,24 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ## Error Handle
 ### Image code status - iXX
 - **INVALID_IMAGE** 
+  - HTTP Code: `415 Unsupported Media Type`
   - Code: "i01"
-  - message: Invalid image file format
+  - Message: Invalid image file format
 - **NO_IMAGE**
+  - HTTP Code: `404 Not Found`
   - Code: "i02"
-  - 'message': No image file uploaded
+  - Message: No image file uploaded
+- **NO_DETECTION**
+  - HTTP Code: `404 Not Found`
+  - Code: "i03" 
+  - Message: Nothing was detected
 ### Database code status - dXX
 - **DATABASE_IS_NONE**
+  - HTTP Code: `503 Service Unavailable`
   - Code: "d01"
-  - 'message': Can not connect to thw database
-## Usage
+  - Message: Can not connect to thw database
 
+## Usage
 ### Human Detection
 - To detect human locations, upload the `image` and make a POST request to `/functions/human_location`. The metadata will save in the `human_location Table`
 - Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result=3`)
@@ -107,13 +114,19 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Landmarks
 - To encode face landmarks, upload the `image` and make a POST request to `/functions/face_landmarks`. The metadata will save in the `face_landmarks Table`
 
+## Config
+### [db_config]
+- host = 0.0.0.0
+- port = 1102
+- db_host = localhost
+- db_user = root
+- db_password = []
+- db_name = metadata
 
-## Variables with default values
-- `baseUrl`: `http://localhost:1102`
-- `db_host` = `localhost`
-- `db_user` = `root`
-- `db_name` = `metadata`
-- `path` = `{'png', 'jpg', 'jpeg'}`
-- `model_path` = `cameraAI2/model/yolov8n.pt` 
-- `round_result` = `3` 
-- `label_class` = `0`
+### [function_config]
+- path = png, jpg, jpeg
+
+### [human_detection_config]
+- model_path = /Users/macbookairm1/Desktop/Viettel/cameraAI2/model/yolov8n.pt
+- round_result = 3
+- label_class = 0
