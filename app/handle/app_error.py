@@ -8,9 +8,12 @@ class AppError(Exception):
 class CustomError:
     INVALID_IMAGE = {'code': "i01", 'message': 'Invalid image file format'}
     NO_IMAGE = {'code': "i02", 'message': 'No image file uploaded'}
-    DATABASE_IS_NONE = {'code': "d01", 'message': 'Can not connect to thw database'}
+    NO_DETECTION = {'code': "i03", 'message': 'Nothing was detected'}
+    DATABASE_IS_NONE = {'code': "d01", 'message': 'Can not connect to the database'}
     # Add more custom errors as needed
-
+class NoDetection(AppError):
+    def __init__(self):
+        super().__init__(CustomError.NO_DETECTION['message'], CustomError.NO_DETECTION['code'])
 class InvalidImageError(AppError):
     def __init__(self):
         super().__init__(CustomError.INVALID_IMAGE['message'], CustomError.INVALID_IMAGE['code'])
@@ -23,4 +26,9 @@ class DatabaseNoneError(AppError):
         super().__init__(CustomError.DATABASE_IS_NONE['message'], CustomError.DATABASE_IS_NONE['code'])
 def handle_generic_error(error):
     response = {'error': error.args[0], 'status_code': getattr(error, 'status_code', 500)}
-    return jsonify(response)
+    if error.args[0] == 'No image file uploaded' or error.args[0] == 'Nothing was detected':
+        return jsonify(response), 404
+    elif error.args[0] == 'Invalid image file format':
+        return jsonify(response), 415
+    elif error.args[0] == 'Can not connect to the database':
+        return jsonify(response), 503

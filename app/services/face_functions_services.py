@@ -5,7 +5,7 @@ from database.database import Database
 import face_recognition
 import cv2
 import numpy as np
-from app.handle.app_error import DatabaseNoneError
+from app.handle.app_error import DatabaseNoneError, NoDetection
 class FaceLocationDetection:
     def __init__(self):
         self.image_data = None
@@ -26,7 +26,6 @@ class FaceLocationDetection:
                 # Process the image using face_detector
                 face_detector.image_data = image_data
                 face_locations = face_detector.facelocation()
-
                 # Create a response object
                 result = {
                     'image_name': image_name,
@@ -34,12 +33,15 @@ class FaceLocationDetection:
                 }
                 # Return the response before attempting database operations
                 db = Database()
-                db.insert_face_location(image_name, face_locations)
-                db.close_connection()
             except:
                 raise DatabaseNoneError
             else:
-                return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                if len(face_locations) == 0:
+                    raise NoDetection
+                else:
+                    db.insert_face_location(image_name, face_locations)
+                    db.close_connection()
+                    return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
 class FaceLandmarksDetection:
     def __init__(self):
         self.image_data = None
@@ -67,9 +69,12 @@ class FaceLandmarksDetection:
                     'landmarks': landmarks
                 }
                 db = Database()
-                db.insert_face_landmark(image_name, landmarks)
-                db.close_connection()
             except:
                 raise DatabaseNoneError
             else:
-                return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
+                if len(landmarks) == 0:
+                    raise NoDetection
+                else:
+                    db.insert_face_landmark(image_name, landmarks)
+                    db.close_connection()
+                    return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
