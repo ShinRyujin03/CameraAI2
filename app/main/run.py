@@ -5,7 +5,6 @@ import configparser
 from app.handle.app_error import handle_generic_error
 import os
 
-
 # Get the current directory of your script
 script_directory = os.path.dirname(os.path.realpath("config/config.ini"))
 
@@ -21,8 +20,8 @@ app = Flask(__name__)
 app.register_error_handler(Exception, handle_generic_error)
 
 # Register the funtion_router blueprint
-app.register_blueprint(face_router, url_prefix='/face')
-app.register_blueprint(objects_router, url_prefix='/objects')
+app.register_blueprint(face_router, url_prefix=config.get('function_config', 'face_prefix'))
+app.register_blueprint(objects_router, url_prefix= config.get('function_config', 'objects_prefix'))
 if __name__ == '__main__':
     host = config.get('db_config', 'host')
     port = config.getint('db_config', 'port')

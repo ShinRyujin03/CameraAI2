@@ -31,7 +31,6 @@ class FaceLocationDetection:
                     'image_name': image_name,
                     'face_locations': face_locations
                 }
-                # Return the response before attempting database operations
                 db = Database()
             except:
                 raise DatabaseNoneError

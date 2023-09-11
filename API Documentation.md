@@ -63,21 +63,24 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 
 ## Endpoints
 ### Human Detection
-- **Endpoint**: `/objects/human_location`
+- **Prefix**:`/objects`
+- **Endpoint**: `/human_location`
 - **Data**: `image`
 - **Method**: POST
 - **Description**: Detect human locations in images and save metadata to the database.
 - **Response**: List of detected human locations.
 
 ### Face Location
-- **Endpoint**: `/face/face_location`
+- **Prefix**:`/face`
+- **Endpoint**: `/face_location`
 - **Data**: `image`
 - **Method**: POST
 - **Description**: Detect face locations in images and save metadata to the database.
 - **Response**: List of detected face locations.
 
 ### Face Landmarks
-- **Endpoint**: `/face/face_landmarks`
+- **Prefix**:`/face`
+- **Endpoint**: `/face_landmarks`
 - **Data**: `image`
 - **Method**: POST
 - **Description**: Encode face landmarks to an array and save metadata to the database.
@@ -105,14 +108,14 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 
 ## Usage
 ### Human Detection
-- To detect human locations, upload the `image` and make a POST request to `/functions/human_location`. The metadata will save in the `human_location Table`
+- To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. The metadata will save in the `human_location Table`
 - Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result=3`)
 - You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 ### Face Location
-- To detect face locations, upload the `image` and make a POST request to `/functions/face_location`. The metadata will save in the `face_location Table`
+- To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`. The metadata will save in the `face_location Table`
 
 ### Face Landmarks
-- To encode face landmarks, upload the `image` and make a POST request to `/functions/face_landmarks`. The metadata will save in the `face_landmarks Table`
+- To encode face landmarks, upload the `image` and make a POST request to `{prefix}` `face_landmarks`. The metadata will save in the `face_landmarks Table`
 
 ## Config
 ### [db_config]
@@ -125,7 +128,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 
 ### [function_config]
 - path = png, jpg, jpeg
-
+- face_prefix = /face
+- objects_prefix = /objects
 ### [human_detection_config]
 - model_path = /Users/macbookairm1/Desktop/Viettel/cameraAI2/model/yolov8n.pt
 - round_result = 3
