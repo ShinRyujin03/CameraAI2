@@ -131,6 +131,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - face_prefix = /face
 - objects_prefix = /objects
 ### [human_detection_config]
-- model_path = /Users/macbookairm1/Desktop/Viettel/cameraAI2/model/yolov8n.pt
+- model_path = model/yolov8n.pt
 - round_result = 3
 - label_class = 0
