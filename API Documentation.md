@@ -10,7 +10,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Database Host**: localhost or 127.0.0.1
 - **Database Name**: metadata
 - **Database User**: root
-- **Database Password**: No password require
+- **Database Password**: No password required
 
 ## Database Tables
 ### face_location Table
@@ -50,15 +50,15 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face detection and face landmarks detection
 - **Library name**: face-recognition
 - **Version**: 1.3.0
-- **Install command line**: `pip install face-recognition`
-- **import syntax** :`import face_recognition`
+- **Install command line**:`pip install face-recognition`
+- **import syntax**:`import face_recognition`
 - **Project documentation**: https://pypi.org/project/face-recognition/
 
 ### Human detection
-- **Model name**:YOLO
+- **Model name**: YOLO
 - **Version**: v8 nano
-- **Install command line**: `pip install ltralytics` 
-- **import syntax** :`from ultralytics import YOLO`
+- **Install command line**:`pip install ultralytics` 
+- **import syntax**:`from ultralytics import YOLO`
 - **Project documentation**: https://docs.ultralytics.com/
 
 ## Endpoints
@@ -109,13 +109,13 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ## Usage
 ### Human Detection
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. The metadata will save in the `human_location Table`
-- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result=3`)
+- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
 - You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 ### Face Location
 - To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`. The metadata will save in the `face_location Table`
 
 ### Face Landmarks
-- To encode face landmarks, upload the `image` and make a POST request to `{prefix}` `face_landmarks`. The metadata will save in the `face_landmarks Table`
+- To encode face landmarks, upload the `image` and make a POST request to `{prefix}` `/face_landmarks`. The metadata will save in the `face_landmarks Table`
 
 ## Config
 ### [db_config]
