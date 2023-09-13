@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 from database.database import Database
-from app.camera_schema import *
+from app.schema.image_schema import *
 from app.handle.app_error import DatabaseNoneError, NoDetection
 import configparser
 

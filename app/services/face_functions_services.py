@@ -1,6 +1,6 @@
 from flask import jsonify
 from werkzeug.utils import secure_filename
-from app.camera_schema import *
+from app.schema.image_schema import *
 from database.database import Database
 import face_recognition
 import cv2

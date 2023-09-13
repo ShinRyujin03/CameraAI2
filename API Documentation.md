@@ -61,6 +61,11 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **import syntax**:`from ultralytics import YOLO`
 - **Project documentation**: https://docs.ultralytics.com/
 
+## Schema
+- **Datafield**: `image`(str)
+- **Datatype**: `png`, `jpg`, `jpeg`(str) - Can be config in `config.ini`
+- **Mandatory**: `True` (bool)
+
 ## Endpoints
 ### Human Detection
 - **Prefix**:`/objects`
