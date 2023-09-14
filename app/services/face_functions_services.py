@@ -1,3 +1,4 @@
+import mysql
 from flask import jsonify
 from werkzeug.utils import secure_filename
 from app.schema.image_schema import *
@@ -31,16 +32,15 @@ class FaceLocationDetection:
                     'image_name': image_name,
                     'face_locations': face_locations
                 }
-                db = Database()
-            except:
-                raise DatabaseNoneError
-            else:
                 if len(face_locations) == 0:
                     raise NoDetection
-                else:
-                    db.insert_face_location(image_name, face_locations)
-                    db.close_connection()
-                    return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                db = Database()
+            except mysql.connector.Error:
+                raise DatabaseNoneError
+            else:
+                db.insert_face_location(image_name, face_locations)
+                db.close_connection()
+                return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
 class FaceLandmarksDetection:
     def __init__(self):
         self.image_data = None
@@ -67,13 +67,12 @@ class FaceLandmarksDetection:
                     'image_name': image_name,
                     'landmarks': landmarks
                 }
-                db = Database()
-            except:
-                raise DatabaseNoneError
-            else:
                 if len(landmarks) == 0:
                     raise NoDetection
-                else:
-                    db.insert_face_landmark(image_name, landmarks)
-                    db.close_connection()
-                    return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
+                db = Database()
+            except mysql.connector.Error:
+                raise DatabaseNoneError
+            else:
+                db.insert_face_landmark(image_name, landmarks)
+                db.close_connection()
+                return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})

@@ -1,3 +1,4 @@
+import mysql
 from flask import jsonify
 from werkzeug.utils import secure_filename
 import cv2
@@ -62,12 +63,12 @@ class HumanDetection:
                                    zip(detected_boxes, detected_weights)]
                 }
                 db = Database()
-            except:
-                raise DatabaseNoneError()
-            else:
                 if len(detected_boxes) == 0:
                     raise NoDetection
-                else:
-                    db.insert_human_location(image_name, detected_boxes, detected_weights)
-                    db.close_connection()
-                    return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                db = Database()
+            except mysql.connector.Error:
+                raise DatabaseNoneError
+            else:
+                db.insert_human_location(image_name, detected_boxes, detected_weights)
+                db.close_connection()
+                return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
