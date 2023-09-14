@@ -29,16 +29,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `face_landmark` (
   `id` int(11) NOT NULL,
-  `image_name` varchar(255) NOT NULL,
-  `bottom_lip` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `chin` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `left_eye` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `left_eyebrow` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `nose_bridge` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `nose_tip` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `right_eye` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `right_eyebrow` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `top_lip` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `image_name` varchar(500) NOT NULL,
+  `bottom_lip` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `chin` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `left_eye` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `left_eyebrow` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `nose_bridge` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `nose_tip` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `right_eye` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `right_eyebrow` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `top_lip` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -51,8 +51,8 @@ CREATE TABLE `face_landmark` (
 
 CREATE TABLE `face_location` (
   `id` int(11) NOT NULL,
-  `image_name` varchar(255) NOT NULL,
-  `face_location` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `image_name` varchar(500) NOT NULL,
+  `face_location` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -65,9 +65,9 @@ CREATE TABLE `face_location` (
 
 CREATE TABLE `human_location` (
   `id` int(11) NOT NULL,
-  `image_name` varchar(255) NOT NULL,
+  `image_name` varchar(500) NOT NULL,
   `human_location_boxes` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
-  `human_location_weights` varchar(255) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
+  `human_location_weights` varchar(500) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
