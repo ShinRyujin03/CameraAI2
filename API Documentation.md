@@ -63,14 +63,13 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 
 ## Schema
 - **Datafield**: `image`(str)
-- **Datatype**: `png`, `jpg`, `jpeg`(str) - Can be config in `config.ini`
+- **Datatype**: `png`, `jpg`, `jpeg`(str) - Can be config at `config.ini`
 - **Mandatory**: `True` (bool)
 
 ## Endpoints
 ### Human Detection
 - **Prefix**:`/objects`
 - **Endpoint**: `/human_location`
-- **Data**: `image`
 - **Method**: POST
 - **Description**: Detect human locations in images and save metadata to the database.
 - **Response**: List of detected human locations.
@@ -78,7 +77,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Location
 - **Prefix**:`/face`
 - **Endpoint**: `/face_location`
-- **Data**: `image`
 - **Method**: POST
 - **Description**: Detect face locations in images and save metadata to the database.
 - **Response**: List of detected face locations.
@@ -86,7 +84,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Landmarks
 - **Prefix**:`/face`
 - **Endpoint**: `/face_landmarks`
-- **Data**: `image`
 - **Method**: POST
 - **Description**: Encode face landmarks to an array and save metadata to the database.
 - **Response**: List of encoded face landmarks.
@@ -109,7 +106,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **DATABASE_IS_NONE**
   - HTTP Code: `503 Service Unavailable`
   - Code: "d01"
-  - Message: Can not connect to thw database
+  - Message: Can not connect to the database
 
 ## Usage
 ### Human Detection
