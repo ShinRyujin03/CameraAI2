@@ -20,14 +20,11 @@ class ImageFileSchema(BaseModel):
 
 def schema_test(image_file):
     pass_test = False
-
     if not image_file:  # mandatory
         raise NoImageError
-
     # Check if the uploaded file has a valid image extension
     allowed_extensions = config.get('function_config', 'path')  # data field - datatype
     filename, extension = os.path.splitext(image_file.filename)
-
     if extension[1:].lower() not in allowed_extensions:
         raise InvalidImageError
 
@@ -40,8 +37,7 @@ def schema_test(image_file):
         }
         ImageFileSchema(**image_data)
         pass_test = True
-    except ValidationError as e:
+    except ValidationError:
         # Handle validation errors here
         pass_test = False
-
     return pass_test

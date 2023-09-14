@@ -10,4 +10,3 @@ def request_human_location():
     human_location = HumanDetection()
     human_result = human_location.get_human_location(image_file)
     return human_result
-

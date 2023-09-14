@@ -19,4 +19,3 @@ def request_face_landmarks():
     face_landmarks = FaceLandmarksDetection()
     landmarks_result = face_landmarks.get_face_landmarks(image_file)
     return landmarks_result
-

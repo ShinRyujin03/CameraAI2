@@ -16,7 +16,6 @@ class FaceLocationDetection:
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         face_locations = face_recognition.face_locations(image)
         return face_locations
-
     def get_face_location(self,image_file):
         face_detector = FaceLocationDetection()
         if schema_test(image_file) == True:
@@ -41,16 +40,15 @@ class FaceLocationDetection:
                 db.insert_face_location(image_name, face_locations)
                 db.close_connection()
                 return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+
 class FaceLandmarksDetection:
     def __init__(self):
         self.image_data = None
-
     def facelandmarks(self):
         image_np = np.frombuffer(self.image_data, np.uint8)
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         face_landmarks_list = face_recognition.face_landmarks(image)
         return face_landmarks_list
-
     def get_face_landmarks(self,image_file):
         landmarks_detector = FaceLandmarksDetection()
         if schema_test(image_file) == True:
@@ -61,7 +59,6 @@ class FaceLandmarksDetection:
                 # Process the image using landmarks_detector
                 landmarks_detector.image_data = image_data
                 landmarks = landmarks_detector.facelandmarks()
-
                 # Create a response object
                 result = {
                     'image_name': image_name,

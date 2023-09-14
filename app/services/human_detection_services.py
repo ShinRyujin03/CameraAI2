@@ -31,7 +31,6 @@ class HumanDetection:
         results = model(image)  # results list
         detected_boxes = []
         detected_weights = []
-
         # Filter results based on the condition r.boxes.cls[i] == 0
         for r in results:
             cls_values = r.boxes.cls.tolist()  # Convert tensor to list
@@ -39,11 +38,8 @@ class HumanDetection:
                 if cls == config.getint('human_detection_config', 'label_class'):  # Only consider when cls is equal to 'label_class'
                     rounded_boxes = [round(value, config.getint('human_detection_config', 'round_result')) for value in r.boxes.xywh[i].tolist()]
                     detected_boxes.append(rounded_boxes)
-                    detected_weights.append(
-                        round(r.boxes.conf[i].item(), config.getint('human_detection_config', 'round_result')))  # Use .item() to convert scalar tensor to Python number
-
+                    detected_weights.append(round(r.boxes.conf[i].item(), config.getint('human_detection_config', 'round_result')))  # Use .item() to convert scalar tensor to Python number
         return detected_boxes, detected_weights
-
     def get_human_location(self, image_file):
         human_detector = HumanDetection()
         if schema_test(image_file) == True:

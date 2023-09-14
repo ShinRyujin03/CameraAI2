@@ -2,7 +2,6 @@ import mysql.connector
 import configparser
 import os
 
-
 # Get the current directory of your script
 script_directory = os.path.dirname(os.path.realpath("config/config.ini"))
 

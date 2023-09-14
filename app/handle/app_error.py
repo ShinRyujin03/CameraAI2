@@ -17,7 +17,6 @@ class NoDetection(AppError):
 class InvalidImageError(AppError):
     def __init__(self):
         super().__init__(CustomError.INVALID_IMAGE['message'], CustomError.INVALID_IMAGE['code'])
-
 class NoImageError(AppError):
     def __init__(self):
         super().__init__(CustomError.NO_IMAGE['message'], CustomError.NO_IMAGE['code'])
