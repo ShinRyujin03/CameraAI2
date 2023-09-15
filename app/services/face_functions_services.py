@@ -6,7 +6,7 @@ from database.database import Database
 import face_recognition
 import cv2
 import numpy as np
-from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
+from app.handle.app_error import DatabaseNoneError, NoDetection
 class FaceLocationDetection:
     def __init__(self):
         self.image_data = None
@@ -37,12 +37,9 @@ class FaceLocationDetection:
             except mysql.connector.Error:
                 raise DatabaseNoneError
             else:
-                if len(str(face_locations)) > 500:
-                    raise OutputTooLongError
-                else:
-                    db.insert_face_location(image_name, face_locations)
-                    db.close_connection()
-                    return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                db.insert_face_location(image_name, face_locations)
+                db.close_connection()
+                return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
 
 class FaceLandmarksDetection:
     def __init__(self):
@@ -73,9 +70,6 @@ class FaceLandmarksDetection:
             except mysql.connector.Error:
                 raise DatabaseNoneError
             else:
-                if len(landmarks[0]["bottom_lip"]) > 250:
-                    raise OutputTooLongError
-                else:
-                    db.insert_face_landmark(image_name, landmarks)
-                    db.close_connection()
-                    return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
+                db.insert_face_landmark(image_name, landmarks)
+                db.close_connection()
+                return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
