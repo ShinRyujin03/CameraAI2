@@ -107,6 +107,10 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - HTTP Code: `503 Service Unavailable`
   - Code: "d01"
   - Message: Can not connect to the database
+- **OUTPUT_TOO_LONG**
+  - HTTP Code: `413 Payload Too Large`
+  - Code: "d02"
+  - Message: Output data  too large!!!
 
 ## Usage
 ### Human Detection

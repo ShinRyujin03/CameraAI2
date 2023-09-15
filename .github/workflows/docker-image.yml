@@ -1,7 +1,4 @@
 name: flask-helloworld
-on:
-  push:
-    branches: [ master ]
 jobs:
   docker:
     runs-on: ubuntu-latest
