@@ -6,7 +6,7 @@ import numpy as np
 from ultralytics import YOLO
 from database.database import Database
 from app.schema.image_schema import *
-from app.handle.app_error import DatabaseNoneError, NoDetection
+from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 import configparser
 
 # Get the current directory of your script
@@ -65,6 +65,9 @@ class HumanDetection:
             except mysql.connector.Error:
                 raise DatabaseNoneError
             else:
-                db.insert_human_location(image_name, detected_boxes, detected_weights)
-                db.close_connection()
-                return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                if len(detected_boxes) > 500:
+                    raise OutputTooLongError
+                else:
+                    db.insert_human_location(image_name, detected_boxes, detected_weights)
+                    db.close_connection()
+                    return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
