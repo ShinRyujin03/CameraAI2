@@ -9,11 +9,8 @@ from app.schema.image_schema import *
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 import configparser
 
-# Get the current directory of your script
-script_directory = os.path.dirname(os.path.realpath("config/config.ini"))
-
 # Construct the relative path to config.ini
-config_path = os.path.join(script_directory,'config.ini')
+config_path = os.path.realpath("../config.ini")
 
 # Create a configuration object
 config = configparser.ConfigParser()
