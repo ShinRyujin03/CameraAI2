@@ -8,14 +8,14 @@ WORKDIR app
 COPY requirements.txt ./
 # Install CMake
 RUN apt-get update && apt-get install -y cmake
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
 
-# Copy the local app directory contents into the container at /usr/src/app
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --timeout 500
+
+# Copy the rest of the application files
 COPY . .
 
-# Define environment variable for config file path
-ENV CONFIG_PATH=main/config/config.ini
-
+ENV PYTHONPATH "${PYTHONPATH}:app"
 # Run app.py when the container launches
 CMD ["python", "app/main/run.py"]
