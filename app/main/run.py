@@ -6,7 +6,7 @@ from app.handle.app_error import handle_generic_error
 import os
 
 # Construct the relative path to config.ini
-config_path = os.path.realpath("../config.ini")
+config_path = os.path.realpath("config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
