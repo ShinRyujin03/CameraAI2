@@ -124,7 +124,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
 - You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 
-### Human Detection
+### Multiple Objects Detection
 - To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`. The metadata will save in the `object_detected Table`
 - Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
 - The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml

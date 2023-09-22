@@ -29,7 +29,11 @@ class Database:
         values = (image_name, str(boxes), str(weights))
         self.cursor.execute(query, values)
         self.conn.commit()
-
+    def insert_detected_objects(self, image_name, objects_name, boxes, weights):
+        query = "INSERT INTO detected_objects (image_name, objects_name, objects_location_boxes ,objects_location_weights) VALUES (%s, %s, %s, %s)"
+        values = (image_name, str(objects_name), str(boxes), str(weights))
+        self.cursor.execute(query, values)
+        self.conn.commit()
     def insert_face_landmark(self, image_name, landmarks_data):
         for landmarks in landmarks_data:
             bottom_lip = str(landmarks.get('bottom_lip'))

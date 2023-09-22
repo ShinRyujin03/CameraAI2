@@ -80,7 +80,7 @@ class MultipleObjectDetection:
                 if len(detected_boxes) == 0:
                     logging.error(NoDetection())
                     raise NoDetection
-                #db = Database()
+                db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
@@ -89,7 +89,7 @@ class MultipleObjectDetection:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    #db.insert_human_location(image_name, detected_boxes, detected_weights)
-                    #db.close_connection()
+                    db.insert_detected_objects(image_name, detected_objects, detected_boxes, detected_weights)
+                    db.close_connection()
                     logging.info(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
