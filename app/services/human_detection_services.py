@@ -55,7 +55,6 @@ class HumanDetection:
                     'detections': [{'box': box, 'weight': weight} for box, weight in
                                    zip(detected_boxes, detected_weights)]
                 }
-                db = Database()
                 if len(detected_boxes) == 0:
                     raise NoDetection
                 db = Database()
