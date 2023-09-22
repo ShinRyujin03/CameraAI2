@@ -5,6 +5,7 @@ from flask import Flask
 import configparser
 from app.handle.app_error import handle_generic_error
 import os
+import logging
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -20,6 +21,10 @@ app.register_error_handler(Exception, handle_generic_error)
 app.register_blueprint(face_router, url_prefix=config.get('function_config', 'face_prefix'))
 app.register_blueprint(objects_router, url_prefix= config.get('function_config', 'objects_prefix'))
 app.register_blueprint(multiple_objects_router, url_prefix= config.get('function_config', 'multiple_objects_prefix'))
+
+# Set up logging
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 if __name__ == '__main__':
     host = config.get('db_config', 'host')
     port = config.getint('db_config', 'port')

@@ -8,7 +8,7 @@ from database.database import Database
 from app.schema.image_schema import *
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 import configparser
-
+import logging
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 
@@ -44,7 +44,7 @@ class HumanDetection:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
-
+                logging.info(f'image_name: {image_name}')
                 # Process the image using human_detector
                 human_detector.image_data = image_data
                 detected_boxes, detected_weights = human_detector.humanlocation()
@@ -56,14 +56,18 @@ class HumanDetection:
                                    zip(detected_boxes, detected_weights)]
                 }
                 if len(detected_boxes) == 0:
+                    logging.error(NoDetection())
                     raise NoDetection
                 db = Database()
             except mysql.connector.Error:
+                logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
                 if len(detected_boxes) > 500:
+                    logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
                     db.insert_human_location(image_name, detected_boxes, detected_weights)
                     db.close_connection()
+                    logging.info(result, {"message": f"Human location metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})

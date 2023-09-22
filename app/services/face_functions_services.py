@@ -7,6 +7,8 @@ import face_recognition
 import cv2
 import numpy as np
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
+import logging
+
 class FaceLocationDetection:
     def __init__(self):
         self.image_data = None
@@ -23,6 +25,7 @@ class FaceLocationDetection:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
+                logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
                 face_detector.image_data = image_data
                 face_locations = face_detector.facelocation()
@@ -32,16 +35,20 @@ class FaceLocationDetection:
                     'face_locations': face_locations
                 }
                 if len(face_locations) == 0:
+                    logging.error(NoDetection())
                     raise NoDetection
                 db = Database()
             except mysql.connector.Error:
+                logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
                 if len(str(face_locations)) > 500:
+                    logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
                     db.insert_face_location(image_name, face_locations)
                     db.close_connection()
+                    logging.info(result, {"message": f"Face location metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
 
 class FaceLandmarksDetection:
@@ -59,6 +66,7 @@ class FaceLandmarksDetection:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
+                logging.info(f'image_name: {image_name}')
                 # Process the image using landmarks_detector
                 landmarks_detector.image_data = image_data
                 landmarks = landmarks_detector.facelandmarks()
@@ -68,14 +76,18 @@ class FaceLandmarksDetection:
                     'landmarks': landmarks
                 }
                 if len(landmarks) == 0:
+                    logging.error(NoDetection())
                     raise NoDetection
                 db = Database()
             except mysql.connector.Error:
+                logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
                 if len(landmarks[0]["bottom_lip"]) > 250:
+                    logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
                     db.insert_face_landmark(image_name, landmarks)
                     db.close_connection()
+                    logging.info(result, {"message": f"Face metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})

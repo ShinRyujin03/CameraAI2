@@ -1,0 +1,22 @@
+2023-09-22 11:18:39,822 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:1102
+ * Running on http://192.168.1.156:1102
+2023-09-22 11:18:39,823 - INFO - [33mPress CTRL+C to quit[0m
+2023-09-22 11:18:39,823 - INFO -  * Restarting with stat
+2023-09-22 11:18:44,027 - WARNING -  * Debugger is active!
+2023-09-22 11:18:44,059 - INFO -  * Debugger PIN: 409-712-011
+2023-09-22 11:18:46,642 - ERROR - No image file uploaded
+2023-09-22 11:18:46,646 - INFO - 127.0.0.1 - - [22/Sep/2023 11:18:46] "[33mPOST /objects/human_location HTTP/1.1[0m" 404 -
+2023-09-22 11:18:57,123 - INFO - file_name: Kiến trúc Hệ thống cho Dự án AI.docx
+2023-09-22 11:18:57,124 - ERROR - Invalid image file format
+2023-09-22 11:18:57,126 - INFO - 127.0.0.1 - - [22/Sep/2023 11:18:57] "[31m[1mPOST /face/face_landmarks HTTP/1.1[0m" 415 -
+2023-09-22 11:19:08,223 - INFO - image_name: Anh_man_hinh_2023-09-15_luc_17.11.54_2.png
+2023-09-22 11:19:09,693 - ERROR - Can not connect to the database
+2023-09-22 11:19:09,694 - INFO - 127.0.0.1 - - [22/Sep/2023 11:19:09] "[35m[1mPOST /face/face_location HTTP/1.1[0m" 503 -
+2023-09-22 11:19:29,315 - INFO - image_name: IMG_0201_2.jpeg
+2023-09-22 11:19:37,926 - INFO - {'image_name': 'IMG_0201_2.jpeg', 'detections': [{'object type': 'laptop', 'box': [379.785, 3154.492, 749.095, 1750.223], 'weight': 0.945}, {'object type': 'laptop', 'box': [2032.891, 3015.415, 470.219, 1641.972], 'weight': 0.864}, {'object type': 'person', 'box': [398.678, 2166.894, 788.135, 1375.312], 'weight': 0.828}, {'object type': 'clock', 'box': [1211.611, 1321.44, 137.34, 150.043], 'weight': 0.805}, {'object type': 'laptop', 'box': [1183.068, 3142.658, 1168.256, 874.879], 'weight': 0.8}, {'object type': 'person', 'box': [1279.516, 2199.097, 1016.052, 1198.633], 'weight': 0.767}, {'object type': 'tv', 'box': [1194.775, 1653.579, 629.659, 424.144], 'weight': 0.51}]}
+2023-09-22 11:19:37,928 - INFO - 127.0.0.1 - - [22/Sep/2023 11:19:37] "POST /m_objects/m_object_location HTTP/1.1" 200 -
+2023-09-22 11:20:58,315 - INFO - image_name: 74234d6434c32c4421a1a1c532483df0.jpg
+2023-09-22 11:20:58,725 - ERROR - Nothing was detected
+2023-09-22 11:20:58,726 - INFO - 127.0.0.1 - - [22/Sep/2023 11:20:58] "[33mPOST /face/face_location HTTP/1.1[0m" 404 -

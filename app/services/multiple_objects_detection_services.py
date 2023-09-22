@@ -7,6 +7,7 @@ from ultralytics import YOLO
 from database.database import Database
 from app.schema.image_schema import *
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
+import logging
 import configparser
 
 # Construct the relative path to config.ini
@@ -66,7 +67,7 @@ class MultipleObjectDetection:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
-
+                logging.info(f'image_name: {image_name}')
                 # Process the image using objects_detector
                 objects_detector.image_data = image_data
                 detected_objects,detected_boxes, detected_weights = objects_detector.objectslocation()
@@ -77,14 +78,18 @@ class MultipleObjectDetection:
                                    zip(detected_objects, detected_boxes, detected_weights)]
                 }
                 if len(detected_boxes) == 0:
+                    logging.error(NoDetection())
                     raise NoDetection
                 #db = Database()
             except mysql.connector.Error:
+                logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
                 if len(detected_boxes) > 500:
+                    logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
                     #db.insert_human_location(image_name, detected_boxes, detected_weights)
                     #db.close_connection()
+                    logging.info(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
