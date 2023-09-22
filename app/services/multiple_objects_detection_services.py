@@ -9,6 +9,7 @@ from app.schema.image_schema import *
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 import logging
 import configparser
+import base64
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -66,6 +67,8 @@ class MultipleObjectDetection:
             try:
                 # Read the image data from the file
                 image_data = image_file.read()
+                base64_image = base64.b64encode(image_data)
+                base64_image_string = base64_image.decode('utf-8')
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using objects_detector
@@ -90,6 +93,7 @@ class MultipleObjectDetection:
                     raise OutputTooLongError
                 else:
                     db.insert_detected_objects(image_name, detected_objects, detected_boxes, detected_weights)
+                    db.insert_image_file(image_name, base64_image_string)
                     db.close_connection()
                     logging.info(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})

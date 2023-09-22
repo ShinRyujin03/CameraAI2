@@ -18,6 +18,12 @@ class Database:
         )
         self.cursor = self.conn.cursor()
 
+    def insert_image_file(self, image_name, image_file):
+        query = "INSERT INTO image (image_name, image_file) VALUES (%s, %s)"
+        values = (image_name, str(image_file))
+        self.cursor.execute(query, values)
+        self.conn.commit()
+
     def insert_face_location(self, image_name, face_location):
         query = "INSERT INTO face_location (image_name, face_location) VALUES (%s, %s)"
         values = (image_name, str(face_location))
@@ -29,11 +35,13 @@ class Database:
         values = (image_name, str(boxes), str(weights))
         self.cursor.execute(query, values)
         self.conn.commit()
+
     def insert_detected_objects(self, image_name, objects_name, boxes, weights):
         query = "INSERT INTO detected_objects (image_name, objects_name, objects_location_boxes ,objects_location_weights) VALUES (%s, %s, %s, %s)"
         values = (image_name, str(objects_name), str(boxes), str(weights))
         self.cursor.execute(query, values)
         self.conn.commit()
+
     def insert_face_landmark(self, image_name, landmarks_data):
         for landmarks in landmarks_data:
             bottom_lip = str(landmarks.get('bottom_lip'))
