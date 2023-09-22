@@ -87,4 +87,4 @@ class MultipleObjectDetection:
                 else:
                     #db.insert_human_location(image_name, detected_boxes, detected_weights)
                     #db.close_connection()
-                    return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                    return jsonify(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})

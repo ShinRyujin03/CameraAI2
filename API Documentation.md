@@ -74,6 +74,12 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Description**: Detect human locations in images and save metadata to the database.
 - **Response**: List of detected human locations.
 
+### Multiple Objects Detection
+- **Prefix**: `/m_objects`
+- **Endpoint**: `m_objects_location`
+- **Method**: POST
+- **Description**: Detect objects locations in images, classify it into different categories and save metadata to the database.
+- **Response**: List of detected objects locations and categories.
 ### Face Location
 - **Prefix**:`/face`
 - **Endpoint**: `/face_location`
@@ -117,6 +123,12 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. The metadata will save in the `human_location Table`
 - Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
 - You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
+
+### Human Detection
+- To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`. The metadata will save in the `object_detected Table`
+- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
+- The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
+
 ### Face Location
 - To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`. The metadata will save in the `face_location Table`
 
@@ -131,7 +143,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - db_user = root
 - db_password = []
 - db_name = metadata
-
 ### [function_config]
 - path = png, jpg, jpeg
 - face_prefix = /face
@@ -140,3 +151,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - model_path = model/yolov8n.pt
 - round_result = 3
 - label_class = 0
+[objects_detection_config]
+- model_path =../../model/yolov8n.pt
+- round_result = 3
