@@ -70,7 +70,11 @@ class Database:
 
             self.cursor.execute(query, values)
         self.conn.commit()
-
+    def insert_face_emotions(self, image_name, face_locations, emotions, emotion_weights):
+        query = "INSERT INTO face_emotions (image_name, face_locations, emotions, emotion_weights) VALUES (%s, %s, %s, %s)"
+        values = (image_name, str(face_locations), str(emotions), str(emotion_weights))
+        self.cursor.execute(query, values)
+        self.conn.commit()
     def close_connection(self):
         if self.conn.is_connected():
             self.cursor.close()

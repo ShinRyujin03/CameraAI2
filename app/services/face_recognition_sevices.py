@@ -68,7 +68,17 @@ class EmotionRecognition:
         # Phân tích cảm xúc bằng DeepFace
         emotions_data = DeepFace.analyze(image, actions=['emotion'], enforce_detection=False)
 
-        return emotions_data
+        emotions_list = []
+        emotion_weights_list = []
+
+        for face in emotions_data:
+            dominant_emotion = face['dominant_emotion']
+            emotion_weight = max(face['emotion'].values())
+
+            emotions_list.append(dominant_emotion)
+            emotion_weights_list.append(round(emotion_weight,3))
+
+        return emotions_list, emotion_weights_list
 
     def get_emotions_recognition(self, image_file):
         emotions_detector = EmotionRecognition()
@@ -83,11 +93,7 @@ class EmotionRecognition:
 
                 # Process the image using emotions_detector
                 emotions_detector.image_data = image_data
-                emotions_data = emotions_detector.emotions_recognition()
-
-                # Extract the emotions and probabilities for each face
-                emotions = [{'dominant_emotion': face['dominant_emotion'], 'emotion_weights': face['emotion']} for face
-                            in emotions_data]
+                emotions, emotion_weights = emotions_detector.emotions_recognition()
 
                 # Get face locations using face_detector
                 face_detector = FaceLocationDetection()
@@ -99,23 +105,27 @@ class EmotionRecognition:
                     'image_name': image_name,
                     'face_locations': face_locations,
                     'emotions': emotions,
+                    'emotion_weight': emotion_weights,
                 }
+
                 if not face_locations:  # Check if no face locations were detected
                     logging.error(NoDetection())
                     raise NoDetection
+
                 db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(face_locations) > 500 or len(emotions) > 250:
+                if len(str(face_locations)) > 500:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    # db.insert_face_landmark(image_name, emotions)
-                    # db.insert_image_file(image_name, base64_image_string)
-                    # db.close_connection()
+                    db.insert_face_emotions(image_name, face_locations, emotions, emotion_weights)
+                    db.insert_image_file(image_name, base64_image_string)
+                    db.close_connection()
                     logging.info(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
+
 
 
