@@ -75,6 +75,16 @@ class Database:
         values = (image_name, str(face_locations), str(emotions), str(emotion_weights))
         self.cursor.execute(query, values)
         self.conn.commit()
+
+    def get_all_image_files(self):
+        query = "SELECT image_file FROM image"
+
+        self.cursor.execute(query)
+        results = self.cursor.fetchall()
+
+        image_files = [result[0] for result in results]
+
+        return image_files
     def close_connection(self):
         if self.conn.is_connected():
             self.cursor.close()
