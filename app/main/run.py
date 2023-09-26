@@ -1,7 +1,8 @@
-from app.routers.face_recognition_routers import face_recognition_router
-from app.routers.face_detection_routers import face_detection_router
+from app.routers.face_routers import face_router
 from app.routers.human_detection_routers import objects_router
 from app.routers.multiple_objects_detection_routers import multiple_objects_router
+
+
 from flask import Flask
 import configparser
 from app.handle.app_error import handle_generic_error
@@ -19,8 +20,7 @@ app = Flask(__name__)
 app.register_error_handler(Exception, handle_generic_error)
 
 # Register the funtion_router blueprint
-app.register_blueprint(face_detection_router, url_prefix= config.get('function_config', 'face_prefix'))
-app.register_blueprint(face_recognition_router, url_prefix= config.get('function_config', 'face_prefix'))
+app.register_blueprint(face_router, url_prefix= config.get('function_config', 'face_prefix'))
 app.register_blueprint(objects_router, url_prefix= config.get('function_config', 'objects_prefix'))
 app.register_blueprint(multiple_objects_router, url_prefix= config.get('function_config', 'multiple_objects_prefix'))
 
