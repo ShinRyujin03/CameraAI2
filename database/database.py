@@ -1,6 +1,7 @@
 import mysql.connector
 import configparser
 import os
+import base64
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -83,8 +84,9 @@ class Database:
         results = self.cursor.fetchall()
 
         image_files = [result[0] for result in results]
+        image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
 
-        return image_files
+        return image_bytes_list
     def close_connection(self):
         if self.conn.is_connected():
             self.cursor.close()

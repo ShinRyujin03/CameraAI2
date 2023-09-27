@@ -1,0 +1,73 @@
+import mysql
+from flask import jsonify
+from werkzeug.utils import secure_filename
+from app.schema.image_schema import *
+from database.database import Database
+import face_recognition
+import cv2
+import numpy as np
+from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
+import logging
+import base64
+
+import mysql.connector
+import io
+
+
+class FaceVerification:
+    def __init__(self):
+        self.image_data = None
+
+    def face_verification(self, unknown_face):
+        db = Database()
+        known_face_encodings = db.get_all_image_files()
+        # Convert the uploaded face to an encoding
+        unknown_face_image = cv2.imdecode(np.frombuffer(unknown_face, np.uint8), cv2.IMREAD_COLOR)
+        unknown_encoding = face_recognition.face_encodings(unknown_face_image)[0]
+        for known_face in known_face_encodings:
+            known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
+            if known_face_image is not None:
+                known_encoding = face_recognition.face_encodings(known_face_image)[0]
+                result = face_recognition.compare_faces([known_encoding], unknown_encoding)
+                print(result)
+            else:
+                pass
+        return "a"
+
+    def get_face_verification(self,image_file, face_name):
+        face_detector = FaceVerification()
+        if schema_test(image_file) == True:
+            try:
+                # Read the image data from the file
+                image_data = image_file.read()
+                # Convert the bytes to base64
+                base64_image = base64.b64encode(image_data)
+                base64_image_string = base64_image.decode('utf-8')
+                image_name = secure_filename(image_file.filename)
+                logging.info(f'image_name: {image_name}')
+                # Process the image using face_detector
+                verify = face_detector.face_verification(image_data)
+                # Create a response object
+                result = {
+                    'face_verification': verify,
+                    'Name': face_name,
+                    'image_name': image_name
+                }
+                if len(face_name) == 0:
+                    logging.error(NoDetection())
+                    raise NoDetection
+                #db = Database()
+            except mysql.connector.Error:
+                logging.error(DatabaseNoneError())
+                raise DatabaseNoneError
+            else:
+                if len(str(face_name)) > 500:
+                    logging.error(OutputTooLongError())
+                    raise OutputTooLongError
+                else:
+                    #db.insert_face_verification(image_name, verify)
+                    #b.insert_image_file(image_name, base64_image_string)
+                    #db.close_connection()
+                    logging.info(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                    return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+
