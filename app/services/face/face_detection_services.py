@@ -25,9 +25,6 @@ class FaceLocationDetection:
             try:
                 # Read the image data from the file
                 image_data = image_file.read()
-                # Convert the bytes to base64
-                base64_image = base64.b64encode(image_data)
-                base64_image_string = base64_image.decode('utf-8')
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector

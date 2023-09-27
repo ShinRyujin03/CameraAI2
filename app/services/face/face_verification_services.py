@@ -6,7 +6,7 @@ from database.database import Database
 import face_recognition
 import cv2
 import numpy as np
-from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
+from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError, NoFaceNameError
 import logging
 import base64
 
@@ -42,13 +42,13 @@ class FaceVerification:
             db.close_connection()
     def get_face_verification(self,image_file, face_name):
         face_detector = FaceVerification()
+        if not face_name:
+            logging.error(NoFaceNameError())
+            raise NoFaceNameError
         if schema_test(image_file) == True:
             try:
                 # Read the image data from the file
                 image_data = image_file.read()
-                # Convert the bytes to base64
-                base64_image = base64.b64encode(image_data)
-                base64_image_string = base64_image.decode('utf-8')
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
@@ -62,7 +62,7 @@ class FaceVerification:
                 if len(face_name) == 0:
                     logging.error(NoDetection())
                     raise NoDetection
-                #db = Database()
+                db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
@@ -71,8 +71,8 @@ class FaceVerification:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    #db.insert_face_verify_status(image_name, face_name, verify)
-                    #db.close_connection()
+                    db.insert_face_verify_status(image_name, face_name, verify)
+                    db.close_connection()
                     logging.info(result)
                     return jsonify(result)
 
