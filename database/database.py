@@ -77,6 +77,12 @@ class Database:
         self.cursor.execute(query, values)
         self.conn.commit()
 
+    def insert_face_verify_status(self, image_name, face_name, verifiy_status):
+        query = "INSERT INTO face_verified (image_name, face_name, verifiy_status) VALUES (%s, %s, %s)"
+        values = (image_name, face_name, verifiy_status)
+        self.cursor.execute(query, values)
+        self.conn.commit()
+
     def get_all_image_files(self):
         query = "SELECT image_file FROM image"
 
