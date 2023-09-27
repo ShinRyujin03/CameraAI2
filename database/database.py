@@ -21,7 +21,7 @@ class Database:
 
     def insert_image_file(self, image_name, image_file):
         query = "INSERT INTO image (image_name, image_file) VALUES (%s, %s)"
-        values = (image_name, str(image_file))
+        values = (image_name, image_file)
         self.cursor.execute(query, values)
         self.conn.commit()
 
@@ -84,9 +84,9 @@ class Database:
         results = self.cursor.fetchall()
 
         image_files = [result[0] for result in results]
-        image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
+        #image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
 
-        return image_bytes_list
+        return image_files
     def close_connection(self):
         if self.conn.is_connected():
             self.cursor.close()

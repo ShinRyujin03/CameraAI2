@@ -1,6 +1,5 @@
 import mysql
 from flask import jsonify
-import base64
 import face_recognition
 import cv2
 import numpy as np
@@ -25,8 +24,6 @@ class FaceLandmarksDetection:
             try:
                 # Read the image data from the file
                 image_data = image_file.read()
-                base64_image = base64.b64encode(image_data)
-                base64_image_string = base64_image.decode('utf-8')
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using landmarks_detector
@@ -50,7 +47,7 @@ class FaceLandmarksDetection:
                     raise OutputTooLongError
                 else:
                     db.insert_face_landmark(image_name, landmarks)
-                    db.insert_image_file(image_name, base64_image_string)
+                    db.insert_image_file(image_name, image_data)
                     db.close_connection()
                     logging.info(result, {"message": f"Face metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
