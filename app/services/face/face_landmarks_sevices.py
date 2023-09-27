@@ -10,6 +10,12 @@ from database.database import Database
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 
 
+# Construct the relative path to config.ini
+config_path = os.path.realpath("../config.ini")
+
+# Create a configuration object
+config = configparser.ConfigParser()
+config.read(config_path)
 class FaceLandmarksDetection:
     def __init__(self):
         self.image_data = None
@@ -42,7 +48,7 @@ class FaceLandmarksDetection:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(landmarks[0]["bottom_lip"]) > 250:
+                if len(landmarks[0]["bottom_lip"]) > config.getint('db_limit_config', 'landmarks'):
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:

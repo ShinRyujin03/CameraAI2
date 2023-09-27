@@ -88,7 +88,7 @@ class MultipleObjectDetection:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(detected_boxes) > 500:
+                if len(detected_boxes) > config.getint('db_limit_config', 'objects_detected_boxes'):
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:

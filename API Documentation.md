@@ -227,6 +227,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
+- The `compare_face_tolerance` can be config in `config.ini` (default `compare_face_tolerance = 0.5`)
 - The face verification status will return `not verified` or `verified` only
 
 ## Config
@@ -237,14 +238,24 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - db_user = root
 - db_password = []
 - db_name = metadata
+
+### [db_limit_config]
+- face_locations = 500
+- landmarks = 250
+- face_name = 250
+- objects_detected_boxes = 500
+
 ### [function_config]
 - path = png, jpg, jpeg
 - face_prefix = /face
 - objects_prefix = /objects
+- compare_face_tolerance = 0.5
+
 ### [human_detection_config]
 - model_path = model/yolov8n.pt
 - round_result = 3
 - label_class = 0
-[objects_detection_config]
+
+### [objects_detection_config]
 - model_path =../../model/yolov8n.pt
 - round_result = 3

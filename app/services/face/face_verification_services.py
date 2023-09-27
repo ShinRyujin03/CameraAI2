@@ -8,11 +8,15 @@ import cv2
 import numpy as np
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError, NoFaceNameError
 import logging
-import base64
-
 import mysql.connector
-import io
+import configparser
 
+# Construct the relative path to config.ini
+config_path = os.path.realpath("../config.ini")
+
+# Create a configuration object
+config = configparser.ConfigParser()
+config.read(config_path)
 
 class FaceVerification:
     def __init__(self):
@@ -29,7 +33,7 @@ class FaceVerification:
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
                 if known_face_image is not None:
                     known_encoding = face_recognition.face_encodings(known_face_image)[0]
-                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, 0.5)
+                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, config.getint('function_config', 'compare_face_tolerance'))
                     if result[0]:
                         return "verified"
                     else:
@@ -67,7 +71,7 @@ class FaceVerification:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(str(face_name)) > 500:
+                if len(str(face_name)) > config.getint('db_limit_config', 'face_name'):
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:

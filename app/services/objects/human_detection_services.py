@@ -45,8 +45,6 @@ class HumanDetection:
             try:
                 # Read the image data from the file
                 image_data = image_file.read()
-                base64_image = base64.b64encode(image_data)
-                base64_image_string = base64_image.decode('utf-8')
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using human_detector
@@ -67,12 +65,12 @@ class HumanDetection:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(detected_boxes) > 500:
+                if len(detected_boxes) > config.getint('db_limit_config', 'objects_detected_boxes'):
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
                     db.insert_human_location(image_name, detected_boxes, detected_weights)
-                    db.insert_image_file(image_name, base64_image_string)
+                    db.insert_image_file(image_name, image_data)
                     db.close_connection()
                     logging.info(result, {"message": f"Human location metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})

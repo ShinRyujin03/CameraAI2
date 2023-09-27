@@ -39,6 +39,7 @@ class EmotionRecognition:
         if schema_test(image_file):
             try:
                 # Read the image data from the file
+                image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
 

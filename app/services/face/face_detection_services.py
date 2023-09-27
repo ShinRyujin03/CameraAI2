@@ -8,8 +8,14 @@ import cv2
 import numpy as np
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 import logging
-import base64
+import configparser
 
+# Construct the relative path to config.ini
+config_path = os.path.realpath("../config.ini")
+
+# Create a configuration object
+config = configparser.ConfigParser()
+config.read(config_path)
 class FaceLocationDetection:
     def __init__(self):
         self.image_data = None
@@ -43,7 +49,7 @@ class FaceLocationDetection:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(str(face_locations)) > 500:
+                if len(str(face_locations)) > config.getint('db_limit_config', 'face_locations'):
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
