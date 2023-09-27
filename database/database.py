@@ -77,9 +77,9 @@ class Database:
         self.cursor.execute(query, values)
         self.conn.commit()
 
-    def insert_face_verify_status(self, image_name, face_name, verifiy_status):
-        query = "INSERT INTO face_verified (image_name, face_name, verifiy_status) VALUES (%s, %s, %s)"
-        values = (image_name, face_name, verifiy_status)
+    def insert_face_verify_status(self, image_name, face_name, verify_status):
+        query = "INSERT INTO face_verified (image_name, face_name, verify_status) VALUES (%s, %s, %s)"
+        values = (image_name, face_name, verify_status)
         self.cursor.execute(query, values)
         self.conn.commit()
 

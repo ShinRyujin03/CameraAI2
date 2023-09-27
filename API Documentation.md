@@ -19,7 +19,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `image_name`: VARCHAR(255), NOT NULL
   - `image_file`: LONGBLOB, NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores image file after request as base64 file (`*.bin`).
+- **Description**: Stores image file after request as bytes strings file (`*.bin`).
 
 ### face_location Table
 - **Fields**:
@@ -44,6 +44,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `top_lip`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected face landmarks.
+
 ### face_emotions Table
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
@@ -53,7 +54,17 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `emotions` : VARCHAR(50), NOT NULL
   - `emotion_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-  - 
+ **Description**: Stores information about detected face emotions.
+
+### face_verified Table
+- **Fields**:
+  - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
+  - `image_name`: VARCHAR(255), NOT NULL
+  - `face_name`: VARCHAR(255), NOT NULL
+  - `verify_status`: VARCHAR(255), NOT NULL
+  - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
+- **Description**: Stores information about face verification status of the image with face's name.
+
 ### human_location Table
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
@@ -72,22 +83,23 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `objects_location_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected objects.
+
 ## Model - Library
-### Face detection and face landmarks detection
+### `face-recognition` library
 - **Library name**: face-recognition
 - **Version**: 1.3.0
 - **Install command line**:`pip install face-recognition`
 - **import syntax**:`import face_recognition`
 - **Project documentation**: https://pypi.org/project/face-recognition/
 
-### Emotions recognition
+### `DeepFace` library
 - **Library name**: DeepFace
 - **Version**: 0.0.79
 - **Install command line**:`pip install deepface`
 - **import syntax**:`from deepface import DeepFace`
 - **Project documentation**: https://pypi.org/project/deepface/
 
-### Human detection and Multiple objects detection
+### `Yolo v8 nano` model
 - **Model name**: YOLO
 - **Version**: v8 nano
 - **Install command line**:`pip install ultralytics` 
@@ -145,6 +157,14 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `{'image_name','face_locations','emotions':[{'dominant_emotion': face['dominant_emotion'], 'emotion_weights': face['emotion']}`
   - "Face emotions metadata of `image_name` saved successfully"
 
+### Face VerificationV
+- **Prefix**:`/face`
+- **Endpoint**: `/face_verify`
+- **Method**: POST
+- **Description**: Get the `image_data` from the `image` table as `known_face`, compare `known_face` with `unknown_face` and save face verification status and face's name to the database.
+- **Response**:
+  - `{'face_verification': verify, 'Name', 'image_name'}`
+
 ## Error Handle
 ### Image code status - iXX
 - **INVALID_IMAGE** 
@@ -159,6 +179,10 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - HTTP Code: `404 Not Found`
   - Code: "i03" 
   - Message: Nothing was detected
+- **NO_FACE_NAME**
+  - HTTP Code: `404 Not Found`
+  - Code: "i04" 
+  - Message: Face's name required
 ### Database code status - dXX
 - **DATABASE_IS_NONE**
   - HTTP Code: `503 Service Unavailable`
@@ -199,6 +223,11 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - The image will save in `image` table
 - The metadata will save in `face_emotions` table
 - The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
+
+### Face Verification
+- To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
+- The face verification status and face's name will save in `face_verified` table
+- The face verification status will return `not verified` or `verified` only
 
 ## Config
 ### [db_config]
