@@ -57,8 +57,3 @@ class FaceLandmarksDetection:
                     db.close_connection()
                     logging.info(result, {"message": f"Face metadata of {image_name} saved successfully"})
                     return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
-
-
-
-
-
