@@ -7,6 +7,7 @@ import face_recognition
 import cv2
 import numpy as np
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError, NoFaceNameError
+from app.services.face.face_detection_services import FaceLocationDetection
 import logging
 import mysql.connector
 import configparser
@@ -27,12 +28,19 @@ class FaceVerification:
             known_face_encodings = db.get_all_image_files()
             # Convert the uploaded face to an encoding
             unknown_face_image = cv2.imdecode(np.frombuffer(unknown_face, np.uint8), cv2.IMREAD_COLOR)
-            unknown_encoding = face_recognition.face_encodings(unknown_face_image)[0]
+
+            # Get face locations using face_detector
+            unknown_face_detector = FaceLocationDetection()
+            unknown_face_detector.image_data = unknown_face
+            unknown_face_locations = unknown_face_detector.facelocation()
+
+            unknown_encoding = face_recognition.face_encodings(unknown_face_image,unknown_face_locations,1,"large")[0]
             for known_face in known_face_encodings:
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
                 if known_face_image is not None:
-                    known_encoding = face_recognition.face_encodings(known_face_image)[0]
-                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, 0.5)
+                    known_encoding = face_recognition.face_encodings(known_face_image,None,1,"small")[0]
+                    print(face_recognition.face_distance(unknown_encoding, [known_encoding])[0])
+                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, 0.6)
                     if result[0]:
                         return "verified"
                     else:
