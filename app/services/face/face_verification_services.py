@@ -40,7 +40,7 @@ class FaceVerification:
                 if known_face_image is not None:
                     known_encoding = face_recognition.face_encodings(known_face_image,None,1,"small")[0]
                     print(face_recognition.face_distance(unknown_encoding, [known_encoding])[0])
-                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, 0.6)
+                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, config.getfloat('function_config', 'compare_face_tolerance'))
                     if result[0]:
                         return "verified"
                     else:

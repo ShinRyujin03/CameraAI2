@@ -55,7 +55,6 @@ class EmotionRecognition:
                 # Create a response object
                 result = {
                     'image_name': image_name,
-                    'face_locations': face_locations,
                     'emotions': emotions,
                     'emotion_weight': emotion_weights,
                 }
@@ -69,11 +68,11 @@ class EmotionRecognition:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(str(face_locations)) > 500:
+                if len(str(emotions)) > 500:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    db.insert_face_emotions(image_name, face_locations, emotions, emotion_weights)
+                    db.insert_face_emotions(image_name, emotions, emotion_weights)
                     db.insert_image_file(image_name, image_data)
                     db.close_connection()
                     logging.info(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
