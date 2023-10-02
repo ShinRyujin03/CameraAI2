@@ -191,7 +191,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **OUTPUT_TOO_LONG**
   - HTTP Code: `413 Payload Too Large`
   - Code: "d02"
-  - Message: Output data  too large!!!
+  - Message: Output data too large!!!
 
 ## Usage
 ### Human Detection
@@ -227,7 +227,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
-- The `compare_face_tolerance` can be config in `config.ini` (default `compare_face_tolerance = 0.5`)
+- The `compare_face_tolerance` can be config in `config.ini` (default `compare_face_tolerance = 0.45`)
 - The face verification status will return `not verified` or `verified` only
 
 ## Config

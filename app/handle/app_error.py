@@ -11,7 +11,7 @@ class CustomError:
     NO_DETECTION = {'code': "i03", 'message': 'Nothing was detected'}
     NO_FACE_NAME = {'code': "i04", 'message': "Face's name required"}
     DATABASE_IS_NONE = {'code': "d01", 'message': 'Can not connect to the database'}
-    OUTPUT_TOO_LONG = {'code': "d02", 'message': 'Output data  too large!!!'}
+    OUTPUT_TOO_LONG = {'code': "d02", 'message': 'Output data too large!!!'}
     # Add more custom errors as needed
 class NoDetection(AppError):
     def __init__(self):
@@ -39,5 +39,5 @@ def handle_generic_error(error):
         return jsonify(response), 415
     elif error.args[0] == 'Can not connect to the database':
         return jsonify(response), 503
-    elif error.args[0] == 'Output data  too large!!!':
+    elif error.args[0] == 'Output data too large!!!':
         return jsonify(response), 413
