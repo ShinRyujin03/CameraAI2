@@ -71,9 +71,9 @@ class Database:
 
             self.cursor.execute(query, values)
         self.conn.commit()
-    def insert_face_emotions(self, image_name, face_locations, emotions, emotion_weights):
-        query = "INSERT INTO face_emotions (image_name, face_locations, emotions, emotion_weights) VALUES (%s, %s, %s, %s)"
-        values = (image_name, str(face_locations), str(emotions), str(emotion_weights))
+    def insert_face_emotions(self, image_name, emotions, emotion_weights):
+        query = "INSERT INTO face_emotions (image_name, emotions, emotion_weights) VALUES (%s, %s, %s)"
+        values = (image_name, str(emotions), str(emotion_weights))
         self.cursor.execute(query, values)
         self.conn.commit()
 

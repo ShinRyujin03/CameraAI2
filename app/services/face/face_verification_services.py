@@ -34,23 +34,32 @@ class FaceVerification:
             unknown_face_detector.image_data = unknown_face
             unknown_face_locations = unknown_face_detector.facelocation()
 
-            unknown_encoding = face_recognition.face_encodings(unknown_face_image,unknown_face_locations,1,"large")[0]
+            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,
+                                                               model="large")
+
+            if not unknown_encoding:
+                return "not verified"
+
+            min_distance = float('inf')
             for known_face in known_face_encodings:
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
                 if known_face_image is not None:
-                    known_encoding = face_recognition.face_encodings(known_face_image,None,1,"small")[0]
-                    print(face_recognition.face_distance(unknown_encoding, [known_encoding])[0])
-                    result = face_recognition.compare_faces([known_encoding], unknown_encoding, config.getfloat('function_config', 'compare_face_tolerance'))
-                    if result[0]:
-                        return "verified"
-                    else:
-                        return "not verified"
-                else:
-                    return "not verified"
+                    known_encoding = face_recognition.face_encodings(known_face_image, model="small")
+                    if known_encoding:
+                        distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
+                        min_distance = min(min_distance, distance)
+
+            if min_distance <= config.getfloat('function_config', 'compare_face_tolerance'):
+                print(min_distance)
+                return "verified"
+            else:
+                print(min_distance)
+                return "not verified"
         except IndexError:
             return "not verified"
         finally:
             db.close_connection()
+
     def get_face_verification(self,image_file, face_name):
         face_detector = FaceVerification()
         if not face_name:
