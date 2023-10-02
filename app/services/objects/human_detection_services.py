@@ -69,8 +69,11 @@ class HumanDetection:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    db.insert_human_location(image_name, detected_boxes, detected_weights)
-                    db.insert_image_file(image_name, image_data)
-                    db.close_connection()
-                    logging.info(result, {"message": f"Human location metadata of {image_name} saved successfully"})
-                    return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                    try:
+                        db.insert_human_location(image_name, detected_boxes, detected_weights)
+                        db.insert_image_file(image_name, image_data)
+                        db.close_connection()
+                        logging.info(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                        return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                    except Exception as e:
+                        return str(e)

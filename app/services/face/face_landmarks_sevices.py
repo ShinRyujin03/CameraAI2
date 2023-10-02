@@ -52,8 +52,11 @@ class FaceLandmarksDetection:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    db.insert_face_landmark(image_name, landmarks)
-                    db.insert_image_file(image_name, image_data)
-                    db.close_connection()
-                    logging.info(result, {"message": f"Face metadata of {image_name} saved successfully"})
-                    return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
+                    try:
+                        db.insert_face_landmark(image_name, landmarks)
+                        db.insert_image_file(image_name, image_data)
+                        db.close_connection()
+                        logging.info(result, {"message": f"Face metadata of {image_name} saved successfully"})
+                        return jsonify(result, {"message": f"Face metadata of {image_name} saved successfully"})
+                    except Exception as e:
+                        return str(e)

@@ -91,8 +91,10 @@ class FaceVerification:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    db.insert_face_verify_status(image_name, face_name, verify)
-                    db.close_connection()
-                    logging.info(result)
-                    return jsonify(result)
-
+                    try:
+                        db.insert_face_verify_status(image_name, face_name, verify)
+                        db.close_connection()
+                        logging.info(result)
+                        return jsonify(result)
+                    except Exception as e:
+                        return str(e)

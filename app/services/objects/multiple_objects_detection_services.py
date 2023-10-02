@@ -92,8 +92,11 @@ class MultipleObjectDetection:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    db.insert_detected_objects(image_name, detected_objects, detected_boxes, detected_weights)
-                    db.insert_image_file(image_name, base64_image_string)
-                    db.close_connection()
-                    logging.info(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
-                    return jsonify(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
+                    try:
+                        db.insert_detected_objects(image_name, detected_objects, detected_boxes, detected_weights)
+                        db.insert_image_file(image_name, base64_image_string)
+                        db.close_connection()
+                        logging.info(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
+                        return jsonify(result, {"message": f"Multiple objects location metadata of {image_name} saved successfully"})
+                    except Exception as e:
+                        return str(e)

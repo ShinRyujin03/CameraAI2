@@ -55,9 +55,11 @@ class FaceLocationDetection:
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
-                    db.insert_face_location(image_name, face_locations)
-                    db.insert_image_file(image_name, image_data)
-                    db.close_connection()
-                    logging.info(result, {"message": f"Face location metadata of {image_name} saved successfully"})
-                    return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
-
+                    try:
+                        db.insert_face_location(image_name, face_locations)
+                        db.insert_image_file(image_name, image_data)
+                        db.close_connection()
+                        logging.info(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                        return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                    except Exception as e:
+                        return str(e)
