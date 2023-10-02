@@ -20,10 +20,19 @@ class Database:
         self.cursor = self.conn.cursor()
 
     def insert_image_file(self, image_name, image_file):
-        query = "INSERT INTO image (image_name, image_file) VALUES (%s, %s)"
-        values = (image_name, image_file)
-        self.cursor.execute(query, values)
-        self.conn.commit()
+        # Check if the image_name already exists in the table
+        check_query = "SELECT COUNT(*) FROM image WHERE image_name = %s"
+        self.cursor.execute(check_query, (image_name,))
+        count = self.cursor.fetchone()[0]
+
+        if count == 0:
+            # Insert the new image if image_name doesn't exist
+            insert_query = "INSERT INTO image (image_name, image_file) VALUES (%s, %s)"
+            values = (image_name, image_file)
+            self.cursor.execute(insert_query, values)
+            self.conn.commit()
+        else:
+            pass
 
     def insert_face_location(self, image_name, face_location):
         query = "INSERT INTO face_location (image_name, face_location) VALUES (%s, %s)"
@@ -91,7 +100,6 @@ class Database:
 
         image_files = [result[0] for result in results]
         #image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
-
         return image_files
     def close_connection(self):
         if self.conn.is_connected():
