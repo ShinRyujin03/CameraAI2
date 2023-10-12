@@ -10,6 +10,14 @@ from app.schema.image_schema import *
 from database.database import Database
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 from app.services.face.face_detection_services import FaceLocationDetection
+import configparser
+
+# Construct the relative path to config.ini
+config_path = os.path.realpath("../config.ini")
+
+# Create a configuration object
+config = configparser.ConfigParser()
+config.read(config_path)
 
 class EmotionRecognition:
     def __init__(self):
@@ -68,7 +76,7 @@ class EmotionRecognition:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(str(emotions)) > 500:
+                if len(str(emotions)) > config.getint('db_limit_config', 'emotions'):
                     logging.error(OutputTooLongError())
                     raise OutputTooLongError
                 else:
