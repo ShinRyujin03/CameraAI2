@@ -9,7 +9,6 @@ from app.schema.image_schema import *
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 import configparser
 import logging
-import base64
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
