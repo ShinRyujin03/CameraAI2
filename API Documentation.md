@@ -52,7 +52,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `emotions` : VARCHAR(500), NOT NULL
   - `emotion_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
- **Description**: Stores information about detected face emotions.
+- **Description**: Stores information about detected face emotions.
 
 ### face_verified Table
 - **Fields**:
@@ -73,7 +73,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `face_name`: VARCHAR(255), NOT NULL
   - `verify_status`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Summarizes the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_emotions` table.
+- **Description**: Summarizes and store the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_emotions` table.
 
 ### human_location Table
 - **Fields**:
@@ -167,7 +167,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `{'image_name','emotions':[{'dominant_emotion': face['dominant_emotion'], 'emotion_weights': face['emotion']}`
   - "Face emotions metadata of `image_name` saved successfully"
 
-### Face VerificationV
+### Face Verification
 - **Prefix**:`/face`
 - **Endpoint**: `/face_verify`
 - **Method**: POST
@@ -208,14 +208,14 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
 - The image will save in `image` table
 - The metadata will save in `human_location` table
-- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
+- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result`
 - You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 
 ### Multiple Objects Detection
 - To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`. 
 - The image will save in `image` table
 - The metadata will save in `detected_objects` table
-- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result` (default `round_result = 3`)
+- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result`
 - The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
 
 ### Face Location
@@ -237,7 +237,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
-- The `compare_face_tolerance` can be config in `config.ini` (default `compare_face_tolerance = 0.45`)
+- The `compare_face_tolerance` is max accepted's distacce. It can be config in `config.ini`
+- The `fast_compare_face_tolerance` is min accepted's distacce. It can be config in `config.ini`
 - The face verification status will return `not verified` or `verified` only
 
 ## Config

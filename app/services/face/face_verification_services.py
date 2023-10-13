@@ -26,6 +26,7 @@ class FaceVerification:
         db = Database()
         try:
             known_face_encodings = db.get_all_image_files()
+            print("Known face nums:", len(known_face_encodings))
             # Convert the uploaded face to an encoding
             unknown_face_image = cv2.imdecode(np.frombuffer(unknown_face, np.uint8), cv2.IMREAD_COLOR)
 
@@ -37,7 +38,8 @@ class FaceVerification:
             unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,model="small")
 
             if not unknown_encoding:
-                return "not verified"
+                logging.error(NoDetection())
+                raise NoDetection
 
             min_distance = float('inf')
             for known_face in known_face_encodings:
@@ -48,13 +50,14 @@ class FaceVerification:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         if min_distance <= config.getfloat('function_config', 'fast_compare_face_tolerance'):
-                            print(min_distance)
+                            print("Fast compare face activated!")
+                            print("Min distance:", min_distance)
                             return "verified"
             if min_distance <= config.getfloat('function_config', 'compare_face_tolerance'):
-                print(min_distance)
+                print("Min distance:", min_distance)
                 return "verified"
             else:
-                print(min_distance)
+                print("Min distance:", min_distance)
                 return "not verified"
         except Exception as e:
             return str(e)
@@ -74,6 +77,7 @@ class FaceVerification:
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
                 verify = face_detector.face_verification(image_data)
+                print(" ")
                 # Create a response object
                 result = {
                     'face_verification': verify,
