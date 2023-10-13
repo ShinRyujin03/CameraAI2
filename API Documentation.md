@@ -49,9 +49,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
-  - `face_location`: VARCHAR(255), NOT NULL
-  - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-  - `emotions` : VARCHAR(50), NOT NULL
+  - `emotions` : VARCHAR(500), NOT NULL
   - `emotion_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
  **Description**: Stores information about detected face emotions.
@@ -61,9 +59,21 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
   - `face_name`: VARCHAR(255), NOT NULL
+  - `face_location`: VARCHAR(255), NOT NULL
+  - `emotions` : VARCHAR(500), NOT NULL
   - `verify_status`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about face verification status of the image with face's name.
+
+### face_metadata Table
+- **Fields**:
+  - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
+  - `image_name`: VARCHAR(255), NOT NULL
+  - `image_file`: LONGBLOB, NOT NULL
+  - `face_name`: VARCHAR(255), NOT NULL
+  - `verify_status`: VARCHAR(255), NOT NULL
+  - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
+- **Description**: Summarizes the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_emotions` table.
 
 ### human_location Table
 - **Fields**:
@@ -78,11 +88,11 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
-  - `objects_name`: VARCHAR(50), NOT NULL
+  - `objects_name`: VARCHAR(500), NOT NULL
   - `objects_location_boxes`: VARCHAR(255), NOT NULL
   - `objects_location_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about detected objects.
+- **Description**: Stores information about multiple detected objects.
 
 ## Model - Library
 ### `face-recognition` library
@@ -154,7 +164,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Method**: POST
 - **Description**: Get the `face_locations` metadata of the images, recognize emotions and save emotions metadata to the database.
 - **Response**:
-  - `{'image_name','face_locations','emotions':[{'dominant_emotion': face['dominant_emotion'], 'emotion_weights': face['emotion']}`
+  - `{'image_name','emotions':[{'dominant_emotion': face['dominant_emotion'], 'emotion_weights': face['emotion']}`
   - "Face emotions metadata of `image_name` saved successfully"
 
 ### Face VerificationV
@@ -244,12 +254,16 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - landmarks = 250
 - face_name = 250
 - objects_detected_boxes = 500
+- emotions = 500
 
 ### [function_config]
 - path = png, jpg, jpeg
 - face_prefix = /face
 - objects_prefix = /objects
-- compare_face_tolerance = 0.5
+- multiple_objects_prefix = /m_objects
+- compare_face_tolerance = 0.45
+- fast_compare_face_tolerance = 0.2
+- upsample_image = 1
 
 ### [human_detection_config]
 - model_path = model/yolov8n.pt
