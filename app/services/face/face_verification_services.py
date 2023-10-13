@@ -6,7 +6,7 @@ from database.database import Database
 import face_recognition
 import cv2
 import numpy as np
-from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError, NoFaceNameError
+from app.handle.app_error import DatabaseNoneError, NoDetection, NoFaceNameError
 from app.services.face.face_detection_services import FaceLocationDetection
 import logging
 import mysql.connector
@@ -48,10 +48,13 @@ class FaceVerification:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         if min_distance <= config.getfloat('function_config', 'fast_compare_face_tolerance'):
+                            print(min_distance)
                             return "verified"
             if min_distance <= config.getfloat('function_config', 'compare_face_tolerance'):
+                print(min_distance)
                 return "verified"
             else:
+                print(min_distance)
                 return "not verified"
         except Exception as e:
             return str(e)
@@ -85,14 +88,10 @@ class FaceVerification:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
-                if len(str(face_name)) > config.getint('db_limit_config', 'face_name'):
-                    logging.error(OutputTooLongError())
-                    raise OutputTooLongError
-                else:
-                    try:
-                        db.insert_face_verify_status(image_name, face_name, verify)
-                        db.close_connection()
-                        logging.info(result)
-                        return jsonify(result)
-                    except Exception as e:
-                        return str(e)
+                try:
+                    db.insert_face_verify_status(image_name, face_name, verify)
+                    db.close_connection()
+                    logging.info(result)
+                    return jsonify(result)
+                except Exception as e:
+                    return str(e)
