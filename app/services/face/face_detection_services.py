@@ -24,8 +24,11 @@ class FaceLocationDetection:
         image_np = np.frombuffer(self.image_data, np.uint8)
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         face_locations = face_recognition.face_locations(image, config.getint('function_config', 'upsample_image'), "hog")
+        model = "Model used: hog"
         if not face_locations:
+            model = "Model used: cnn"
             face_locations = face_recognition.face_locations(image, config.getint('function_config', 'upsample_image'), "cnn")
+        print(model)
         return face_locations
     def get_face_location(self,image_file):
         face_detector = FaceLocationDetection()
