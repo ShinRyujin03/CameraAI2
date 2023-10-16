@@ -262,15 +262,15 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - face_prefix = /face
 - objects_prefix = /objects
 - multiple_objects_prefix = /m_objects
-- compare_face_tolerance = 0.45
-- fast_compare_face_tolerance = 0.2
+- compare_face_tolerance = 0.42
+- fast_compare_face_tolerance = 0.23
 - upsample_image = 1
 
 ### [human_detection_config]
 - model_path = model/yolov8n.pt
-- round_result = 3
+- round_result = 5
 - label_class = 0
 
 ### [objects_detection_config]
 - model_path =../../model/yolov8n.pt
-- round_result = 3
+- round_result = 5
