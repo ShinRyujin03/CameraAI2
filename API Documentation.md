@@ -237,8 +237,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
-- The `compare_face_tolerance` is max accepted's distacce. It can be config in `config.ini`
-- The `fast_compare_face_tolerance` is min accepted's distacce. It can be config in `config.ini`
+- The `compare_face_tolerance` is max accepted's distance. It can be config in `config.ini`
+- The `fast_compare_face_tolerance` is min accepted's distance. It can be config in `config.ini`
 - The face verification status will return `not verified` or `verified` only
 
 ## Config
