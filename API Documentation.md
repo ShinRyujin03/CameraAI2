@@ -49,7 +49,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
-  - `emotions` : VARCHAR(500), NOT NULL
+  - `emotions` : VARCHAR(255), NOT NULL
   - `emotion_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected face emotions.
@@ -58,9 +58,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
-  - `face_name`: VARCHAR(255), NOT NULL
-  - `face_location`: VARCHAR(255), NOT NULL
-  - `emotions` : VARCHAR(500), NOT NULL
   - `verify_status`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about face verification status of the image with face's name.
@@ -71,6 +68,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `image_name`: VARCHAR(255), NOT NULL
   - `image_file`: LONGBLOB, NOT NULL
   - `face_name`: VARCHAR(255), NOT NULL
+  - `face_location`: VARCHAR(255), NOT NULL
+  - `emotions` : VARCHAR(255), NOT NULL
   - `verify_status`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Summarizes and store the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_emotions` table.
@@ -88,8 +87,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
-  - `objects_name`: VARCHAR(500), NOT NULL
-  - `objects_location_boxes`: VARCHAR(255), NOT NULL
+  - `objects_name`: VARCHAR(255), NOT NULL
+  - `objects_location_boxes`: VARCHAR(500), NOT NULL
   - `objects_location_weights`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about multiple detected objects.
@@ -237,7 +236,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
-- The `compare_face_tolerance` is max accepted's distance. It can be config in `config.ini`
+- The `compare_face_tolerance` is max acceptable distance. It can be config in `config.ini`
 - The `fast_compare_face_tolerance` is min accepted's distance. It can be config in `config.ini`
 - The face verification status will return `not verified` or `verified` only
 
@@ -251,11 +250,11 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - db_name = metadata
 
 ### [db_limit_config]
-- face_locations = 500
+- face_locations = 250
 - landmarks = 250
 - face_name = 250
-- objects_detected_boxes = 500
-- emotions = 500
+- objects_detected_boxes = 490
+- emotions = 250
 
 ### [function_config]
 - path = png, jpg, jpeg
