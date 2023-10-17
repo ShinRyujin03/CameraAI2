@@ -201,7 +201,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Response**:
   - [{
       -  "image_name": "1655923786906.jpeg",
-      -  "landmarks": [...] ' (Avg: 5000 - 50000 line of face landmark) '
+      -  "landmarks": [...] ` (Avg: 5000 - 50000 line of face landmark) `
     - {
         "message": "Face metadata of 1655923786906.jpeg saved successfully"
     }
