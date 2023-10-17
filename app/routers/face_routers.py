@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.services.face.face_landmarks_sevices import  FaceLandmarksDetection
-from app.services.face.emotions_recognition_services import EmotionRecognition
+from app.services.face.facial_attribute_recognition_services import FacialAttributeRecognition
 from app.services.face.face_detection_services import FaceLocationDetection
 from app.services.face.face_verification_services import FaceVerification
 # Create instances of the function classes
@@ -23,11 +23,11 @@ def request_face_landmarks():
     landmarks_result = face_landmarks.get_face_landmarks(image_file)
     return landmarks_result
 
-@face_router.route('/emotions_recognition', methods=['POST'])
+@face_router.route('/facial_attribute_recognition', methods=['POST'])
 def request_emotions_recognition():
     image_file = request.files['image']  # Access the uploaded file
-    face_emotions = EmotionRecognition()
-    emotions_result = face_emotions.get_emotions_recognition(image_file)
+    face_emotions = FacialAttributeRecognition()
+    emotions_result = face_emotions.get_facial_attribute_recognition(image_file)
     return emotions_result
 
 @face_router.route('/face_verify', methods=['POST'])

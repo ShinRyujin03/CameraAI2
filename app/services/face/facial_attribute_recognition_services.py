@@ -19,11 +19,11 @@ config_path = os.path.realpath("../config.ini")
 config = configparser.ConfigParser()
 config.read(config_path)
 
-class EmotionRecognition:
+class FacialAttributeRecognition:
     def __init__(self):
         self.image_data = None
 
-    def emotions_recognition(self):
+    def facial_attribute_recognition(self):
         image_np = np.frombuffer(self.image_data, np.uint8)
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
 
@@ -50,8 +50,8 @@ class EmotionRecognition:
 
         return emotions_list, emotion_weights_list, age_list, gender_list
 
-    def get_emotions_recognition(self, image_file):
-        emotions_detector = EmotionRecognition()
+    def get_facial_attribute_recognition(self, image_file):
+        emotions_detector = FacialAttributeRecognition()
         if schema_test(image_file):
             try:
                 # Read the image data from the file
@@ -62,7 +62,7 @@ class EmotionRecognition:
                 try:
                     # Process the image using emotions_detector
                     emotions_detector.image_data = image_data
-                    emotions, emotion_weights, age, gender = emotions_detector.emotions_recognition()
+                    emotions, emotion_weights, age, gender = emotions_detector.facial_attribute_recognition()
                 except Exception as e:
                     return str(e)
 
