@@ -126,27 +126,72 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Endpoint**: `/human_location`
 - **Method**: POST
 - **Description**: Detect human locations in images
-- **Response**: 
-  - `{'image_name', 'detections': [{'box', 'weight'}`
-  - "Human location metadata of `image_name` saved successfully"
+- **Example Response**: 
+  - [{ 
+    - "detections": [{
+      - "box": [
+                        400.51749,
+                        268.44345,
+                        403.30487,
+                        465.74261
+                    ],
+      - "weight": 0.92163 }],
+    - "image_name": "mot-so-hinh-anh-ve-rei.jpg"},
+    
+    - {
+         "message": "Human location metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
+     }
+  - ]
 
 ### Multiple Objects Detection
 - **Prefix**: `/m_objects`
 - **Endpoint**: `m_objects_location`
 - **Method**: POST
 - **Description**: Detect object locations in images, classify into different categories
-- **Response**:
-  - `{'image_name', 'detections': [{'object type', 'box', 'weight'}`
-  - "Multiple objects location metadata of `image_name` saved successfully"
-
+- **Example Response**:
+    - [{ 
+    - "detections": [{
+      - "box": [
+                        400.51749,
+                        268.44345,
+                        403.30487,
+                        465.74261
+                    ],
+      - "object type": "person", "weight": 0.92163 },
+    - {
+      - "box": [
+                        192.27647,
+                        438.57233,
+                        69.00922,
+                        133.88718
+                    ],
+      - "object type": "bottle", "weight": 0.53189 }]
+    - "image_name": "mot-so-hinh-anh-ve-rei.jpg"}, 
+  - {
+       "message": "Human location metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
+   }
+  - ]
 ### Face Location
 - **Prefix**:`/face`
 - **Endpoint**: `/face_location`
 - **Method**: POST
 - **Description**: Detect face locations in images
-- **Response**: 
-  - `{'image_name', face_locations'}`
-  - "Face location metadata of `image_name` saved successfully"
+- **Example Response**: 
+  - [
+     - {
+        "face_locations": [
+       [
+                724,
+                2853,
+                1682,
+                1895
+            ]
+    ],
+      -  "image_name": "newjeans-hyein-4k-wallpaper-uhdpaper.com-8960g.jpg"
+    },
+    - {
+    "message": "Face location metadata of newjeans-hyein-4k-wallpaper-uhdpaper.com-8960g.jpg saved successfully"}
+  - ]
 
 ### Face Landmarks
 - **Prefix**:`/face`
@@ -154,25 +199,47 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Method**: POST
 - **Description**: Encode face landmarks to an array
 - **Response**:
-  - `{'image_name', 'landmarks'}`
-  - "Face metadata of `image_name` saved successfully"
+  - [{
+      -  "image_name": "1655923786906.jpeg",
+      -  "landmarks": [...] ' (Avg: 5000 - 50000 line of face landmark) '
+    - {
+        "message": "Face metadata of 1655923786906.jpeg saved successfully"
+    }
+  - ]
 
-### Emotions Recognition
+### Facial Attribute Recognition
 - **Prefix**:`/face`
-- **Endpoint**: `/emotions_recognition`
+- **Endpoint**: `/facial_attribute_recognition`
 - **Method**: POST
-- **Description**: Get the `face_locations` metadata of the images, recognize emotions and save emotions metadata to the database.
-- **Response**:
-  - `{'image_name','emotions':[{'dominant_emotion': face['dominant_emotion'], 'emotion_weights': face['emotion']}`
-  - "Face emotions metadata of `image_name` saved successfully"
+- **Description**: Recognize ages, gender and emotions and save emotions metadata to the database.
+- **Example Response**:
+  - [{
+     -   "age": [
+            "27 - 32"
+        ],
+    -    "emotions": [
+            "neutral"
+        ],
+    -    "gender": [
+            "Woman"
+        ],
+    -    "image_name": "210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg"
+    },
+      - {
+          "message": "Face emotions metadata of 210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg saved successfully"
+  - }]
 
 ### Face Verification
 - **Prefix**:`/face`
 - **Endpoint**: `/face_verify`
 - **Method**: POST
 - **Description**: Get the `image_data` from the `image` table as `known_face`, compare `known_face` with `unknown_face` and save face verification status and face's name to the database.
-- **Response**:
-  - `{'face_verification': verify, 'Name', 'image_name'}`
+- **Example Response**:
+  - {
+    - "Name": "Rei",
+    - "face_verification": "verified",
+    - "image_name": "mot-so-hinh-anh-ve-rei.jpg"
+  - }
 
 ## Error Handle
 ### Image code status - iXX

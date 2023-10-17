@@ -28,7 +28,7 @@ class FacialAttributeRecognition:
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
 
         # Phân tích cảm xúc bằng DeepFace
-        emotions_data = DeepFace.analyze(image, actions=['emotion', 'age', 'gender'], enforce_detection=False)
+        emotions_data = DeepFace.analyze(image, actions=['emotion', 'age', 'gender'], enforce_detection=False, silent=True)
 
         emotions_list = []
         emotion_weights_list = []
