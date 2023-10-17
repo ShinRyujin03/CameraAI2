@@ -39,13 +39,14 @@ class FacialAttributeRecognition:
         for face in emotions_data:
             dominant_emotion = face['dominant_emotion']
             emotion_weight = max(face['emotion'].values())
-            age = face['age'] - 10
-            gender = face['gender']
+            age_min = face['age'] - 9
+            age_max = age_min + 5
+            gender = max(face['gender'], key=face['gender'].get)
 
             emotions_list.append(dominant_emotion)
             emotion_weights_list.append(round(emotion_weight,3))
 
-            age_list.append(age)
+            age_list.append(f"{age_min} - {age_max}")
             gender_list.append(gender)
 
         return emotions_list, emotion_weights_list, age_list, gender_list
@@ -70,7 +71,7 @@ class FacialAttributeRecognition:
                 result = {
                     'image_name': image_name,
                     'emotions': emotions,
-                    'age (+-3)' : age,
+                    'age' : age,
                     'gender': gender,
                 }
 
@@ -78,7 +79,7 @@ class FacialAttributeRecognition:
                     logging.error(NoDetection())
                     raise NoDetection
 
-                db = Database()
+                #db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
@@ -88,9 +89,9 @@ class FacialAttributeRecognition:
                     raise OutputTooLongError
                 else:
                     try:
-                        db.insert_face_emotions(image_name, emotions, emotion_weights)
-                        db.insert_image_file(image_name, image_data)
-                        db.close_connection()
+                        #db.insert_face_emotions(image_name, emotions, emotion_weights)
+                        #db.insert_image_file(image_name, image_data)
+                        #db.close_connection()
                         logging.info(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
                         return jsonify(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
                     except Exception as e:
