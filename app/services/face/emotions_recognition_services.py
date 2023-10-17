@@ -28,19 +28,27 @@ class EmotionRecognition:
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
 
         # Phân tích cảm xúc bằng DeepFace
-        emotions_data = DeepFace.analyze(image, actions=['emotion'], enforce_detection=False)
+        emotions_data = DeepFace.analyze(image, actions=['emotion', 'age', 'gender'], enforce_detection=False)
 
         emotions_list = []
         emotion_weights_list = []
 
+        age_list = []
+        gender_list = []
+
         for face in emotions_data:
             dominant_emotion = face['dominant_emotion']
             emotion_weight = max(face['emotion'].values())
+            age = face['age'] - 10
+            gender = face['gender']
 
             emotions_list.append(dominant_emotion)
             emotion_weights_list.append(round(emotion_weight,3))
 
-        return emotions_list, emotion_weights_list
+            age_list.append(age)
+            gender_list.append(gender)
+
+        return emotions_list, emotion_weights_list, age_list, gender_list
 
     def get_emotions_recognition(self, image_file):
         emotions_detector = EmotionRecognition()
@@ -51,23 +59,22 @@ class EmotionRecognition:
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
 
-                # Process the image using emotions_detector
-                emotions_detector.image_data = image_data
-                emotions, emotion_weights = emotions_detector.emotions_recognition()
-
-                # Get face locations using face_detector
-                face_detector = FaceLocationDetection()
-                face_detector.image_data = image_data
-                face_locations = face_detector.facelocation()
+                try:
+                    # Process the image using emotions_detector
+                    emotions_detector.image_data = image_data
+                    emotions, emotion_weights, age, gender = emotions_detector.emotions_recognition()
+                except Exception as e:
+                    return str(e)
 
                 # Create a response object
                 result = {
                     'image_name': image_name,
                     'emotions': emotions,
-                    'emotion_weight': emotion_weights,
+                    'age (+-3)' : age,
+                    'gender': gender,
                 }
 
-                if not face_locations:  # Check if no face locations were detected
+                if not emotions:  # Check if no face locations were detected
                     logging.error(NoDetection())
                     raise NoDetection
 
