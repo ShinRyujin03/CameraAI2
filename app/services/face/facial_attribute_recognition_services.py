@@ -79,7 +79,7 @@ class FacialAttributeRecognition:
                     logging.error(NoDetection())
                     raise NoDetection
 
-                #db = Database()
+                db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
@@ -89,9 +89,9 @@ class FacialAttributeRecognition:
                     raise OutputTooLongError
                 else:
                     try:
-                        #db.insert_face_emotions(image_name, emotions, emotion_weights)
-                        #db.insert_image_file(image_name, image_data)
-                        #db.close_connection()
+                        db.insert_face_facial_attubute(image_name, emotions, age, gender)
+                        db.insert_image_file(image_name, image_data)
+                        db.close_connection()
                         logging.info(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
                         return jsonify(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
                     except Exception as e:

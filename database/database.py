@@ -80,9 +80,9 @@ class Database:
 
             self.cursor.execute(query, values)
         self.conn.commit()
-    def insert_face_emotions(self, image_name, emotions, emotion_weights):
-        query = "INSERT INTO face_emotions (image_name, emotions, emotion_weights) VALUES (%s, %s, %s)"
-        values = (image_name, str(emotions), str(emotion_weights))
+    def insert_face_facial_attubute(self, image_name, emotions, ages, gender):
+        query = "INSERT INTO face_facial_attribute (image_name, emotions, ages, gender) VALUES (%s, %s, %s, %s)"
+        values = (image_name, str(emotions), str(ages), str(gender))
         self.cursor.execute(query, values)
         self.conn.commit()
 
