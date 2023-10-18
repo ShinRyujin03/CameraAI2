@@ -53,7 +53,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `ages`: VARCHAR(255), NOT NULL
   - `gender`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about detected face emotions.
+- **Description**: Stores information about detected face facial attribute.
 
 ### face_verified Table
 - **Fields**:
@@ -75,7 +75,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `gender`: VARCHAR(255), NULL
   - `verify_status`: VARCHAR(255), NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Summarizes and store the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_emotions` table.
+- **Description**: Summarizes and store the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_facial_attribute` table.
 
 ### human_location Table
 - **Fields**:

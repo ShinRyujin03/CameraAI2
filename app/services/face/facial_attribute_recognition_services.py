@@ -92,7 +92,7 @@ class FacialAttributeRecognition:
                         db.insert_face_facial_attubute(image_name, emotions, age, gender)
                         db.insert_image_file(image_name, image_data)
                         db.close_connection()
-                        logging.info(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
-                        return jsonify(result, {"message": f"Face emotions metadata of {image_name} saved successfully"})
+                        logging.info(result, {"message": f"Face facial attribute metadata of {image_name} saved successfully"})
+                        return jsonify(result, {"message": f"Face facial attribute metadata of {image_name} saved successfully"})
                     except Exception as e:
                         return str(e)
