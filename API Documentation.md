@@ -45,12 +45,13 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected face landmarks.
 
-### face_emotions Table
+### face_facial_attribute Table
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
   - `emotions` : VARCHAR(255), NOT NULL
-  - `emotion_weights`: VARCHAR(255), NOT NULL
+  - `ages`: VARCHAR(255), NOT NULL
+  - `gender`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores information about detected face emotions.
 
@@ -66,11 +67,13 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Fields**:
   - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
   - `image_name`: VARCHAR(255), NOT NULL
-  - `image_file`: LONGBLOB, NOT NULL
-  - `face_name`: VARCHAR(255), NOT NULL
-  - `face_location`: VARCHAR(255), NOT NULL
-  - `emotions` : VARCHAR(255), NOT NULL
-  - `verify_status`: VARCHAR(255), NOT NULL
+  - `image_file`: LONGBLOB, NULL
+  - `face_name`: VARCHAR(255), NULL
+  - `face_location`: VARCHAR(255), NULL
+  - `emotions` : VARCHAR(255), NULL
+  - `ages`: VARCHAR(255), NULL
+  - `gender`: VARCHAR(255), NULL
+  - `verify_status`: VARCHAR(255), NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Summarizes and store the image's most important face metadata information from the `image` table, the `face_location` table, the `face_verified` table, and the `face_emotions` table.
 
@@ -294,11 +297,13 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - The image will save in `image` table
 - The metadata will save in `face_landmarks` table
 
-### Emotions Recognition
-- To recognize face emotions, upload the `image` and make a POST request to `{prefix}` `/emotions_recognition`. 
+### Facial Attribute Recognition
+- To recognize face facial attribute, upload the `image` and make a POST request to `{prefix}` `/facial_attribute_recognition`. 
 - The image will save in `image` table
-- The metadata will save in `face_emotions` table
+- The metadata will save in `face_facial_attribute` table
 - The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
+- The algorithm returns a range of numbers predicting the age of the image
+- The gender will return `Man` or `Woman` only
 
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
