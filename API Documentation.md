@@ -1,5 +1,16 @@
 # API Documentation
-
+# Table of Contents
+- [API Documentation](#api-documentation)
+  - [Introduction](#introduction)
+  - [Base URL](#base-url)
+  - [Database Information](#database-information)
+  - [Database Tables](#database-tables)
+  - [Model - Library](#model---library)
+  - [Schema](#schema)
+  - [Endpoints](#endpoints)
+  - [Error Handle](#error-handle)
+  - [Usage](#usage)
+  - [Config](#config)
 ## Introduction
 This documentation outlines the endpoints, requests, and responses for the Camera API. It also includes information about the database tables used to store the API responses.
 
