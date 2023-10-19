@@ -24,11 +24,11 @@ def request_face_landmarks():
     return landmarks_result
 
 @face_router.route('/facial_attribute_recognition', methods=['POST'])
-def request_emotions_recognition():
+def request_facial_attribute_recognition():
     image_file = request.files['image']  # Access the uploaded file
-    face_emotions = FacialAttributeRecognition()
-    emotions_result = face_emotions.get_facial_attribute_recognition(image_file)
-    return emotions_result
+    face_facial_attribute = FacialAttributeRecognition()
+    facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
+    return facial_attribute_result
 
 @face_router.route('/face_verify', methods=['POST'])
 def request_face_verification():

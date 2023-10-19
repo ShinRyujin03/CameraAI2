@@ -131,7 +131,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 
 ## Schema
 - **Datafield**: `image`(str)
-- **Datatype**: `png`, `jpg`, `jpeg`(str) - Can be config at `config.ini`
+- **Datatype**: `png`, `jpg`, `jpeg`(str) - Can be configuring at `config.ini`
 - **Mandatory**: `True` (bool)
 
 ## Endpoints
@@ -182,7 +182,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
       - "object type": "bottle", "weight": 0.53189 }]
     - "image_name": "mot-so-hinh-anh-ve-rei.jpg"}, 
   - {
-       "message": "Human location metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
+       "message": "Objects detection metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
    }
   - ]
 ### Face Location
@@ -215,9 +215,9 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Response**:
   - [{
       -  "image_name": "1655923786906.jpeg",
-      -  "landmarks": [...] ` (Avg: 5000 - 50000 line of face landmark) `
+      -  "landmarks": [...] `(Avg: 5000 - 50000 line of face landmarks)`
     - {
-        "message": "Face metadata of 1655923786906.jpeg saved successfully"
+        "message": "Face landmarks of 1655923786906.jpeg saved successfully"
     }
   - ]
 
@@ -240,14 +240,14 @@ This documentation outlines the endpoints, requests, and responses for the Camer
     -    "image_name": "210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg"
     },
       - {
-          "message": "Face emotions metadata of 210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg saved successfully"
+          "message": "Face facial attribute metadata of 210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg saved successfully"
   - }]
 
 ### Face Verification
 - **Prefix**:`/face`
 - **Endpoint**: `/face_verify`
 - **Method**: POST
-- **Description**: Get the `image_data` from the `image` table as `known_face`, compare `known_face` with `unknown_face` and save face verification status and face's name to the database.
+- **Description**: Get the `image_data` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
 - **Example Response**:
   - {
     - "Name": "Rei",
@@ -288,14 +288,14 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
 - The image will save in `image` table
 - The metadata will save in `human_location` table
-- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result`
-- You can customize the `humman_detection` to other type of object detection by change the values of `label_class` (The object class at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
+- Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
+- You can configure the `humman_detection` to other type of object detection by change the values of `label_class` (The list of object class can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 
 ### Multiple Objects Detection
 - To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`. 
 - The image will save in `image` table
 - The metadata will save in `detected_objects` table
-- Results can be rounded to `n` numbers after the comma. `n` can be edited at the variable `round_result`
+- Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
 - The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
 
 ### Face Location
@@ -314,13 +314,14 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - The metadata will save in `face_facial_attribute` table
 - The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
 - The algorithm returns a range of numbers predicting the age of the image
+- If the predicted age is different from the actual age, you can minimize the error by configuring `ages_bias` in `config.ini`
 - The gender will return `Man` or `Woman` only
 
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
-- The `compare_face_tolerance` is max acceptable distance. It can be config in `config.ini`
-- The `fast_compare_face_tolerance` is min accepted's distance. It can be config in `config.ini`
+- The `compare_face_tolerance` is max acceptable distance. It can be configuring in `config.ini`
+- The `fast_compare_face_tolerance` is min accepted distance. It can be configuring in `config.ini`
 - The face verification status will return `not verified` or `verified` only
 
 ## Config
@@ -347,6 +348,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - compare_face_tolerance = 0.42
 - fast_compare_face_tolerance = 0.23
 - upsample_image = 1
+- ages_bias = 9
 
 ### [human_detection_config]
 - model_path = model/yolov8n.pt
