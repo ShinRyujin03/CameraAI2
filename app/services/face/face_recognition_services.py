@@ -44,6 +44,10 @@ class NameRecognition:
             min_distance = float('inf')
             recognized_face_name = "Unknown"
             face_loaded = 0
+            high_accuracy_name = []
+            medium_accuracy_name = []
+            low_accuracy_name = []
+
             for known_face in known_face_encodings:
                 face_loaded = face_loaded + 1
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
@@ -52,16 +56,40 @@ class NameRecognition:
                     if known_encoding:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
-                        recognized_face_name = known_face_names[face_loaded-1]
-                        if min_distance <= 0.33:
-                            print("Min distance:", min_distance)
-                            return recognized_face_name
-            if min_distance > 0.33:
+                        recognized_face_name = known_face_names[face_loaded - 1]
+
+                        if min_distance <= 0.3:
+                            high_accuracy_name = recognized_face_name
+                            #append
+                        elif 0.3 < min_distance <= 0.35:
+                            medium_accuracy_name = recognized_face_name
+                            # append
+                        elif 0.35 < min_distance <= 0.42:
+                            low_accuracy_name = recognized_face_name
+                            # append
+
+            # Determine accuracy level after all distances have been calculated
+            if high_accuracy_name is not None:
+                print("Accuracy: High")
+                print("Min distance:", min_distance)
+                return high_accuracy_name
+            elif medium_accuracy_name is not None:
+                print("Accuracy: Medium")
+                print("Min distance:", min_distance)
+                return medium_accuracy_name
+            elif low_accuracy_name is not None:
+                print("Accuracy: Low")
+                print("Min distance:", min_distance)
+                return low_accuracy_name
+            else:
                 print("Min distance:", min_distance)
                 return "Unknown"
         except Exception as e:
             raise Exception
         finally:
+            print("high_accuracy_name:", high_accuracy_name)
+            print("medium_accuracy_name:", medium_accuracy_name)
+            print("low_accuracy_name:", low_accuracy_name)
             db.close_connection()
 
     def get_face_name_recognition(self,image_file):

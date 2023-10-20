@@ -52,17 +52,22 @@ class FaceVerification:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         if min_distance <= config.getfloat('function_config', 'fast_compare_face_tolerance'):
-                            print("Fast compare face activated!")
+                            print("Accuracy: High")
                             print("Min distance:", min_distance)
                             print("Number of loaded face:", face_loaded)
                             return "verified"
-                        elif min_distance <= config.getfloat('function_config', 'compare_face_tolerance'):
-                            print("Min distance:", min_distance)
-                            print("Number of loaded face:", face_loaded)
-                            return "verified"
-            if min_distance > config.getfloat('function_config', 'fast_compare_face_tolerance'):
+            if 0.2 < min_distance <= 0.34:
+                print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
+                return "verified"
+            elif 0.34 < min_distance <= 0.4:
+                print("Accuracy: Low")
+                print("Min distance:", min_distance)
+                print("Number of loaded face:", face_loaded)
+                return "verified"
+            else:
+                print("Min distance:", min_distance)
                 return "not verified"
         except Exception as e:
             return str(e)
