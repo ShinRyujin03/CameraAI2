@@ -3,6 +3,7 @@ from app.services.face.face_landmarks_sevices import  FaceLandmarksDetection
 from app.services.face.facial_attribute_recognition_services import FacialAttributeRecognition
 from app.services.face.face_detection_services import FaceLocationDetection
 from app.services.face.face_verification_services import FaceVerification
+from app.services.face.face_recognition_services import NameRecognition
 # Create instances of the function classes
 face_router = Blueprint('face_router', __name__)
 
@@ -37,3 +38,10 @@ def request_face_verification():
     face_verify = FaceVerification()
     face_verify_result = face_verify.get_face_verification(image_file, face_name)
     return face_verify_result
+
+@face_router.route('/face_name_recognition', methods=['POST'])
+def face_name_recognition():
+    image_file = request.files['image']  # Access the uploaded file
+    name_recognition = NameRecognition()
+    name_recognition_result = name_recognition.get_face_name_recognition(image_file)
+    return name_recognition_result

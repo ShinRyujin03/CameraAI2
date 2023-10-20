@@ -101,6 +101,18 @@ class Database:
         image_files = [result[0] for result in results]
         #image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
         return image_files
+
+    def get_image_files_and_name(self):
+        query = "SELECT image_file, face_name FROM face_metadata WHERE face_name IS NOT NULL AND image_file IS NOT NULL"
+
+        self.cursor.execute(query)
+        results = self.cursor.fetchall()
+
+        image_files = [result[0] for result in results if result[0] is not None]
+        face_names = [result[1] for result in results if result[1] is not None]
+
+        return image_files, face_names
+
     def close_connection(self):
         if self.conn.is_connected():
             self.cursor.close()
