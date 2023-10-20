@@ -313,8 +313,11 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - The image will save in `image` table
 - The metadata will save in `face_facial_attribute` table
 - The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
-- The algorithm returns a range of numbers predicting the age of the image
+- The algorithm returns a range of numbers predicting the age of the image, It can be configuring at the variable `ages_range`
 - If the predicted age is different from the actual age, you can minimize the error by configuring `ages_bias` in `config.ini`
+- Ages calculation formula:
+  - age_min = `face['age']` +  `ages_bias`
+  - age_max = age_min +  `ages_range`
 - The gender will return `Man` or `Woman` only
 
 ### Face Verification
@@ -348,7 +351,8 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - compare_face_tolerance = 0.42
 - fast_compare_face_tolerance = 0.23
 - upsample_image = 1
-- ages_bias = 9
+- ages_bias = -9
+- ages_range = 5
 
 ### [human_detection_config]
 - model_path = model/yolov8n.pt

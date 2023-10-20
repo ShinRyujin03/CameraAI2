@@ -35,8 +35,8 @@ class FacialAttributeRecognition:
 
         for face in emotions_data:
             dominant_emotion = face['dominant_emotion']
-            age_min = face['age'] - config.getint('function_config', 'ages_bias')
-            age_max = age_min + 5
+            age_min = face['age'] + config.getint('function_config', 'ages_bias')
+            age_max = age_min + config.getint('function_config', 'ages_range')
             gender = max(face['gender'], key=face['gender'].get)
 
             emotions_list.append(dominant_emotion)
