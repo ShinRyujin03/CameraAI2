@@ -42,7 +42,9 @@ class FaceVerification:
                 raise NoDetection
 
             min_distance = float('inf')
+            face_loaded = 0
             for known_face in known_face_encodings:
+                face_loaded = face_loaded + 1
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
                 if known_face_image is not None:
                     known_encoding = face_recognition.face_encodings(known_face_image, None, model="large")
@@ -52,12 +54,15 @@ class FaceVerification:
                         if min_distance <= config.getfloat('function_config', 'fast_compare_face_tolerance'):
                             print("Fast compare face activated!")
                             print("Min distance:", min_distance)
+                            print("Number of loaded face:", face_loaded)
                             return "verified"
             if min_distance <= config.getfloat('function_config', 'compare_face_tolerance'):
                 print("Min distance:", min_distance)
+                print("Number of loaded face:", face_loaded)
                 return "verified"
             else:
                 print("Min distance:", min_distance)
+                print("Number of loaded face:", face_loaded)
                 return "not verified"
         except Exception as e:
             return str(e)
