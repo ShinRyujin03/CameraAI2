@@ -1,4 +1,5 @@
 import mysql.connector
+import mysql.connector
 import configparser
 import os
 import base64

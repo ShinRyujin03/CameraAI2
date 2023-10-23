@@ -63,18 +63,14 @@ class NameRecognition:
                         elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
                             if medium_accuracy_name and min_distance < last_min_distance:
                                 medium_accuracy_name[0] = str(recognized_face_name)
-                                print("Medium:", medium_accuracy_name[0])
                             else:
                                 medium_accuracy_name.append(str(recognized_face_name))
-                                print("Medium:", medium_accuracy_name[0])
                             # append
                         elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
                             if low_accuracy_name and min_distance < last_min_distance:
                                 low_accuracy_name[0] = str(recognized_face_name)
-                                print("Low:",low_accuracy_name[0])
                             else:
                                 low_accuracy_name.append(str(recognized_face_name))
-                                print("Low:", low_accuracy_name[0])
                             # append
 
             # Determine accuracy level after all distances have been calculated
@@ -101,9 +97,18 @@ class NameRecognition:
         except Exception as e:
             raise Exception
         finally:
-            print("high_accuracy_name:", high_accuracy_name)
-            print("medium_accuracy_name list:", medium_accuracy_name)
-            print("low_accuracy_name list:", low_accuracy_name)
+            if high_accuracy_name:
+                print("high_accuracy_name:", high_accuracy_name[0])
+            else:
+                print("high_accuracy_name: None")
+            if medium_accuracy_name:
+                print("medium_accuracy_name:", medium_accuracy_name[0])
+            else:
+                print("medium_accuracy_name: None")
+            if low_accuracy_name:
+                print("low_accuracy_name:", low_accuracy_name[0])
+            else:
+                print("low_accuracy_name: None")
             db.close_connection()
 
     def get_face_name_recognition(self,image_file):
