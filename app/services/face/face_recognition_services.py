@@ -46,7 +46,6 @@ class NameRecognition:
             high_accuracy_name = []
             medium_accuracy_name = []
             low_accuracy_name = []
-
             for known_face in known_face_encodings:
                 face_loaded = face_loaded + 1
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
@@ -54,6 +53,7 @@ class NameRecognition:
                     known_encoding = face_recognition.face_encodings(known_face_image, None, model="large")
                     if known_encoding:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
+                        last_min_distance = min_distance
                         min_distance = min(min_distance, distance[0])
                         recognized_face_name = known_face_names[face_loaded - 1]
                         if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
@@ -61,10 +61,20 @@ class NameRecognition:
                             break
                             #append
                         elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
-                            medium_accuracy_name.append(str(recognized_face_name))
+                            if medium_accuracy_name and min_distance < last_min_distance:
+                                medium_accuracy_name[0] = str(recognized_face_name)
+                                print("Medium:", medium_accuracy_name[0])
+                            else:
+                                medium_accuracy_name.append(str(recognized_face_name))
+                                print("Medium:", medium_accuracy_name[0])
                             # append
                         elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
-                            low_accuracy_name.append(str(recognized_face_name))
+                            if low_accuracy_name and min_distance < last_min_distance:
+                                low_accuracy_name[0] = str(recognized_face_name)
+                                print("Low:",low_accuracy_name[0])
+                            else:
+                                low_accuracy_name.append(str(recognized_face_name))
+                                print("Low:", low_accuracy_name[0])
                             # append
 
             # Determine accuracy level after all distances have been calculated
