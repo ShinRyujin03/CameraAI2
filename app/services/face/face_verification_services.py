@@ -51,17 +51,17 @@ class FaceVerification:
                     if known_encoding:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
-                        if min_distance <= config.getfloat('function_config', 'fast_compare_face_tolerance'):
+                        if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
                             print("Accuracy: High")
                             print("Min distance:", min_distance)
                             print("Number of loaded face:", face_loaded)
                             return "verified"
-            if 0.2 < min_distance <= 0.34:
+            if config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            elif 0.34 < min_distance <= 0.4:
+            elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)

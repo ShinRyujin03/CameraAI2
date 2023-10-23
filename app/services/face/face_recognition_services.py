@@ -42,7 +42,6 @@ class NameRecognition:
                 raise NoDetection
 
             min_distance = float('inf')
-            recognized_face_name = "Unknown"
             face_loaded = 0
             high_accuracy_name = []
             medium_accuracy_name = []
@@ -57,39 +56,44 @@ class NameRecognition:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         recognized_face_name = known_face_names[face_loaded - 1]
-
-                        if min_distance <= 0.3:
-                            high_accuracy_name = recognized_face_name
+                        if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
+                            high_accuracy_name.append(str(recognized_face_name))
+                            break
                             #append
-                        elif 0.3 < min_distance <= 0.35:
-                            medium_accuracy_name = recognized_face_name
+                        elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
+                            medium_accuracy_name.append(str(recognized_face_name))
                             # append
-                        elif 0.35 < min_distance <= 0.42:
-                            low_accuracy_name = recognized_face_name
+                        elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
+                            low_accuracy_name.append(str(recognized_face_name))
                             # append
 
             # Determine accuracy level after all distances have been calculated
-            if high_accuracy_name is not None:
+            if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
+                accuracy = "High"
                 print("Accuracy: High")
                 print("Min distance:", min_distance)
-                return high_accuracy_name
-            elif medium_accuracy_name is not None:
+                return high_accuracy_name[0], accuracy
+            elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
+                accuracy = "Medium"
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
-                return medium_accuracy_name
-            elif low_accuracy_name is not None:
+                return medium_accuracy_name[0], accuracy
+            elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
+                accuracy = "Low"
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)
-                return low_accuracy_name
+                return low_accuracy_name[0], accuracy
             else:
+                accuracy = "Low"
+                print("Accuracy: Low")
                 print("Min distance:", min_distance)
-                return "Unknown"
+                return "Unknown", accuracy
         except Exception as e:
             raise Exception
         finally:
             print("high_accuracy_name:", high_accuracy_name)
-            print("medium_accuracy_name:", medium_accuracy_name)
-            print("low_accuracy_name:", low_accuracy_name)
+            print("medium_accuracy_name list:", medium_accuracy_name)
+            print("low_accuracy_name list:", low_accuracy_name)
             db.close_connection()
 
     def get_face_name_recognition(self,image_file):
@@ -101,12 +105,16 @@ class NameRecognition:
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
-                recognized_face_name = face_detector.face_name_recognition(image_data)
+                try:
+                    recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
+                except Exception:
+                    raise Exception
                 print(" ")
                 # Create a response object
                 result = {
                     'recognized_face_name': recognized_face_name,
-                    'image_name': image_name
+                    'image_name': image_name,
+                    'accuracy': accuracy
                 }
                 if len(recognized_face_name) == 0:
                     logging.error(NoDetection())
