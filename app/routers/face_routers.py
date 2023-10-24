@@ -40,7 +40,7 @@ def request_face_verification():
     return face_verify_result
 
 @face_router.route('/face_name_recognition', methods=['POST'])
-def face_name_recognition():
+def request_name_recognition():
     image_file = request.files['image']  # Access the uploaded file
     name_recognition = NameRecognition()
     name_recognition_result = name_recognition.get_face_name_recognition(image_file)

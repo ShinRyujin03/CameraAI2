@@ -1,8 +1,6 @@
 import mysql.connector
-import mysql.connector
 import configparser
 import os
-import base64
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")

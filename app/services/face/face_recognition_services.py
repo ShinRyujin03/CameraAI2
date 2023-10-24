@@ -34,8 +34,7 @@ class NameRecognition:
             unknown_face_detector.image_data = unknown_face
             unknown_face_locations = unknown_face_detector.facelocation()
 
-            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,
-                                                               model="large")
+            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations, model="large")
 
             if not unknown_encoding:
                 logging.error(NoDetection())
@@ -61,20 +60,16 @@ class NameRecognition:
                                 high_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 high_accuracy_name.append(str(recognized_face_name))
-
-                            #append
                         elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
                             if medium_accuracy_name and min_distance < last_min_distance:
                                 medium_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 medium_accuracy_name.append(str(recognized_face_name))
-                            # append
                         elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
                             if low_accuracy_name and min_distance < last_min_distance:
                                 low_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 low_accuracy_name.append(str(recognized_face_name))
-                            # append
 
             # Determine accuracy level after all distances have been calculated
             if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
@@ -137,14 +132,11 @@ class NameRecognition:
                 if len(recognized_face_name) == 0:
                     logging.error(NoDetection())
                     raise NoDetection
-                #db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
                 raise DatabaseNoneError
             else:
                 try:
-                    #db.insert_face_verify_status(image_name, face_name, verify)
-                    #db.close_connection()
                     logging.info(result)
                     return jsonify(result)
                 except Exception as e:
