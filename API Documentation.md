@@ -1,16 +1,40 @@
 # API Documentation
-# Table of Contents
-- [API Documentation](#api-documentation)
-  - [Introduction](#introduction)
-  - [Base URL](#base-url)
-  - [Database Information](#database-information)
-  - [Database Tables](#database-tables)
-  - [Model - Library](#model---library)
-  - [Schema](#schema)
-  - [Endpoints](#endpoints)
-  - [Error Handle](#error-handle)
-  - [Usage](#usage)
-  - [Config](#config)
+## Table of Contents
+- [Introduction](#introduction)
+- [Base URL](#base-url)
+- [Database Information](#database-information)
+- [Database Tables](#database-tables)
+  - [`image` Table](#image-table)
+  - [`face_location` Table](#face_location-table)
+  - [`face_landmark` Table](#face_landmark-table)
+  - [`face_facial_attribute` Table](#face_facial_attribute-table)
+  - [`face_verified` Table](#face_verified-table)
+  - [`face_metadata` Table](#face_metadata-table)
+  - [`human_location` Table](#human_location-table)
+  - [`detected_objects` Table](#detected_objects-table)
+- [Model - Library](#model---library)
+  - [`face-recognition` library](#face-recognition-library)
+  - [`DeepFace` library](#deepface-library)
+  - [`Yolo v8 nano` model](#yolo-v8-nano-model)
+- [Schema](#schema)
+- [Endpoints](#endpoints)
+  - [Human Detection](#human-detection)
+  - [Multiple Objects Detection](#multiple-objects-detection)
+  - [Face Location](#face-location)
+  - [Face Landmarks](#face-landmarks)
+  - [Facial Attribute Recognition](#facial-attribute-recognition)
+  - [Face Verification](#face-verification)
+  - [Name Recognition](#name-recognition)
+- [Error Handle](#error-handle)
+  - [Image code status - iXX](#image-code-status---ixx)
+  - [Database code status - dXX](#database-code-status---dxx)
+- [Usage](#usage)
+- [Config](#config)
+  - [db_config](#db_config)
+  - [db_limit_config](#db_limit_config)
+  - [function_config](#function_config)
+  - [human_detection_config](#human_detection_config)
+  - [objects_detection_config](#objects_detection_config)
 ## Introduction
 This documentation outlines the endpoints, requests, and responses for the Camera API. It also includes information about the database tables used to store the API responses.
 
@@ -247,7 +271,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - **Prefix**:`/face`
 - **Endpoint**: `/face_verify`
 - **Method**: POST
-- **Description**: Get the `image_data` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
+- **Description**: Get the `image_file` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
 - **Example Response**:
   - {
     - "Name": "Rei",
@@ -255,6 +279,17 @@ This documentation outlines the endpoints, requests, and responses for the Camer
     - "image_name": "mot-so-hinh-anh-ve-rei.jpg"
   - }
 
+### Name Recognition
+- **Prefix**:`/face`
+- **Endpoint**: `/face_name_recognition`
+- **Method**: POST
+- **Description**: Get the `image_file` and `face_name` from the `face_metadata` table as `known_face`, compare this `known_face` with `unknown_face` to predict the unknown face name with the corresponding level of accuracy.
+- **Example Response**:
+  - {
+    - "accuracy": "Medium",
+    - "image_name": "IMG_0092.JPG",
+    - "recognized_face_name": "Haewon"
+  - }
 ## Error Handle
 ### Image code status - iXX
 - **INVALID_IMAGE** 
@@ -323,9 +358,12 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
 - The face verification status and face's name will save in `face_verified` table
-- The `compare_face_tolerance` is max acceptable distance. It can be configuring in `config.ini`
-- The `fast_compare_face_tolerance` is min accepted distance. It can be configuring in `config.ini`
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
 - The face verification status will return `not verified` or `verified` only
+
+### Name Recognition
+- To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
 
 ## Config
 ### [db_config]
@@ -348,8 +386,9 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - face_prefix = /face
 - objects_prefix = /objects
 - multiple_objects_prefix = /m_objects
-- compare_face_tolerance = 0.42
-- fast_compare_face_tolerance = 0.23
+- low_accuracy_compare_face = 0.46
+- medium_accuracy_compare_face = 0.43
+- high_accuracy_compare_face = 0.34
 - upsample_image = 1
 - ages_bias = -9
 - ages_range = 5
