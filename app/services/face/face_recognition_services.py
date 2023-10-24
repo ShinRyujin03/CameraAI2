@@ -57,8 +57,11 @@ class NameRecognition:
                         min_distance = min(min_distance, distance[0])
                         recognized_face_name = known_face_names[face_loaded - 1]
                         if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
-                            high_accuracy_name.append(str(recognized_face_name))
-                            break
+                            if high_accuracy_name and min_distance < last_min_distance:
+                                high_accuracy_name[0] = str(recognized_face_name)
+                            else:
+                                high_accuracy_name.append(str(recognized_face_name))
+
                             #append
                         elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
                             if medium_accuracy_name and min_distance < last_min_distance:
