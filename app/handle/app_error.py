@@ -6,12 +6,12 @@ class AppError(Exception):
         self.status_code = status_code
 
 class CustomError:
-    INVALID_IMAGE = {'code': "i01", 'message': 'Invalid image file format'}
-    NO_IMAGE = {'code': "i02", 'message': 'No image file uploaded'}
-    NO_DETECTION = {'code': "i03", 'message': 'Nothing was detected'}
-    NO_FACE_NAME = {'code': "i04", 'message': "Face's name required"}
-    DATABASE_IS_NONE = {'code': "d01", 'message': 'Can not connect to the database'}
-    OUTPUT_TOO_LONG = {'code': "d02", 'message': 'Output data too large!!!'}
+    INVALID_IMAGE = {'code': "i01", 'message': 'Invalid image file format. Supported formats are PNG, JPG, and JPEG.'}
+    NO_IMAGE = {'code': "i02", 'message': 'Image not found. Please upload a valid image file.'}
+    NO_DETECTION = {'code': "i03", 'message': 'No face detected in the image. Please upload an image with a visible face.'}
+    NO_FACE_NAME = {'code': "i04", 'message': "Face name not found. Please provide a valid name for the face."}
+    DATABASE_IS_NONE = {'code': "d01", 'message': 'Unable to establish a connection with the database. Please try again later.'}
+    OUTPUT_TOO_LONG = {'code': "d02", 'message': 'Output size exceeds the maximum allowed limit. Please upload a less complex image.'}
     # Add more custom errors as needed
 class NoDetection(AppError):
     def __init__(self):
@@ -33,11 +33,11 @@ class OutputTooLongError(AppError):
         super().__init__(CustomError.OUTPUT_TOO_LONG['message'], CustomError.OUTPUT_TOO_LONG['code'])
 def handle_generic_error(error):
     response = {'error': error.args[0], 'status_code': getattr(error, 'status_code', 500)}
-    if error.args[0] == 'No image file uploaded' or error.args[0] == 'Nothing was detected' or error.args[0] == "Face's name required" :
+    if error.args[0] == 'Face name not found. Please provide a valid name for the face.' or error.args[0] == 'Image not found. Please upload a valid image file.' or error.args[0] == "No face detected in the image. Please upload an image with a visible face." :
         return jsonify(response), 404
-    elif error.args[0] == 'Invalid image file format':
+    elif error.args[0] == 'Invalid image file format. Supported formats are PNG, JPG, and JPEG.':
         return jsonify(response), 415
-    elif error.args[0] == 'Can not connect to the database':
+    elif error.args[0] == 'Unable to establish a connection with the database. Please try again later.':
         return jsonify(response), 503
-    elif error.args[0] == 'Output data too large!!!':
+    elif error.args[0] == 'Output size exceeds the maximum allowed limit. Please upload a less complex image.':
         return jsonify(response), 413

@@ -86,6 +86,7 @@ class FaceVerification:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
+                print("Image name:",image_name)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
                 verify = face_detector.face_verification(image_data)

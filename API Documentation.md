@@ -25,6 +25,7 @@
   - [Facial Attribute Recognition](#facial-attribute-recognition)
   - [Face Verification](#face-verification)
   - [Name Recognition](#name-recognition)
+- [Example Debug Messenger](#example-debug-messenger)
 - [Error Handle](#error-handle)
   - [Image code status - iXX](#image-code-status---ixx)
   - [Database code status - dXX](#database-code-status---dxx)
@@ -209,6 +210,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
        "message": "Objects detection metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
    }
   - ]
+
 ### Face Location
 - **Prefix**:`/face`
 - **Endpoint**: `/face_location`
@@ -290,33 +292,61 @@ This documentation outlines the endpoints, requests, and responses for the Camer
     - "image_name": "IMG_0092.JPG",
     - "recognized_face_name": "Haewon"
   - }
+
+## Example Debug Messenger
+
+### Face Location
+- Image name: IMG_3495.JPG
+- Location model used: hog
+
+### Face Verification
+- Image name: Ban_sao_tai_xuong_2.jpeg
+- Known face nums: 159
+- Location model used: hog
+- Accuracy: Medium
+- Min distance: 0.4181185213873312
+- Number of loaded face: 159
+
+### Name Recognition
+- Image name: main-qimg-f98162925e69b8beb5948d028a7ad3b4-lq.jpeg
+- Location model used: hog
+- Accuracy: High
+- Min distance: 0.2996199092209529
+- high_accuracy_name: Kazuha
+- medium_accuracy_name: Kazuha
+- low_accuracy_name: Rosé
+
+### Human Detection and Multiple Objects Detection
+- 0: 480x640 5 persons, 1 book, 317.7ms
+- Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at shape (1, 3, 480, 640)
+
 ## Error Handle
 ### Image code status - iXX
 - **INVALID_IMAGE** 
   - HTTP Code: `415 Unsupported Media Type`
   - Code: "i01"
-  - Message: Invalid image file format
+  - Message: Invalid image file format. Supported formats are PNG, JPG, and JPEG.
 - **NO_IMAGE**
   - HTTP Code: `404 Not Found`
   - Code: "i02"
-  - Message: No image file uploaded
+  - Message: Image not found. Please upload a valid image file.
 - **NO_DETECTION**
   - HTTP Code: `404 Not Found`
   - Code: "i03" 
-  - Message: Nothing was detected
+  - Message: No face detected in the image. Please upload an image with a visible face.
 - **NO_FACE_NAME**
   - HTTP Code: `404 Not Found`
   - Code: "i04" 
-  - Message: Face's name required
+  - Message: Face name not found. Please provide a valid name for the face.
 ### Database code status - dXX
 - **DATABASE_IS_NONE**
   - HTTP Code: `503 Service Unavailable`
   - Code: "d01"
-  - Message: Can not connect to the database
+  - Message: Unable to establish a connection with the database. Please try again later.
 - **OUTPUT_TOO_LONG**
   - HTTP Code: `413 Payload Too Large`
   - Code: "d02"
-  - Message: Output data too large!!!
+  - Message: Output size exceeds the maximum allowed limit. Please upload a less complex image.
 
 ## Usage
 ### Human Detection
