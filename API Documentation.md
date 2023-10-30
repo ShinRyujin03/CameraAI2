@@ -2,6 +2,11 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Base URL](#base-url)
+- [Quick Guide](#quick-guide)
+  - [Pre-requisites](#pre-requisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+  - [API Usage](#api-usage)
 - [Database Information](#database-information)
 - [Database Tables](#database-tables)
   - [`image` Table](#image-table)
@@ -25,22 +30,65 @@
   - [Facial Attribute Recognition](#facial-attribute-recognition)
   - [Face Verification](#face-verification)
   - [Name Recognition](#name-recognition)
+- [Endpoint Usage](#endpoint-usage)
 - [Example Debug Messenger](#example-debug-messenger)
 - [Error Handle](#error-handle)
   - [Image code status - iXX](#image-code-status---ixx)
   - [Database code status - dXX](#database-code-status---dxx)
-- [Usage](#usage)
 - [Config](#config)
-  - [db_config](#db_config)
-  - [db_limit_config](#db_limit_config)
-  - [function_config](#function_config)
-  - [human_detection_config](#human_detection_config)
-  - [objects_detection_config](#objects_detection_config)
 ## Introduction
-This documentation outlines the endpoints, requests, and responses for the Camera API. It also includes information about the database tables used to store the API responses.
+ - The CameraAI2 project is a computer vision application designed to perform various tasks such as face detection, recognition, and object detection.
+ - This documentation outlines the endpoints, requests, and responses for this API with quick guide help you set up and run the project. It also includes information about the database tables used to store the API responses.
 
 ## Base URL
 `http://localhost:1102`
+
+## Quick Guide
+### Pre-requisites
+- Python: Ensure Python 3.10 is installed on your system.
+
+### Installation
+1. Clone the project from the repository:
+
+    ```bash
+    git clone https://github.com/ShinRyujin03/CameraAI2.git
+    ```
+
+2. Create a virtual environment and activate it:
+
+    ```bash
+    python3.10 -m venv venv
+    source venv/bin/activate
+    ```
+
+3. Install the required packages:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Running the Application
+1. Start the application using the provided run script:
+
+    ```bash
+    /path to project/app/main/run.py
+    ```
+
+   Make sure to replace `/path to project` with the actual paths on your system.
+
+2. The application will start, and you can now access the API at `http://localhost:1102`.
+
+### API Usage
+#### Sending Requests
+- Use tools like `curl`, `Postman`, or your preferred HTTP client to send requests to the API endpoints.
+See the [Endpoint Usage](#endpoint-usage) for more information
+
+#### Sending Image Files
+- When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG.
+
+#### API Responses
+- The API returns JSON responses containing the requested data or error messages.
+See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more information
 
 ## Database Information
 - **Database Host**: localhost or 127.0.0.1
@@ -136,21 +184,30 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 ### `face-recognition` library
 - **Library name**: face-recognition
 - **Version**: 1.3.0
-- **Install command line**:`pip install face-recognition`
+- **Install command line**:
+    ```bash
+    pip install face-recognition
+    ```
 - **import syntax**:`import face_recognition`
 - **Project documentation**: https://pypi.org/project/face-recognition/
 
 ### `DeepFace` library
 - **Library name**: DeepFace
 - **Version**: 0.0.79
-- **Install command line**:`pip install deepface`
+- **Install command line**:
+    ```bash
+    pip install deepface
+    ```
 - **import syntax**:`from deepface import DeepFace`
 - **Project documentation**: https://pypi.org/project/deepface/
 
 ### `Yolo v8 nano` model
 - **Model name**: YOLO
 - **Version**: v8 nano
-- **Install command line**:`pip install ultralytics` 
+- **Install command line**:`pip install ultralytics`
+    ```bash
+    pip install ultralytics
+    ```
 - **import syntax**:`from ultralytics import YOLO`
 - **Project documentation**: https://docs.ultralytics.com/
 
@@ -293,8 +350,54 @@ This documentation outlines the endpoints, requests, and responses for the Camer
     - "recognized_face_name": "Haewon"
   - }
 
-## Example Debug Messenger
+## Endpoint Usage
+### Human Detection
+- To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
+- The image will save in `image` table
+- The metadata will save in `human_location` table
+- Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
+- You can configure the `humman_detection` to other type of object detection by change the values of `label_class` (The list of object class can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 
+### Multiple Objects Detection
+- To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`. 
+- The image will save in `image` table
+- The metadata will save in `detected_objects` table
+- Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
+- The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
+
+### Face Location
+- To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`.
+- The image will save in `image` table
+- The metadata will save in `face_location` table
+
+### Face Landmarks
+- To encode face landmarks, upload the `image` and make a POST request to `{prefix}` `/face_landmarks`. 
+- The image will save in `image` table
+- The metadata will save in `face_landmarks` table
+
+### Facial Attribute Recognition
+- To recognize face facial attribute, upload the `image` and make a POST request to `{prefix}` `/facial_attribute_recognition`. 
+- The image will save in `image` table
+- The metadata will save in `face_facial_attribute` table
+- The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
+- The algorithm returns a range of numbers predicting the age of the image, It can be configuring at the variable `ages_range`
+- If the predicted age is different from the actual age, you can minimize the error by configuring `ages_bias` in `config.ini`
+- Ages calculation formula:
+  - age_min = `face['age']` +  `ages_bias`
+  - age_max = age_min +  `ages_range`
+- The gender will return `Man` or `Woman` only
+
+### Face Verification
+- To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
+- The face verification status and face's name will save in `face_verified` table
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
+- The face verification status will return `not verified` or `verified` only
+
+### Name Recognition
+- To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
+
+## Example Debug Messenger
 ### Face Location
 - Image name: IMG_3495.JPG
 - Location model used: hog
@@ -348,53 +451,6 @@ This documentation outlines the endpoints, requests, and responses for the Camer
   - Code: "d02"
   - Message: Output size exceeds the maximum allowed limit. Please upload a less complex image.
 
-## Usage
-### Human Detection
-- To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
-- The image will save in `image` table
-- The metadata will save in `human_location` table
-- Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
-- You can configure the `humman_detection` to other type of object detection by change the values of `label_class` (The list of object class can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
-
-### Multiple Objects Detection
-- To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`. 
-- The image will save in `image` table
-- The metadata will save in `detected_objects` table
-- Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
-- The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
-
-### Face Location
-- To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`.
-- The image will save in `image` table
-- The metadata will save in `face_location` table
-
-### Face Landmarks
-- To encode face landmarks, upload the `image` and make a POST request to `{prefix}` `/face_landmarks`. 
-- The image will save in `image` table
-- The metadata will save in `face_landmarks` table
-
-### Facial Attribute Recognition
-- To recognize face facial attribute, upload the `image` and make a POST request to `{prefix}` `/facial_attribute_recognition`. 
-- The image will save in `image` table
-- The metadata will save in `face_facial_attribute` table
-- The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
-- The algorithm returns a range of numbers predicting the age of the image, It can be configuring at the variable `ages_range`
-- If the predicted age is different from the actual age, you can minimize the error by configuring `ages_bias` in `config.ini`
-- Ages calculation formula:
-  - age_min = `face['age']` +  `ages_bias`
-  - age_max = age_min +  `ages_range`
-- The gender will return `Man` or `Woman` only
-
-### Face Verification
-- To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
-- The face verification status and face's name will save in `face_verified` table
-- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
-- The face verification status will return `not verified` or `verified` only
-
-### Name Recognition
-- To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
-- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
-
 ## Config
 ### [db_config]
 - host = 0.0.0.0
@@ -411,7 +467,7 @@ This documentation outlines the endpoints, requests, and responses for the Camer
 - objects_detected_boxes = 490
 - emotions = 250
 
-### [function_config]
+### [facefunction_config]
 - path = png, jpg, jpeg
 - face_prefix = /face
 - objects_prefix = /objects
