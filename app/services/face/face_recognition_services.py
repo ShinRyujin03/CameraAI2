@@ -55,34 +55,34 @@ class NameRecognition:
                         last_min_distance = min_distance
                         min_distance = min(min_distance, distance[0])
                         recognized_face_name = known_face_names[face_loaded - 1]
-                        if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
+                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
                             if high_accuracy_name and min_distance < last_min_distance:
                                 high_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 high_accuracy_name.append(str(recognized_face_name))
-                        elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
+                        elif config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'medium_accuracy_compare_face'):
                             if medium_accuracy_name and min_distance < last_min_distance:
                                 medium_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 medium_accuracy_name.append(str(recognized_face_name))
-                        elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
+                        elif config.getfloat('face_function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'low_accuracy_compare_face'):
                             if low_accuracy_name and min_distance < last_min_distance:
                                 low_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 low_accuracy_name.append(str(recognized_face_name))
 
             # Determine accuracy level after all distances have been calculated
-            if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
+            if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
                 accuracy = "High"
                 print("Accuracy: High")
                 print("Min distance:", min_distance)
                 return high_accuracy_name[0], accuracy
-            elif config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
+            elif config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'medium_accuracy_compare_face'):
                 accuracy = "Medium"
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 return medium_accuracy_name[0], accuracy
-            elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
+            elif config.getfloat('face_function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'low_accuracy_compare_face'):
                 accuracy = "Low"
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)

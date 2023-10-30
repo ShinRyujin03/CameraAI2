@@ -1,13 +1,20 @@
 from database.database import Database
 import matplotlib.pyplot as plt
+import os
+import configparser
 
+# Construct the relative path to config.ini
+config_path = os.path.realpath("../config.ini")
+# Create a configuration object
+config = configparser.ConfigParser()
+config.read(config_path)
 
 def plot_face_names_histogram(face_names):
     # Count the occurrences of each face name
     face_name_counts = {name: face_names.count(name) for name in set(face_names)}
 
     # Set the threshold for passing
-    threshold = 4
+    threshold = config.getint('face_function_config', 'number_of_face_required')
 
     # Calculate pass and fail counts
     pass_count = len([count for count in face_name_counts.values() if count > threshold])

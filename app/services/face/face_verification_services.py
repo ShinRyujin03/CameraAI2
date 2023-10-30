@@ -51,19 +51,19 @@ class FaceVerification:
                     if known_encoding:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
-                        if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
+                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
                             break
-            if min_distance <= config.getfloat('function_config', 'high_accuracy_compare_face'):
+            if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
                 print("Accuracy: High")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            if config.getfloat('function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'medium_accuracy_compare_face'):
+            if config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'medium_accuracy_compare_face'):
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            elif config.getfloat('function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('function_config', 'low_accuracy_compare_face'):
+            elif config.getfloat('face_function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'low_accuracy_compare_face'):
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
