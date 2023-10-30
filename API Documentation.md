@@ -396,7 +396,11 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 ### Name Recognition
 - To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
-
+- The number of images per `face_name` in the database should be greater than or equal to `number_of_face_required` (recommended >= 4) to get highest accuracy
+- You can check if the name has a sufficient number of images by running the `numb_face_name_test.py` program at:
+    ```bash
+    app/services/test/numb_face_name_test.py
+    ```
 ## Example Debug Messenger
 ### Face Location
 - Image name: IMG_3495.JPG
@@ -467,7 +471,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - objects_detected_boxes = 490
 - emotions = 250
 
-### [facefunction_config]
+### [face_function_config]
 - path = png, jpg, jpeg
 - face_prefix = /face
 - objects_prefix = /objects
@@ -478,6 +482,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - upsample_image = 1
 - ages_bias = -9
 - ages_range = 5
+- number_of_face_required = 4
 
 ### [human_detection_config]
 - model_path = model/yolov8n.pt
