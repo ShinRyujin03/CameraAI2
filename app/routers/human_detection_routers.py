@@ -1,7 +1,9 @@
 from flask import Blueprint, request
 from app.services.objects.human_detection_services import HumanDetection
+
 # Create instances of the function classes
 objects_router = Blueprint('object_router', __name__)
+
 
 # Route for human location
 @objects_router.route('/human_location', methods=['POST'])

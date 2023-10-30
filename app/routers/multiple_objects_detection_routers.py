@@ -1,7 +1,9 @@
 from flask import Blueprint, request
 from app.services.objects.multiple_objects_detection_services import MultipleObjectDetection
+
 # Create instances of the function classes
 multiple_objects_router = Blueprint('multiple_object_router', __name__)
+
 
 # Route for human location
 @multiple_objects_router.route('/m_object_location', methods=['POST'])
