@@ -1,13 +1,12 @@
 # API Documentation
 ## Table of Contents
 - [Introduction](#introduction)
-- [Base URL](#base-url)
 - [Quick Guide](#quick-guide)
   - [Pre-requisites](#pre-requisites)
   - [Installation](#installation)
   - [Running the Application](#running-the-application)
   - [API Usage](#api-usage)
-- [Database Information](#database-information)
+- [Default Database Information ](#default-database-information)
 - [Database Tables](#database-tables)
   - [`image` Table](#image-table)
   - [`face_location` Table](#facelocation-table)
@@ -36,12 +35,10 @@
   - [Image code status - iXX](#image-code-status---ixx)
   - [Database code status - dXX](#database-code-status---dxx)
 - [Config](#config)
+
 ## Introduction
  - The CameraAI2 project is a computer vision application designed to perform various tasks such as face detection, recognition, and object detection.
  - This documentation outlines the endpoints, requests, and responses for this API with quick guide help you set up and run the project. It also includes information about the database tables used to store the API responses.
-
-## Base URL
-`http://localhost:1102`
 
 ## Quick Guide
 ### Pre-requisites
@@ -67,14 +64,16 @@
     pip install -r requirements.txt
     ```
 
+4. Setup the database by run SQL script:
+    ```
+   database/metadata.sql
+    ```
 ### Running the Application
 1. Start the application using the provided run script:
 
     ```
-    /path to project/app/main/run.py
+    /app/main/run.py
     ```
-
-   Make sure to replace `/path to project` with the actual paths on your system.
 
 2. The application will start, and you can now access the API at `http://localhost:1102`.
 
@@ -90,8 +89,9 @@ See the [Endpoint Usage](#endpoint-usage) for more information
 - The API returns JSON responses containing the requested data or error messages.
 See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more information
 
-## Database Information
+## Default Database Information 
 - **Database Host**: localhost or 127.0.0.1
+- **Database Port**: 1102
 - **Database Name**: metadata
 - **Database User**: root
 - **Database Password**: No password required
@@ -217,13 +217,14 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Mandatory**: `True` (bool)
 
 ## Endpoints
+- Postman workspace: https://www.postman.com/technical-observer-13837837/workspace/cameraai/collection/29180513-362c36ef-6fd3-4f9f-aa98-0976c5cbdb80?action=share&creator=29180513
 ### Human Detection
 - **Prefix**:`/objects`
 - **Endpoint**: `/human_location`
 - **Method**: POST
 - **Description**: Detect human locations in images
 - **Example Response**: 
-  ```
+  ```json lines
   [
     {
         "detections": [
@@ -251,7 +252,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect object locations in images, classify into different categories
 - **Example Response**:
-  ```
+  ```json lines
   [
     {
         "detections": [
@@ -300,7 +301,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect face locations in images
 - **Example Response**:
-  ```
+  ```json lines
   [
     {
         "face_locations": [
@@ -325,11 +326,11 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Encode face landmarks to an array
 - **Example Response**:
-  ```
+  ```json lines
   [
     {
         "image_name": "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg",
-        "landmarks": [...] `(Avg: 5000 - 50000 line of face landmarks)`
+        "landmarks": [] //Avg: 5000 - 50000 line of face landmarks
     },
     {
         "message": "Face landmarks of ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg saved successfully"
@@ -343,7 +344,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Recognize ages, gender and emotions and save emotions metadata to the database.
 - **Example Response**:
-  ```
+  ```json lines
   [
     {
         "age": [
@@ -369,7 +370,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
 - **Example Response**:
-  ```
+  ```json lines
     {
       "accuracy": "High",
       "image_name": "IMG_9599.JPG",
@@ -383,7 +384,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` and `face_name` from the `face_metadata` table as `known_face`, compare this `known_face` with `unknown_face` to predict the unknown face name with the corresponding level of accuracy.
 - **Example Response**:
-  ```  
+  ```json lines
     {
     "Name": "Haewon",
     "face_verification": "verified",
@@ -436,32 +437,36 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 ### Name Recognition
 - To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
-- The number of images per `face_name` in the database should be greater than or equal to `number_of_face_required` (recommended >= 4) to get highest accuracy
+- The number of images per `face_name` in the database should be greater than or equal to `number_of_face_required` (recommended >= 4) to get the highest accuracy
 - You can check if the name has a sufficient number of images by running the `numb_face_name_test.py` program at:
     ```bash
     app/services/test/numb_face_name_test.py
     ```
 ## Example Debug Messenger
 ### Face Location
-- Image name: IMG_3495.JPG
-- Location model used: hog
-
+```
+Image name: IMG_3495.JPG
+Location model used: hog
+```
 ### Face Verification
-- Image name: Ban_sao_tai_xuong_2.jpeg
-- Known face nums: 159
-- Location model used: hog
-- Accuracy: Medium
-- Min distance: 0.4181185213873312
-- Number of loaded face: 159
-
+```
+Image name: Ban_sao_tai_xuong_2.jpeg
+Known face nums: 159
+Location model used: hog
+Accuracy: Medium
+Min distance: 0.4181185213873312
+Number of loaded face: 159
+```
 ### Name Recognition
-- Image name: main-qimg-f98162925e69b8beb5948d028a7ad3b4-lq.jpeg
-- Location model used: hog
-- Accuracy: High
-- Min distance: 0.2996199092209529
-- high_accuracy_name: Kazuha
-- medium_accuracy_name: Kazuha
-- low_accuracy_name: Rosé
+``` 
+Image name: main-qimg-f98162925e69b8beb5948d028a7ad3b4-lq.jpeg
+Location model used: hog
+high_accuracy_name: Kazuha
+medium_accuracy_name: Kazuha
+low_accuracy_name: Rosé
+Accuracy: High
+Min distance: 0.2996199092209529
+```
 
 ### Human Detection and Multiple Objects Detection
 - 0: 480x640 5 persons, 1 book, 317.7ms
@@ -497,38 +502,49 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 
 ## Config
 ### [db_config]
-- host = 0.0.0.0
-- port = 1102
-- db_host = localhost
-- db_user = root
-- db_password = []
-- db_name = metadata
+```ini
+host = 0.0.0.0
+port = 1102
+db_host = localhost
+db_user = root
+db_password =
+db_name = metadata
+```
 
 ### [db_limit_config]
-- face_locations = 250
-- landmarks = 250
-- face_name = 250
-- objects_detected_boxes = 490
-- emotions = 250
+```ini
+face_locations = 250
+landmarks = 250
+face_name = 250
+objects_detected_boxes = 490
+emotions = 250
+```
 
 ### [face_function_config]
-- path = png, jpg, jpeg
-- face_prefix = /face
-- objects_prefix = /objects
-- multiple_objects_prefix = /m_objects
-- low_accuracy_compare_face = 0.46
-- medium_accuracy_compare_face = 0.43
-- high_accuracy_compare_face = 0.34
-- upsample_image = 1
-- ages_bias = -9
-- ages_range = 5
-- number_of_face_required = 4
+```ini
+path = png, jpg, jpeg
+face_prefix = /face
+objects_prefix = /objects
+multiple_objects_prefix = /m_objects
+low_accuracy_compare_face = 0.46
+medium_accuracy_compare_face = 0.43
+high_accuracy_compare_face = 0.34
+upsample_image = 1
+ages_bias = -9
+ages_range = 5
+number_of_face_required = 4
+```
 
 ### [human_detection_config]
-- model_path = model/yolov8n.pt
-- round_result = 5
-- label_class = 0
+```ini
+model_path =../../model/yolov8n.pt
+round_result = 5
+label_class = 0
+```
 
 ### [objects_detection_config]
-- model_path =../../model/yolov8n.pt
-- round_result = 5
+```ini
+model_path =../../model/yolov8n.pt
+round_result = 5
+```
+
