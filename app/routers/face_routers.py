@@ -12,13 +12,10 @@ face_router = Blueprint('face_router', __name__)
 # Route for face location
 @face_router.route('/face_location', methods=['POST'])
 def request_face_location():
-    try:
-        image_file = request.files['image']  # Access the uploaded file
-        face_detector = FaceLocationDetection()
-        face_result = face_detector.get_face_location(image_file)
-        return face_result
-    except Exception as e:
-        return str(e)
+    image_file = request.files['image']  # Access the uploaded file
+    face_detector = FaceLocationDetection()
+    face_result = face_detector.get_face_location(image_file)
+    return face_result
 
 
 # Route for face landmarks

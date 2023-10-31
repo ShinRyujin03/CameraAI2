@@ -10,13 +10,13 @@
 - [Database Information](#database-information)
 - [Database Tables](#database-tables)
   - [`image` Table](#image-table)
-  - [`face_location` Table](#face_location-table)
-  - [`face_landmark` Table](#face_landmark-table)
-  - [`face_facial_attribute` Table](#face_facial_attribute-table)
-  - [`face_verified` Table](#face_verified-table)
-  - [`face_metadata` Table](#face_metadata-table)
-  - [`human_location` Table](#human_location-table)
-  - [`detected_objects` Table](#detected_objects-table)
+  - [`face_location` Table](#facelocation-table)
+  - [`face_landmark` Table](#facelandmark-table)
+  - [`face_facial_attribute` Table](#facefacialattribute-table)
+  - [`face_verified` Table](#faceverified-table)
+  - [`face_metadata` Table](#facemetadata-table)
+  - [`human_location` Table](#humanlocation-table)
+  - [`detected_objects` Table](#detectedobjects-table)
 - [Model - Library](#model---library)
   - [`face-recognition` library](#face-recognition-library)
   - [`DeepFace` library](#deepface-library)
@@ -70,7 +70,7 @@
 ### Running the Application
 1. Start the application using the provided run script:
 
-    ```bash
+    ```
     /path to project/app/main/run.py
     ```
 
@@ -223,21 +223,27 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect human locations in images
 - **Example Response**: 
-  - [{ 
-    - "detections": [{
-      - "box": [
-                        400.51749,
-                        268.44345,
-                        403.30487,
-                        465.74261
-                    ],
-      - "weight": 0.92163 }],
-    - "image_name": "mot-so-hinh-anh-ve-rei.jpg"},
-    
-    - {
-         "message": "Human location metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
-     }
-  - ]
+  ```
+  [
+    {
+        "detections": [
+            {
+                "box": [
+                    1065.94641,
+                    717.97485,
+                    1340.47827,
+                    1270.15039
+                ],
+                "weight": 0.86508
+            }
+        ],
+        "image_name": "Jiwoo.jpg"
+    },
+    {
+        "message": "Human location metadata of Jiwoo.jpg saved successfully"
+    }
+  ]
+    ```
 
 ### Multiple Objects Detection
 - **Prefix**: `/m_objects`
@@ -245,64 +251,91 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect object locations in images, classify into different categories
 - **Example Response**:
-    - [{ 
-    - "detections": [{
-      - "box": [
-                        400.51749,
-                        268.44345,
-                        403.30487,
-                        465.74261
-                    ],
-      - "object type": "person", "weight": 0.92163 },
-    - {
-      - "box": [
-                        192.27647,
-                        438.57233,
-                        69.00922,
-                        133.88718
-                    ],
-      - "object type": "bottle", "weight": 0.53189 }]
-    - "image_name": "mot-so-hinh-anh-ve-rei.jpg"}, 
-  - {
-       "message": "Objects detection metadata of mot-so-hinh-anh-ve-rei.jpg saved successfully"
-   }
-  - ]
+  ```
+  [
+    {
+        "detections": [
+            {
+                "box": [
+                    1065.94641,
+                    717.97485,
+                    1340.47827,
+                    1270.15039
+                ],
+                "object type": "person",
+                "weight": 0.86508
+            },
+            {
+                "box": [
+                    1101.8562,
+                    1254.60352,
+                    313.31927,
+                    214.42932
+                ],
+                "object type": "teddy bear",
+                "weight": 0.58707
+            },
+            {
+                "box": [
+                    363.354,
+                    1222.16138,
+                    289.47791,
+                    266.88342
+                ],
+                "object type": "laptop",
+                "weight": 0.35285
+            }
+        ],
+        "image_name": "Jiwoo.jpg"
+    },
+    {
+        "message": "Objects detection metadata of Jiwoo.jpg saved successfully"
+    }
+  ]
+    ```
 
 ### Face Location
 - **Prefix**:`/face`
 - **Endpoint**: `/face_location`
 - **Method**: POST
 - **Description**: Detect face locations in images
-- **Example Response**: 
-  - [
-     - {
+- **Example Response**:
+  ```
+  [
+    {
         "face_locations": [
-       [
-                724,
-                2853,
-                1682,
-                1895
+            [
+                72,
+                137,
+                146,
+                63
             ]
-    ],
-      -  "image_name": "newjeans-hyein-4k-wallpaper-uhdpaper.com-8960g.jpg"
+        ],
+        "image_name": "images.jpeg"
     },
-    - {
-    "message": "Face location metadata of newjeans-hyein-4k-wallpaper-uhdpaper.com-8960g.jpg saved successfully"}
-  - ]
+    {
+        "message": "Face location metadata of images.jpeg saved successfully"
+    }
+  ]
+  ```
 
 ### Face Landmarks
 - **Prefix**:`/face`
 - **Endpoint**: `/face_landmarks`
 - **Method**: POST
 - **Description**: Encode face landmarks to an array
-- **Response**:
-  - [{
-      -  "image_name": "1655923786906.jpeg",
-      -  "landmarks": [...] `(Avg: 5000 - 50000 line of face landmarks)`
-    - {
-        "message": "Face landmarks of 1655923786906.jpeg saved successfully"
+- **Example Response**:
+  ```
+  [
+    {
+        "image_name": "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg",
+        "landmarks": [...] `(Avg: 5000 - 50000 line of face landmarks)`
+    },
+    {
+        "message": "Face landmarks of ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg saved successfully"
     }
-  - ]
+  ]
+    ```
 
 ### Facial Attribute Recognition
 - **Prefix**:`/face`
@@ -310,21 +343,25 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Recognize ages, gender and emotions and save emotions metadata to the database.
 - **Example Response**:
-  - [{
-     -   "age": [
-            "27 - 32"
+  ```
+  [
+    {
+        "age": [
+            "15 - 20"
         ],
-    -    "emotions": [
-            "neutral"
+        "emotions": [
+            "surprise"
         ],
-    -    "gender": [
+        "gender": [
             "Woman"
         ],
-    -    "image_name": "210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg"
+        "image_name": "IMG_3805.JPG"
     },
-      - {
-          "message": "Face facial attribute metadata of 210328-IU-Coin-LILAC-at-Inkigayo-documents-72.jpeg saved successfully"
-  - }]
+    {
+        "message": "Face facial attribute metadata of IMG_3805.JPG saved successfully"
+    }
+  ]
+  ```
 
 ### Face Verification
 - **Prefix**:`/face`
@@ -332,11 +369,13 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
 - **Example Response**:
-  - {
-    - "Name": "Rei",
-    - "face_verification": "verified",
-    - "image_name": "mot-so-hinh-anh-ve-rei.jpg"
-  - }
+  ```
+    {
+      "accuracy": "High",
+      "image_name": "IMG_9599.JPG",
+      "recognized_face_name": "Kazuha"
+    }
+  ```
 
 ### Name Recognition
 - **Prefix**:`/face`
@@ -344,12 +383,13 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` and `face_name` from the `face_metadata` table as `known_face`, compare this `known_face` with `unknown_face` to predict the unknown face name with the corresponding level of accuracy.
 - **Example Response**:
-  - {
-    - "accuracy": "Medium",
-    - "image_name": "IMG_0092.JPG",
-    - "recognized_face_name": "Haewon"
-  - }
-
+  ```  
+    {
+    "Name": "Haewon",
+    "face_verification": "verified",
+    "image_name": "IMG_0587.JPG"
+    }
+  ```
 ## Endpoint Usage
 ### Human Detection
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
@@ -365,7 +405,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
 - The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
 
-### Face Location
+### Face Location 
 - To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`.
 - The image will save in `image` table
 - The metadata will save in `face_location` table
