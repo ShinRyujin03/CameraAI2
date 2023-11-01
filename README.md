@@ -528,7 +528,7 @@ Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at sha
      image = "image/yujin 4.jpeg"
      face_locations = [(73, 128, 135, 66)] 
      ```
-  - ***Output***
+  - ***Output***:    
     ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md%20image/Yujin%20md.png)
 ### Number of Face Image Test
 
