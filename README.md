@@ -31,6 +31,9 @@
   - [Name Recognition](#name-recognition)
 - [Endpoint Usage](#endpoint-usage)
 - [Example Debug Messenger](#example-debug-messenger)
+- [Results visualize test](#results-visualize-test)
+  - [Face Location Test](#face-location-test)
+  - [Number of Face Image Test](#number-of-face-image-test)
 - [Error Handle](#error-handle)
   - [Image code status - iXX](#image-code-status---ixx)
   - [Database code status - dXX](#database-code-status---dxx)
@@ -189,7 +192,10 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```bash
     pip install face-recognition
     ```
-- **import syntax**:`import face_recognition`
+- **import syntax**:
+    ```python lines
+    import face_recognition
+    ```
 - **Project documentation**: https://pypi.org/project/face-recognition/
 
 ### `DeepFace` library
@@ -199,17 +205,23 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```bash
     pip install deepface
     ```
-- **import syntax**:`from deepface import DeepFace`
+- **import syntax**:
+    ```python lines
+    from deepface import DeepFace
+    ```
 - **Project documentation**: https://pypi.org/project/deepface/
 
 ### `Yolo v8 nano` model
 - **Model name**: YOLO
 - **Version**: v8 nano
-- **Install command line**:`pip install ultralytics`
+- **Install command line**:
     ```bash
     pip install ultralytics
     ```
-- **import syntax**:`from ultralytics import YOLO`
+- **import syntax**:
+    ```python lines
+    from ultralytics import YOLO
+    ```
 - **Project documentation**: https://docs.ultralytics.com/
 
 ## Schema
@@ -229,7 +241,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
     image: "images.jpeg"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](/database/image/README.md%20image/Jiwoo%20md.png)
+    ![Jiwoo%20md.png](/database/image/README.md%20image/Jiwoo%20md.png)
   - ***Output***
     ```json lines
     [
@@ -371,26 +383,27 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Example Response**:
   - ***Input***
     ```
-    image: "IMG_0587.JPG"
+    image: "Sakura.jpeg"
     ```
+    ![Ảnh màn hình 2023-11-01 lúc 17.00.50.png](..%2F..%2F%E1%BA%A2nh%20m%C3%A0n%20h%C3%ACnh%202023-11-01%20l%C3%BAc%2017.00.50.png)
   - ***Output***
      ```json lines
      [
-       {
-           "age": [
-               "15 - 20"
-           ],
-           "emotions": [
-               "surprise"
-           ],
-           "gender": [
-               "Woman"
-           ],
-           "image_name": "IMG_3805.JPG"
-       },
-       {
-           "message": "Face facial attribute metadata of IMG_3805.JPG saved successfully"
-       }
+         {
+             "age": [
+                 "22 - 27"
+             ],
+             "emotions": [
+                 "neutral"
+             ],
+             "gender": [
+                 "Woman"
+             ],
+             "image_name": "Sakura.jpeg"
+         },
+         {
+             "message": "Face facial attribute metadata of Sakura.jpeg saved successfully"
+         }
      ]
      ```
 
@@ -421,7 +434,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` and `face_name` from the `face_metadata` table as `known_face`, compare this `known_face` with `unknown_face` to predict the unknown face name with the corresponding level of accuracy.
 - **Example Response**:
-- ***Input***
+  - ***Input***
     ```
     image: "IMG_9599.JPG"
     ```
