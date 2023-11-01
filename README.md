@@ -82,6 +82,7 @@
 - Use tools like `curl`, `Postman`, or your preferred HTTP client to send requests to the API endpoints.
 See the [Endpoint Usage](#endpoint-usage) for more information
 
+![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/image/README.md image/API input.png)
 #### Sending Image Files
 - When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG.
 
@@ -224,27 +225,33 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect human locations in images
 - **Example Response**: 
-  ```json lines
-  [
-    {
-        "detections": [
-            {
-                "box": [
-                    1065.94641,
-                    717.97485,
-                    1340.47827,
-                    1270.15039
-                ],
-                "weight": 0.86508
-            }
-        ],
-        "image_name": "Jiwoo.jpg"
-    },
-    {
-        "message": "Human location metadata of Jiwoo.jpg saved successfully"
-    }
-  ]
+  - ***Input***
     ```
+    image: "images.jpeg"
+    ```
+    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](database/image/README.md image/Jiwoo md.png)
+  - ***Output***
+    ```json lines
+    [
+      {
+          "detections": [
+              {
+                  "box": [
+                      1065.94641,
+                      717.97485,
+                      1340.47827,
+                      1270.15039
+                  ],
+                  "weight": 0.86508
+              }
+          ],
+          "image_name": "Jiwoo.jpg"
+      },
+      {
+          "message": "Human location metadata of Jiwoo.jpg saved successfully"
+      }
+    ]
+      ```
 
 ### Multiple Objects Detection
 - **Prefix**: `/m_objects`
@@ -252,47 +259,53 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect object locations in images, classify into different categories
 - **Example Response**:
-  ```json lines
-  [
-    {
-        "detections": [
-            {
-                "box": [
-                    1065.94641,
-                    717.97485,
-                    1340.47827,
-                    1270.15039
-                ],
-                "object type": "person",
-                "weight": 0.86508
-            },
-            {
-                "box": [
-                    1101.8562,
-                    1254.60352,
-                    313.31927,
-                    214.42932
-                ],
-                "object type": "teddy bear",
-                "weight": 0.58707
-            },
-            {
-                "box": [
-                    363.354,
-                    1222.16138,
-                    289.47791,
-                    266.88342
-                ],
-                "object type": "laptop",
-                "weight": 0.35285
-            }
-        ],
-        "image_name": "Jiwoo.jpg"
-    },
-    {
-        "message": "Objects detection metadata of Jiwoo.jpg saved successfully"
-    }
-  ]
+  - ***Input***
+    ```
+    image: "images.jpeg"
+    ```
+    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](database/image/README.md image/Jiwoo md.png)
+  - ***Output***
+    ```json lines
+    [
+      {
+          "detections": [
+              {
+                  "box": [
+                      1065.94641,
+                      717.97485,
+                      1340.47827,
+                      1270.15039
+                  ],
+                  "object type": "person",
+                  "weight": 0.86508
+              },
+              {
+                  "box": [
+                      1101.8562,
+                      1254.60352,
+                      313.31927,
+                      214.42932
+                  ],
+                  "object type": "teddy bear",
+                  "weight": 0.58707
+              },
+              {
+                  "box": [
+                      363.354,
+                      1222.16138,
+                      289.47791,
+                      266.88342
+                  ],
+                  "object type": "laptop",
+                  "weight": 0.35285
+              }
+          ],
+          "image_name": "Jiwoo.jpg"
+      },
+      {
+          "message": "Objects detection metadata of Jiwoo.jpg saved successfully"
+      }
+    ]
     ```
 
 ### Face Location
@@ -301,24 +314,30 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Detect face locations in images
 - **Example Response**:
-  ```json lines
-  [
-    {
-        "face_locations": [
-            [
-                72,
-                137,
-                146,
-                63
-            ]
-        ],
-        "image_name": "images.jpeg"
-    },
-    {
-        "message": "Face location metadata of images.jpeg saved successfully"
-    }
-  ]
-  ```
+  - ***Input***
+    ```
+    image: "images.jpeg"
+    ```
+    ![Ảnh màn hình 2023-11-01 lúc 14.29.14.png](database/image/README.md image/Kazuha 2.png)
+  - ***Output***
+    ```json lines
+    [
+      {
+          "face_locations": [
+              [
+                  72,
+                  137,
+                  146,
+                  63
+              ]
+          ],
+          "image_name": "images.jpeg"
+      },
+      {
+          "message": "Face location metadata of images.jpeg saved successfully"
+      }
+    ]
+    ```
 
 ### Face Landmarks
 - **Prefix**:`/face`
@@ -326,16 +345,22 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Encode face landmarks to an array
 - **Example Response**:
-  ```json lines
-  [
-    {
-        "image_name": "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg",
-        "landmarks": [] //Avg: 5000 - 50000 line of face landmarks
-    },
-    {
-        "message": "Face landmarks of ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg saved successfully"
-    }
-  ]
+  - ***Input***
+    ```
+     image: "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg"
+    ```
+    ![Ảnh màn hình 2023-11-01 lúc 14.23.56.png](database/image/README.md image/Yeji md.png)
+  - ***Output***
+   ```json lines
+   [
+     {
+         "image_name": "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg",
+         "landmarks": [] //Avg: 5000 - 50000 line of face landmarks
+     },
+     {
+         "message": "Face landmarks of ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg saved successfully"
+     }
+   ]
     ```
 
 ### Facial Attribute Recognition
@@ -344,25 +369,30 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Recognize ages, gender and emotions and save emotions metadata to the database.
 - **Example Response**:
-  ```json lines
-  [
-    {
-        "age": [
-            "15 - 20"
-        ],
-        "emotions": [
-            "surprise"
-        ],
-        "gender": [
-            "Woman"
-        ],
-        "image_name": "IMG_3805.JPG"
-    },
-    {
-        "message": "Face facial attribute metadata of IMG_3805.JPG saved successfully"
-    }
-  ]
-  ```
+  - ***Input***
+    ```
+    image: "IMG_0587.JPG"
+    ```
+  - ***Output***
+     ```json lines
+     [
+       {
+           "age": [
+               "15 - 20"
+           ],
+           "emotions": [
+               "surprise"
+           ],
+           "gender": [
+               "Woman"
+           ],
+           "image_name": "IMG_3805.JPG"
+       },
+       {
+           "message": "Face facial attribute metadata of IMG_3805.JPG saved successfully"
+       }
+     ]
+     ```
 
 ### Face Verification
 - **Prefix**:`/face`
@@ -370,13 +400,20 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
 - **Example Response**:
-  ```json lines
+  - ***Input***
+    ```
+    face_name: Haewon
+    image: "IMG_0587.JPG"
+    ```
+    ![Ảnh màn hình 2023-11-01 lúc 14.03.30.png](database/image/README.md image/Haewon md.png)
+  - ***Output***
+    ```json lines
     {
-      "accuracy": "High",
-      "image_name": "IMG_9599.JPG",
-      "recognized_face_name": "Kazuha"
+    "Name": "Haewon",
+    "face_verification": "verified",
+    "image_name": "IMG_0587.JPG"
     }
-  ```
+    ```
 
 ### Name Recognition
 - **Prefix**:`/face`
@@ -384,13 +421,19 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Method**: POST
 - **Description**: Get the `image_file` and `face_name` from the `face_metadata` table as `known_face`, compare this `known_face` with `unknown_face` to predict the unknown face name with the corresponding level of accuracy.
 - **Example Response**:
-  ```json lines
+- ***Input***
+    ```
+    image: "IMG_9599.JPG"
+    ```
+  ![Ảnh màn hình 2023-11-01 lúc 14.12.56.png](database/image/README.md image/Kazuha md.png)
+  - ***Output***
+    ```json lines
     {
-    "Name": "Haewon",
-    "face_verification": "verified",
-    "image_name": "IMG_0587.JPG"
+      "accuracy": "High",
+      "image_name": "IMG_9599.JPG",
+      "recognized_face_name": "Kazuha"
     }
-  ```
+    ```
 ## Endpoint Usage
 ### Human Detection
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
@@ -469,9 +512,36 @@ Min distance: 0.2996199092209529
 ```
 
 ### Human Detection and Multiple Objects Detection
-- 0: 480x640 5 persons, 1 book, 317.7ms
-- Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at shape (1, 3, 480, 640)
+```
+0: 480x640 5 persons, 1 book, 317.7ms
+Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at shape (1, 3, 480, 640)
+```
 
+## Results visualize test
+
+### Face Location Test
+
+- **Description**: The Face Location Test is designed to locate and draw rectangles around faces in an image. It uses the provided face locations and applies them to the input image. Below is the visual representation of the test:
+- **Example Result**:
+  - ***Input***
+     ```
+     image = "image/yujin 4.jpeg"
+     face_locations = [(73, 128, 135, 66)] 
+     ```
+  - ***Output***
+    ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md image/Yujin md.png)
+### Number of Face Image Test
+
+- **Description**: The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates the occurrence of each face name and provides insights into the distribution. The test also determines the pass and fail counts based on a predefined threshold.
+
+- **Example Result**:
+    ```
+    Passed faces: Sumin (4 times), Yuna (8 times), Yeji (7 times), Jennie (5 times), NaNa (4 times), Rosé (13 times), Jisoo (5 times), Jiwoo (8 times), Sakura (7 times), Irene (4 times), IU (14 times), Kazuha (6 times), Wonyoung (10 times), Ryujin (10 times), Lisa (11 times), Yujin (7 times), Rei (9 times)
+    Failed faces: Lily (2 times), Nayeon (2 times), Test Img (1 times), Chaeyeon (1 times), Hyein (2 times), Lia (3 times), Minji (2 times), Haerin (1 times), Yuqi (2 times), ITZY (2 times), Joy (2 times), Chaeryeong (3 times), Hanni (2 times), IVE (1 times), Haewon (2 times), Tsuki (2 times), Eunchae (3 times), Soyeon (1 times)
+    Face Pass: 14
+    Face Fail: 21
+    ```
+  ![Figure_1.png](database/image/README.md image/Figure.png)
 ## Error Handle
 ### Image code status - iXX
 - **INVALID_IMAGE** 

@@ -16,8 +16,8 @@ class FaceLocationDrawer:
 
 
 # Usage example
-image = cv2.imread("/Users/macbookairm1/Desktop/K-Pop/IVE/Snapinsta.app_387269765_6448350551957565_5189336302001287490_n_1080.jpg")
-face_locations = [(769, 1612, 924, 1457), (288, 459, 442, 304), (383, 1515, 512, 1386), (125, 841, 254, 712), (219, 1990, 374, 1835), (139, 1199, 268, 1070)]  # Example face locations
+image = cv2.imread("/Users/macbookairm1/Desktop/K-Pop/IVE/yujin 4.jpeg")
+face_locations = [(73, 128, 135, 66)]  # Example face locations
 
 drawer = FaceLocationDrawer()
 result_image = drawer.draw_face_locations(image, face_locations)
