@@ -82,7 +82,7 @@
 - Use tools like `curl`, `Postman`, or your preferred HTTP client to send requests to the API endpoints.
 See the [Endpoint Usage](#endpoint-usage) for more information
 
-![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/image/README.md image/API input.png)
+![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/image/README.md%20image/API%20input.png)
 #### Sending Image Files
 - When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG.
 
@@ -229,7 +229,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
     image: "images.jpeg"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](database/image/README.md image/Jiwoo md.png)
+    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](/database/image/README.md%20image/Jiwoo%20md.png)
   - ***Output***
     ```json lines
     [
@@ -263,7 +263,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
     image: "images.jpeg"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](database/image/README.md image/Jiwoo md.png)
+    ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](/database/image/README.md%20image/Jiwoo%20md.png)
   - ***Output***
     ```json lines
     [
@@ -318,7 +318,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
     image: "images.jpeg"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 14.29.14.png](database/image/README.md image/Kazuha 2.png)
+    ![Ảnh màn hình 2023-11-01 lúc 14.29.14.png](/database/image/README.md%20image/Kazuha%202.png)
   - ***Output***
     ```json lines
     [
@@ -349,7 +349,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
      image: "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 14.23.56.png](database/image/README.md image/Yeji md.png)
+    ![Ảnh màn hình 2023-11-01 lúc 14.23.56.png](database/image/README.md%20image/Yeji%20md.png)
   - ***Output***
    ```json lines
    [
@@ -405,7 +405,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     face_name: Haewon
     image: "IMG_0587.JPG"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 14.03.30.png](database/image/README.md image/Haewon md.png)
+    ![Ảnh màn hình 2023-11-01 lúc 14.03.30.png](database/image/README.md%20image/Haewon%20md.png)
   - ***Output***
     ```json lines
     {
@@ -425,7 +425,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
     image: "IMG_9599.JPG"
     ```
-  ![Ảnh màn hình 2023-11-01 lúc 14.12.56.png](database/image/README.md image/Kazuha md.png)
+  ![Ảnh màn hình 2023-11-01 lúc 14.12.56.png](database/image/README.md%20image/Kazuha%20md.png)
   - ***Output***
     ```json lines
     {
@@ -529,7 +529,7 @@ Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at sha
      face_locations = [(73, 128, 135, 66)] 
      ```
   - ***Output***
-    ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md image/Yujin md.png)
+    ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md%20image/Yujin%20md.png)
 ### Number of Face Image Test
 
 - **Description**: The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates the occurrence of each face name and provides insights into the distribution. The test also determines the pass and fail counts based on a predefined threshold.
@@ -541,7 +541,7 @@ Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at sha
     Face Pass: 14
     Face Fail: 21
     ```
-  ![Figure_1.png](database/image/README.md image/Figure.png)
+  ![Figure_1.png](database/image/README.md%20image/Figure.png)
 ## Error Handle
 ### Image code status - iXX
 - **INVALID_IMAGE** 
