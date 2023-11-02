@@ -529,11 +529,6 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 ### Name Recognition
 - To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
-- The number of images per `face_name` in the database should be greater than or equal to `number_of_face_required` (recommended >= 4) to get the highest accuracy
-- You can check if the name has a sufficient number of images by running the `numb_face_name_test.py` program at:
-    ```bash
-    app/services/test/numb_face_name_test.py
-    ```
 
 ## Results visualize test
 
@@ -542,7 +537,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Description**: The Face Location Test is designed to locate and draw rectangles around faces in an image. It uses the provided face locations and applies them to the input image. Below is the visual representation of the test:
 - **Example Result**:
   - ***Input***
-     ```
+     ```  
      image = "image/yujin 4.jpeg"
      face_locations = [(73, 128, 135, 66)] 
      ```
