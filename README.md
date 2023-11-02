@@ -30,7 +30,6 @@
   - [Face Verification](#face-verification)
   - [Name Recognition](#name-recognition)
 - [Endpoint Usage](#endpoint-usage)
-- [Example Debug Messenger](#example-debug-messenger)
 - [Results visualize test](#results-visualize-test)
   - [Face Location Test](#face-location-test)
   - [Number of Face Image Test](#number-of-face-image-test)
@@ -264,7 +263,11 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
       }
     ]
       ```
-
+  - ***Back-end messenger***
+    ```
+    0: 448x640 1 person, 1 laptop, 1 teddy bear, 385.0ms
+    Speed: 17.0ms preprocess, 385.0ms inference, 36.6ms postprocess per image at shape (1, 3, 448, 640)
+    ```
 ### Multiple Objects Detection
 - **Prefix**: `/m_objects`
 - **Endpoint**: `m_objects_location`
@@ -319,6 +322,11 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
       }
     ]
     ```
+  - ***Back-end messenger***
+    ```
+    0: 448x640 1 person, 1 laptop, 1 teddy bear, 385.0ms
+    Speed: 17.0ms preprocess, 385.0ms inference, 36.6ms postprocess per image at shape (1, 3, 448, 640)
+    ```
 
 ### Face Location
 - **Prefix**:`/face`
@@ -349,6 +357,11 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
           "message": "Face location metadata of images.jpeg saved successfully"
       }
     ]
+    ```
+  - ***Back-end messenger***
+    ```
+    Image name: images.jpeg
+    Location model used: hog
     ```
 
 ### Face Landmarks
@@ -383,28 +396,28 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Example Response**:
   - ***Input***
     ```
-    image: "Sakura.jpeg"
+    image: "Wonyoung.jpeg"
     ```
-    ![Ảnh màn hình 2023-11-01 lúc 17.00.50.png](..%2F..%2F%E1%BA%A2nh%20m%C3%A0n%20h%C3%ACnh%202023-11-01%20l%C3%BAc%2017.00.50.png)
+    ![Wonyoung md.png](database/image/README.md%20image/Wonyoung%20md.png)
   - ***Output***
      ```json lines
-     [
-         {
-             "age": [
-                 "22 - 27"
-             ],
-             "emotions": [
-                 "neutral"
-             ],
-             "gender": [
-                 "Woman"
-             ],
-             "image_name": "Sakura.jpeg"
-         },
-         {
-             "message": "Face facial attribute metadata of Sakura.jpeg saved successfully"
-         }
-     ]
+    [
+        {
+            "age": [
+                "19 - 24"
+            ],
+            "emotions": [
+                "happy"
+            ],
+            "gender": [
+                "Woman"
+            ],
+            "image_name": "Wonyoung.jpg"
+        },
+        {
+            "message": "Face facial attribute metadata of Wonyoung.jpg saved successfully"
+        }
+    ]
      ```
 
 ### Face Verification
@@ -427,6 +440,15 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     "image_name": "IMG_0587.JPG"
     }
     ```
+  - ***Back-end messenger***
+    ```
+    Image name: IMG_0587.JPG
+    Known face nums: 178
+    Location model used: hog
+    Accuracy: High
+    Min distance: 0.33201442482600557
+    Number of loaded face: 161
+    ```
 
 ### Name Recognition
 - **Prefix**:`/face`
@@ -436,17 +458,28 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Example Response**:
   - ***Input***
     ```
-    image: "IMG_9599.JPG"
+    image: "IMG_3716.JPG"
     ```
-  ![Ảnh màn hình 2023-11-01 lúc 14.12.56.png](database/image/README.md%20image/Kazuha%20md.png)
+    ![Rei md.png](/database/image/README.md%20image/Rei%20md.png)
   - ***Output***
     ```json lines
     {
-      "accuracy": "High",
-      "image_name": "IMG_9599.JPG",
-      "recognized_face_name": "Kazuha"
+        "accuracy": "Medium",
+        "image_name": "IMG_3716.JPG",
+        "recognized_face_name": "Rei"
     }
     ```
+  - ***Back-end messenger***
+    ```
+    Image name: IMG_3716.JPG
+    Location model used: hog
+    high_accuracy_name: None
+    medium_accuracy_name: Rei
+    low_accuracy_name: None
+    Accuracy: Medium
+    Min distance: 0.34526925581139395
+    ```
+    
 ## Endpoint Usage
 ### Human Detection
 - To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`. 
@@ -498,37 +531,6 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```bash
     app/services/test/numb_face_name_test.py
     ```
-## Example Debug Messenger
-### Face Location
-```
-Image name: IMG_3495.JPG
-Location model used: hog
-```
-### Face Verification
-```
-Image name: Ban_sao_tai_xuong_2.jpeg
-Known face nums: 159
-Location model used: hog
-Accuracy: Medium
-Min distance: 0.4181185213873312
-Number of loaded face: 159
-```
-### Name Recognition
-``` 
-Image name: main-qimg-f98162925e69b8beb5948d028a7ad3b4-lq.jpeg
-Location model used: hog
-high_accuracy_name: Kazuha
-medium_accuracy_name: Kazuha
-low_accuracy_name: Rosé
-Accuracy: High
-Min distance: 0.2996199092209529
-```
-
-### Human Detection and Multiple Objects Detection
-```
-0: 480x640 5 persons, 1 book, 317.7ms
-Speed: 12.1ms preprocess, 317.7ms inference, 29.7ms postprocess per image at shape (1, 3, 480, 640)
-```
 
 ## Results visualize test
 
