@@ -20,7 +20,7 @@
   - [`face-recognition` library](#face-recognition-library)
   - [`DeepFace` library](#deepface-library)
   - [`Yolo v8 nano` model](#yolo-v8-nano-model)
-- [Schema](#schema)
+- [Image Schema](#image-schema)
 - [Endpoints](#endpoints)
   - [Human Detection](#human-detection)
   - [Multiple Objects Detection](#multiple-objects-detection)
@@ -35,6 +35,7 @@
   - [Number of Face Image Test](#number-of-face-image-test)
 - [Error Handle](#error-handle)
   - [Image code status - iXX](#image-code-status---ixx)
+  - [Face name code status - fXX](#face-name-code-status---fxx)
   - [Database code status - dXX](#database-code-status---dxx)
 - [Config](#config)
 
@@ -223,14 +224,9 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ```
 - **Project documentation**: https://docs.ultralytics.com/
 
-## Schema
-- **image**
+## Image Schema
   - **Datafield**: `image`
   - **Datatype**: `png`, `jpg`, `jpeg` (binary) - Can be configuring at `config.ini`
-  - **Mandatory**: `True` (bool)
-- **face_name**
-  - **Datafield**: `face_name`
-  - **Datatype**: `text` (str with none special characters)
   - **Mandatory**: `True` (bool)
 ## Endpoints
 - Postman workspace: https://www.postman.com/technical-observer-13837837/workspace/cameraai/collection/29180513-362c36ef-6fd3-4f9f-aa98-0976c5cbdb80?action=share&creator=29180513
@@ -584,10 +580,15 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
   - HTTP Code: `404 Not Found`
   - Code: "i03" 
   - Message: No face detected in the image. Please upload an image with a visible face.
+### Face name code status - fXX
 - **NO_FACE_NAME**
   - HTTP Code: `404 Not Found`
-  - Code: "i04" 
+  - Code: "f01" 
   - Message: Face name not found. Please provide a valid name for the face.
+- **INVALID_FACE_NAME**
+  - HTTP Code: `406 Not Acceptable`
+  - Code: "f02" 
+  - Message: Invalid image face name. Please provide a valid name for the face.
 ### Database code status - dXX
 - **DATABASE_IS_NONE**
   - HTTP Code: `503 Service Unavailable`

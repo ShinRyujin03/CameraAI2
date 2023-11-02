@@ -6,7 +6,8 @@ from database.database import Database
 import face_recognition
 import cv2
 import numpy as np
-from app.handle.app_error import DatabaseNoneError, NoDetection, NoFaceNameError
+import re
+from app.handle.app_error import DatabaseNoneError, NoDetection, InvalidFaceNameError, NoFaceNameError
 from app.services.face.face_detection_services import FaceLocationDetection
 import logging
 import mysql.connector
@@ -80,7 +81,11 @@ class FaceVerification:
         face_detector = FaceVerification()
         if not face_name:
             logging.error(NoFaceNameError())
-            raise NoFaceNameError
+            raise NoFaceNameError()
+        else:
+            if not re.match("^[a-zA-Z]+$", face_name):
+                logging.error(InvalidFaceNameError())
+                raise InvalidFaceNameError()
         if schema_test(image_file) == True:
             try:
                 # Read the image data from the file
