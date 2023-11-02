@@ -148,7 +148,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
   - `image_name`: VARCHAR(255), NOT NULL
   - `verify_status`: VARCHAR(255), NOT NULL
   - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about face verification status of the image with face's name.
+- **Description**: Stores information about face verification status of the image with face name.
 
 ### face_metadata Table
 - **Fields**:
@@ -428,7 +428,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Prefix**:`/face`
 - **Endpoint**: `/face_verify`
 - **Method**: POST
-- **Description**: Get the `image_file` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face's name to the database.
+- **Description**: Get the `image_file` from the `image` table as `known_face`, compare this `known_face` with `unknown_face` and save face verification status and face name to the database.
 - **Example Response**:
   - ***Input***
     ```
@@ -526,7 +526,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 
 ### Face Verification
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`. 
-- The face verification status and face's name will save in `face_verified` table
+- The face verification status and face name will save in `face_verified` table
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
 - The face verification status will return `not verified` or `verified` only
 
