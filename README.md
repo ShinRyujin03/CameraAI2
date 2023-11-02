@@ -40,7 +40,7 @@
 
 ## Introduction
  - The CameraAI2 project is a computer vision application designed to perform various tasks such as face detection, recognition, and object detection.
- - This documentation outlines the endpoints, requests, and responses for this API with quick guide help you set up and run the project. It also includes information about the database tables used to store the API responses.
+ - This documentation outlines the endpoints, requests, and responses for this API with quick guide to help you set up and run the project. It also includes information about the database tables used to store the API responses.
 
 ## Quick Guide
 ### Pre-requisites
@@ -86,7 +86,7 @@ See the [Endpoint Usage](#endpoint-usage) for more information
 
 ![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/image/README.md%20image/API%20input.png)
 #### Sending Image Files
-- When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG.
+- When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG. You can configure it at `path` in `config.ini` 
 
 #### API Responses
 - The API returns JSON responses containing the requested data or error messages.
@@ -224,10 +224,14 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Project documentation**: https://docs.ultralytics.com/
 
 ## Schema
-- **Datafield**: `image`(str)
-- **Datatype**: `png`, `jpg`, `jpeg`(str) - Can be configuring at `config.ini`
-- **Mandatory**: `True` (bool)
-
+- **image**
+  - **Datafield**: `image`
+  - **Datatype**: `png`, `jpg`, `jpeg` (binary) - Can be configuring at `config.ini`
+  - **Mandatory**: `True` (bool)
+- **face_name**
+  - **Datafield**: `face_name`
+  - **Datatype**: `text` (str with none special characters)
+  - **Mandatory**: `True` (bool)
 ## Endpoints
 - Postman workspace: https://www.postman.com/technical-observer-13837837/workspace/cameraai/collection/29180513-362c36ef-6fd3-4f9f-aa98-0976c5cbdb80?action=share&creator=29180513
 ### Human Detection
@@ -392,11 +396,11 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - **Prefix**:`/face`
 - **Endpoint**: `/facial_attribute_recognition`
 - **Method**: POST
-- **Description**: Recognize ages, gender and emotions and save emotions metadata to the database.
+- **Description**: Recognize ages, gender and emotions and save facial attribute metadata to the database.
 - **Example Response**:
   - ***Input***
     ```
-    image: "Wonyoung.jpeg"
+    image: "Wonyoung.jpg"
     ```
     ![Wonyoung md.png](database/image/README.md%20image/Wonyoung%20md.png)
   - ***Output***
@@ -486,6 +490,7 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - The image will save in `image` table
 - The metadata will save in `human_location` table
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
+- The results is in `xywh` format
 - You can configure the `humman_detection` to other type of object detection by change the values of `label_class` (The list of object class can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
 
 ### Multiple Objects Detection
@@ -493,11 +498,13 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - The image will save in `image` table
 - The metadata will save in `detected_objects` table
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
+- The results is in `xywh` format
 - The list of object can be detected at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
 
 ### Face Location 
 - To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`.
 - The image will save in `image` table
+- The results is in `xyxy` format
 - The metadata will save in `face_location` table
 
 ### Face Landmarks
@@ -547,7 +554,13 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
     ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md%20image/Yujin%20md.png)
 ### Number of Face Image Test
 
-- **Description**: The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates the occurrence of each face name and provides insights into the distribution. The test also determines the pass and fail counts based on a predefined threshold.
+- **Description**:
+    -The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates the occurrence of each face name and   provides insights into the distribution. The test also determines the pass and fail counts based on a predefined threshold.
+    - The number of images per `face_name` in the database should be greater than or equal to `number_of_face_required` (recommended >= 4) to get the highest accuracy
+    - You can check if the name has a sufficient number of images by running the `numb_face_name_test.py` program at:
+    ```bash
+    app/services/test/numb_face_name_test.py
+    ```
 
 - **Example Result**:
     ```
