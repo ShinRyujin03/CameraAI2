@@ -11,7 +11,7 @@ from app.services.face.face_detection_services import FaceLocationDetection
 import logging
 import mysql.connector
 import configparser
-
+import time
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 # Create a configuration object
@@ -44,6 +44,7 @@ class NameRecognition:
         high_accuracy_name = []
         medium_accuracy_name = []
         low_accuracy_name = []
+        start_time = time.time()
         for known_face in known_face_encodings:
             face_loaded = face_loaded + 1
             known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
@@ -54,6 +55,7 @@ class NameRecognition:
                     last_min_distance = min_distance
                     min_distance = min(min_distance, distance[0])
                     recognized_face_name = known_face_names[face_loaded - 1]
+                    elapsed_time = time.time() - start_time  # Measure elapsed time
                     if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
                         if high_accuracy_name and min_distance < last_min_distance:
                             high_accuracy_name[0] = str(recognized_face_name)
@@ -73,6 +75,8 @@ class NameRecognition:
                             low_accuracy_name[0] = str(recognized_face_name)
                         else:
                             low_accuracy_name.append(str(recognized_face_name))
+                    if elapsed_time >= config.getint('face_function_config', 'recognition_elapsed_time'):
+                        break
 
         if high_accuracy_name:
             print("high_accuracy_name:", high_accuracy_name[0])
@@ -123,7 +127,11 @@ class NameRecognition:
                 print("Image name:",image_name)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
-                recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
+                try:
+                    recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
+                except Exception as e:
+                    return str(e)
+
                 print(" ")
                 # Create a response object
                 result = {
