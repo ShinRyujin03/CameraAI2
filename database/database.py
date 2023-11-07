@@ -1,12 +1,14 @@
-import mysql.connector
 import configparser
 import os
+
+import mysql.connector
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
 
 class Database:
     def __init__(self):
@@ -79,6 +81,7 @@ class Database:
 
             self.cursor.execute(query, values)
         self.conn.commit()
+
     def insert_face_facial_attubute(self, image_name, emotions, ages, gender):
         query = "INSERT INTO face_facial_attribute (image_name, emotions, ages, gender) VALUES (%s, %s, %s, %s)"
         values = (image_name, str(emotions), str(ages), str(gender))
@@ -98,7 +101,7 @@ class Database:
         results = self.cursor.fetchall()
 
         image_files = [result[0] for result in results]
-        #image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
+        # image_bytes_list = [base64.b64decode(base64_string) for base64_string in image_files]
         return image_files
 
     def get_image_files_and_name(self):
