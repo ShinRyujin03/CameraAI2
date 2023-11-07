@@ -12,7 +12,7 @@ from app.services.face.face_detection_services import FaceLocationDetection
 import logging
 import mysql.connector
 import configparser
-
+import time
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 # Create a configuration object
@@ -44,6 +44,7 @@ class FaceVerification:
 
             min_distance = float('inf')
             face_loaded = 0
+            start_time = time.time()
             for known_face in known_face_encodings:
                 face_loaded = face_loaded + 1
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
@@ -52,7 +53,8 @@ class FaceVerification:
                     if known_encoding:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
-                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
+                        elapsed_time = time.time() - start_time
+                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') or elapsed_time >= 25:
                             break
             if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
                 print("Accuracy: High")
