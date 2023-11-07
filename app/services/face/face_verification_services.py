@@ -54,23 +54,23 @@ class FaceVerification:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         elapsed_time = time.time() - start_time
-                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') or elapsed_time >= 25:
+                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') or elapsed_time >= 60:
                             break
-            if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
+            if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') + 0.03:
                 print("Accuracy: High")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            if config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'medium_accuracy_compare_face'):
+            if config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'medium_accuracy_compare_face') + 0.03:
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
-                return "verified"
+                return "not verified"
             elif config.getfloat('face_function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'low_accuracy_compare_face'):
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
-                return "verified"
+                return "not verified"
             else:
                 print("Min distance:", min_distance)
                 return "not verified"
