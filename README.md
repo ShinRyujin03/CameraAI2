@@ -525,11 +525,12 @@ See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more infor
 - The face verification status and face name will save in `face_verified` table
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
 - The face verification status will return `not verified` or `verified` only
+- The elapsed time can be configuring at `verification_elapsed_time` variable in `config.ini`  (Default = 1m)
 
 ### Name Recognition
 - To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%) and `low`(>60%)
-- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default = 65s)
+- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default = 55s)
 
 ## Results visualize test
 
@@ -628,7 +629,8 @@ upsample_image = 1
 ages_bias = -9
 ages_range = 5
 number_of_face_required = 4
-recognition_elapsed_time = 65
+recognition_elapsed_time = 55
+verification_elapsed_time = 60
 ```
 
 ### [human_detection_config]

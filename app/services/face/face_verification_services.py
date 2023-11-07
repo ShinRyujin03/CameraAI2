@@ -58,7 +58,9 @@ class FaceVerification:
                         min_distance = min(min_distance, distance[0])
                         elapsed_time = time.time() - start_time
                         if min_distance <= config.getfloat('face_function_config',
-                                                           'high_accuracy_compare_face') or elapsed_time >= 60:
+                                                           'high_accuracy_compare_face') or elapsed_time >= config.getint(
+                            'face_function_config',
+                            'verification_elapsed_time'):
                             break
             if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') + 0.03:
                 print("Accuracy: High")
