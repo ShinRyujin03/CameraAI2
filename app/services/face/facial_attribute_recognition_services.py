@@ -1,14 +1,13 @@
-import mysql
-from flask import jsonify
 import cv2
+import mysql
 import numpy as np
 from deepface import DeepFace
-
+from flask import jsonify
 from werkzeug.utils import secure_filename
+
+from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 from app.schema.image_schema import *
 from database.database import Database
-from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
-import configparser
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -16,6 +15,7 @@ config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
 
 class FacialAttributeRecognition:
     def __init__(self):
@@ -26,7 +26,8 @@ class FacialAttributeRecognition:
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
 
         # Phân tích cảm xúc bằng DeepFace
-        emotions_data = DeepFace.analyze(image, actions=['emotion', 'age', 'gender'], enforce_detection=False, silent=True)
+        emotions_data = DeepFace.analyze(image, actions=['emotion', 'age', 'gender'], enforce_detection=False,
+                                         silent=True)
 
         emotions_list = []
 
@@ -66,7 +67,7 @@ class FacialAttributeRecognition:
                 result = {
                     'image_name': image_name,
                     'emotions': emotions,
-                    'age' : age,
+                    'age': age,
                     'gender': gender,
                 }
 
@@ -87,7 +88,9 @@ class FacialAttributeRecognition:
                         db.insert_face_facial_attubute(image_name, emotions, age, gender)
                         db.insert_image_file(image_name, image_data)
                         db.close_connection()
-                        logging.info(result, {"message": f"Face facial attribute metadata of {image_name} saved successfully"})
-                        return jsonify(result, {"message": f"Face facial attribute metadata of {image_name} saved successfully"})
+                        logging.info(result,
+                                     {"message": f"Face facial attribute metadata of {image_name} saved successfully"})
+                        return jsonify(result, {
+                            "message": f"Face facial attribute metadata of {image_name} saved successfully"})
                     except Exception as e:
                         return str(e)

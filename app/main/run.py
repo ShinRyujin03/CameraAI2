@@ -1,13 +1,13 @@
+import configparser
+import logging
+import os
+
+from flask import Flask
+
+from app.handle.app_error import handle_generic_error
 from app.routers.face_routers import face_router
 from app.routers.human_detection_routers import objects_router
 from app.routers.multiple_objects_detection_routers import multiple_objects_router
-
-
-from flask import Flask
-import configparser
-from app.handle.app_error import handle_generic_error
-import os
-import logging
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -20,9 +20,10 @@ app = Flask(__name__)
 app.register_error_handler(Exception, handle_generic_error)
 
 # Register the funtion_router blueprint
-app.register_blueprint(face_router, url_prefix= config.get('face_function_config', 'face_prefix'))
-app.register_blueprint(objects_router, url_prefix= config.get('face_function_config', 'objects_prefix'))
-app.register_blueprint(multiple_objects_router, url_prefix= config.get('face_function_config', 'multiple_objects_prefix'))
+app.register_blueprint(face_router, url_prefix=config.get('face_function_config', 'face_prefix'))
+app.register_blueprint(objects_router, url_prefix=config.get('face_function_config', 'objects_prefix'))
+app.register_blueprint(multiple_objects_router,
+                       url_prefix=config.get('face_function_config', 'multiple_objects_prefix'))
 
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

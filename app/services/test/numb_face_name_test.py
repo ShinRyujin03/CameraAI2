@@ -1,13 +1,16 @@
-from database.database import Database
-import matplotlib.pyplot as plt
-import os
 import configparser
+import os
+
+import matplotlib.pyplot as plt
+
+from database.database import Database
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
 
 def plot_face_names_histogram(face_names):
     # Count the occurrences of each face name
@@ -30,12 +33,11 @@ def plot_face_names_histogram(face_names):
     print(f"Face Pass: {pass_count}")
     print(f"Face Fail: {fail_count}")
 
-
     # Create a bar chart
     labels = list(face_name_counts.keys())
     counts = list(face_name_counts.values())
 
-    fig, ax = plt.subplots(figsize = (16,9))
+    fig, ax = plt.subplots(figsize=(16, 9))
     ax.bar(labels, counts, color='blue')
     ax.set_xlabel('Face Names')
     ax.set_ylabel('Frequency')
@@ -51,8 +53,5 @@ known_face_encodings, known_face_names = db.get_image_files_and_name()
 # Assuming you have queried and calculated percentages already
 face_names = known_face_names  # Example list of face_names
 
-
 # Call the function to plot and print results
 plot_face_names_histogram(face_names)
-
-

@@ -1,23 +1,25 @@
+import re
+import time
+
+import cv2
+import face_recognition
 import mysql
+import mysql.connector
+import numpy as np
 from flask import jsonify
 from werkzeug.utils import secure_filename
-from app.schema.image_schema import *
-from database.database import Database
-import face_recognition
-import cv2
-import numpy as np
-import re
+
 from app.handle.app_error import DatabaseNoneError, NoDetection, InvalidFaceNameError, NoFaceNameError
+from app.schema.image_schema import *
 from app.services.face.face_detection_services import FaceLocationDetection
-import logging
-import mysql.connector
-import configparser
-import time
+from database.database import Database
+
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
 
 class FaceVerification:
     def __init__(self):
@@ -36,7 +38,8 @@ class FaceVerification:
             unknown_face_detector.image_data = unknown_face
             unknown_face_locations = unknown_face_detector.facelocation()
 
-            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,model="large")
+            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,
+                                                               model="large")
 
             if not unknown_encoding:
                 logging.error(NoDetection())
@@ -54,19 +57,23 @@ class FaceVerification:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         elapsed_time = time.time() - start_time
-                        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') or elapsed_time >= 60:
+                        if min_distance <= config.getfloat('face_function_config',
+                                                           'high_accuracy_compare_face') or elapsed_time >= 60:
                             break
             if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face') + 0.03:
                 print("Accuracy: High")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            if config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'medium_accuracy_compare_face') + 0.03:
+            if config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat(
+                    'face_function_config', 'medium_accuracy_compare_face') + 0.03:
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "not verified"
-            elif config.getfloat('face_function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat('face_function_config', 'low_accuracy_compare_face'):
+            elif config.getfloat('face_function_config',
+                                 'medium_accuracy_compare_face') < min_distance <= config.getfloat(
+                'face_function_config', 'low_accuracy_compare_face'):
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
@@ -79,7 +86,7 @@ class FaceVerification:
         finally:
             db.close_connection()
 
-    def get_face_verification(self,image_file, face_name):
+    def get_face_verification(self, image_file, face_name):
         face_detector = FaceVerification()
         if not face_name:
             logging.error(NoFaceNameError())
@@ -93,7 +100,7 @@ class FaceVerification:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
-                print("Image name:",image_name)
+                print("Image name:", image_name)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
                 verify = face_detector.face_verification(image_data)

@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+
 from app.services.objects.multiple_objects_detection_services import MultipleObjectDetection
 
 # Create instances of the function classes

@@ -1,14 +1,13 @@
+import cv2
+import face_recognition
 import mysql
+import numpy as np
 from flask import jsonify
 from werkzeug.utils import secure_filename
+
+from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 from app.schema.image_schema import *
 from database.database import Database
-import face_recognition
-import cv2
-import numpy as np
-from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
-import logging
-import configparser
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -16,6 +15,8 @@ config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
+
 class FaceLocationDetection:
     def __init__(self):
         self.image_data = None
@@ -23,14 +24,18 @@ class FaceLocationDetection:
     def facelocation(self):
         image_np = np.frombuffer(self.image_data, np.uint8)
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-        face_locations = face_recognition.face_locations(image, config.getint('face_function_config', 'upsample_image'), "hog")
+        face_locations = face_recognition.face_locations(image, config.getint('face_function_config', 'upsample_image'),
+                                                         "hog")
         model = "Location model used: hog"
         if not face_locations:
             model = "Location model used: cnn"
-            face_locations = face_recognition.face_locations(image, config.getint('face_function_config', 'upsample_image'), "cnn")
+            face_locations = face_recognition.face_locations(image,
+                                                             config.getint('face_function_config', 'upsample_image'),
+                                                             "cnn")
         print(model)
         return face_locations
-    def get_face_location(self,image_file):
+
+    def get_face_location(self, image_file):
         face_detector = FaceLocationDetection()
         if schema_test(image_file) == True:
             try:
@@ -64,6 +69,7 @@ class FaceLocationDetection:
                         db.insert_image_file(image_name, image_data)
                         db.close_connection()
                         logging.info(result, {"message": f"Face location metadata of {image_name} saved successfully"})
-                        return jsonify(result, {"message": f"Face location metadata of {image_name} saved successfully"})
+                        return jsonify(result,
+                                       {"message": f"Face location metadata of {image_name} saved successfully"})
                     except Exception as e:
                         return str(e)

@@ -1,22 +1,24 @@
+import time
+
+import cv2
+import face_recognition
 import mysql
+import mysql.connector
+import numpy as np
 from flask import jsonify
 from werkzeug.utils import secure_filename
-from app.schema.image_schema import *
-from database.database import Database
-import face_recognition
-import cv2
-import numpy as np
+
 from app.handle.app_error import DatabaseNoneError, NoDetection
+from app.schema.image_schema import *
 from app.services.face.face_detection_services import FaceLocationDetection
-import logging
-import mysql.connector
-import configparser
-import time
+from database.database import Database
+
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
 
 class NameRecognition:
     def __init__(self):
@@ -71,19 +73,20 @@ class NameRecognition:
                             high_accuracy_name.append(str(recognized_face_name))
                     elif config.getfloat('face_function_config',
                                          'high_accuracy_compare_face') < min_distance <= config.getfloat(
-                            'face_function_config', 'medium_accuracy_compare_face'):
+                        'face_function_config', 'medium_accuracy_compare_face'):
                         if medium_accuracy_name and min_distance < last_min_distance:
                             medium_accuracy_name[0] = str(recognized_face_name)
                         else:
                             medium_accuracy_name.append(str(recognized_face_name))
                     elif config.getfloat('face_function_config',
                                          'medium_accuracy_compare_face') < min_distance <= config.getfloat(
-                            'face_function_config', 'low_accuracy_compare_face'):
+                        'face_function_config', 'low_accuracy_compare_face'):
                         if low_accuracy_name and min_distance < last_min_distance:
                             low_accuracy_name[0] = str(recognized_face_name)
                         else:
                             low_accuracy_name.append(str(recognized_face_name))
-                    if elapsed_time >= config.getint('face_function_config', 'recognition_elapsed_time') and increase_time_turn == 0 :
+                    if elapsed_time >= config.getint('face_function_config',
+                                                     'recognition_elapsed_time') and increase_time_turn == 0:
                         print(elapsed_time)
                         if min_distance <= 0.33:
                             increase_time_turn = 1
@@ -130,15 +133,14 @@ class NameRecognition:
             print("Min distance:", min_distance)
             return "Unknown", accuracy
 
-
-    def get_face_name_recognition(self,image_file):
+    def get_face_name_recognition(self, image_file):
         face_detector = NameRecognition()
         if schema_test(image_file) == True:
             try:
                 # Read the image data from the file
                 image_data = image_file.read()
                 image_name = secure_filename(image_file.filename)
-                print("Image name:",image_name)
+                print("Image name:", image_name)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
                 try:

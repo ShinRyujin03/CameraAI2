@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+
 from app.services.objects.human_detection_services import HumanDetection
 
 # Create instances of the function classes

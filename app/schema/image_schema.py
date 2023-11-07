@@ -1,8 +1,11 @@
-from app.handle.app_error import InvalidImageError, NoImageError
-import os
 import configparser
-from pydantic import BaseModel, ValidationError
 import logging
+import os
+
+from pydantic import BaseModel, ValidationError
+
+from app.handle.app_error import InvalidImageError, NoImageError
+
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
 
@@ -10,10 +13,12 @@ config_path = os.path.realpath("../config.ini")
 config = configparser.ConfigParser()
 config.read(config_path)
 
+
 class ImageFileSchema(BaseModel):
     datafield: str
     datatype: str
     mandatory: bool
+
 
 def schema_test(image_file):
     pass_test = False

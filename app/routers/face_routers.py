@@ -1,9 +1,10 @@
 from flask import Blueprint, request
-from app.services.face.face_landmarks_sevices import FaceLandmarksDetection
-from app.services.face.facial_attribute_recognition_services import FacialAttributeRecognition
+
 from app.services.face.face_detection_services import FaceLocationDetection
-from app.services.face.face_verification_services import FaceVerification
+from app.services.face.face_landmarks_sevices import FaceLandmarksDetection
 from app.services.face.face_recognition_services import NameRecognition
+from app.services.face.face_verification_services import FaceVerification
+from app.services.face.facial_attribute_recognition_services import FacialAttributeRecognition
 
 # Create instances of the function classes
 face_router = Blueprint('face_router', __name__)

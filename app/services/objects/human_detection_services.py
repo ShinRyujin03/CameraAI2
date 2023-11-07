@@ -1,14 +1,13 @@
-import mysql
-from flask import jsonify
-from werkzeug.utils import secure_filename
 import cv2
+import mysql
 import numpy as np
+from flask import jsonify
 from ultralytics import YOLO
-from database.database import Database
-from app.schema.image_schema import *
+from werkzeug.utils import secure_filename
+
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
-import configparser
-import logging
+from app.schema.image_schema import *
+from database.database import Database
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -16,6 +15,8 @@ config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
+
 class HumanDetection:
     def __init__(self):
         self.image_data = None
@@ -33,11 +34,15 @@ class HumanDetection:
         for r in results:
             cls_values = r.boxes.cls.tolist()  # Convert tensor to list
             for i, cls in enumerate(cls_values):
-                if cls == config.getint('human_detection_config', 'label_class'):  # Only consider when cls is equal to 'label_class'
-                    rounded_boxes = [round(value, config.getint('human_detection_config', 'round_result')) for value in r.boxes.xywh[i].tolist()]
+                if cls == config.getint('human_detection_config',
+                                        'label_class'):  # Only consider when cls is equal to 'label_class'
+                    rounded_boxes = [round(value, config.getint('human_detection_config', 'round_result')) for value in
+                                     r.boxes.xywh[i].tolist()]
                     detected_boxes.append(rounded_boxes)
-                    detected_weights.append(round(r.boxes.conf[i].item(), config.getint('human_detection_config', 'round_result')))  # Use .item() to convert scalar tensor to Python number
+                    detected_weights.append(round(r.boxes.conf[i].item(), config.getint('human_detection_config',
+                                                                                        'round_result')))  # Use .item() to convert scalar tensor to Python number
         return detected_boxes, detected_weights
+
     def get_human_location(self, image_file):
         human_detector = HumanDetection()
         if schema_test(image_file) == True:
@@ -73,6 +78,7 @@ class HumanDetection:
                         db.insert_image_file(image_name, image_data)
                         db.close_connection()
                         logging.info(result, {"message": f"Human location metadata of {image_name} saved successfully"})
-                        return jsonify(result, {"message": f"Human location metadata of {image_name} saved successfully"})
+                        return jsonify(result,
+                                       {"message": f"Human location metadata of {image_name} saved successfully"})
                     except Exception as e:
                         return str(e)

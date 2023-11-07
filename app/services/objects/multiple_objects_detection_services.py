@@ -1,14 +1,13 @@
-import mysql
-from flask import jsonify
-from werkzeug.utils import secure_filename
 import cv2
+import mysql
 import numpy as np
+from flask import jsonify
 from ultralytics import YOLO
-from database.database import Database
-from app.schema.image_schema import *
+from werkzeug.utils import secure_filename
+
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
-import logging
-import configparser
+from app.schema.image_schema import *
+from database.database import Database
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -16,6 +15,8 @@ config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
+
 class MultipleObjectDetection:
     def __init__(self):
         self.image_data = None
@@ -53,13 +54,16 @@ class MultipleObjectDetection:
                 73: 'book', 74: 'clock', 75: 'vase', 76: 'scissors',
                 77: 'teddy bear', 78: 'hair drier', 79: 'toothbrush'
             }
-            for i,cls in enumerate(cls_values):
-                cls_name = names[round(cls,0)]
+            for i, cls in enumerate(cls_values):
+                cls_name = names[round(cls, 0)]
                 detected_objects.append(cls_name)
-                rounded_boxes = [round(value, config.getint('objects_detection_config', 'round_result')) for value in r.boxes.xywh[i].tolist()]
+                rounded_boxes = [round(value, config.getint('objects_detection_config', 'round_result')) for value in
+                                 r.boxes.xywh[i].tolist()]
                 detected_boxes.append(rounded_boxes)
-                detected_weights.append(round(r.boxes.conf[i].item(), config.getint('objects_detection_config', 'round_result')))  # Use .item() to convert scalar tensor to Python number
-        return detected_objects,detected_boxes, detected_weights
+                detected_weights.append(round(r.boxes.conf[i].item(), config.getint('objects_detection_config',
+                                                                                    'round_result')))  # Use .item() to convert scalar tensor to Python number
+        return detected_objects, detected_boxes, detected_weights
+
     def get_objects_location(self, image_file):
         objects_detector = MultipleObjectDetection()
         if schema_test(image_file) == True:
@@ -70,7 +74,7 @@ class MultipleObjectDetection:
                 logging.info(f'image_name: {image_name}')
                 # Process the image using objects_detector
                 objects_detector.image_data = image_data
-                detected_objects,detected_boxes, detected_weights = objects_detector.objectslocation()
+                detected_objects, detected_boxes, detected_weights = objects_detector.objectslocation()
                 # You can return the results as needed
                 result = {
                     'detections': [{'object type': obj, 'box': box, 'weight': weight} for obj, box, weight in
@@ -93,7 +97,9 @@ class MultipleObjectDetection:
                         db.insert_detected_objects(image_name, detected_objects, detected_boxes, detected_weights)
                         db.insert_image_file(image_name, image_data)
                         db.close_connection()
-                        logging.info(result, {"message": f"Objects detection metadata of {image_name} saved successfully"})
-                        return jsonify(result, {"message": f"Objects detection metadata of {image_name} saved successfully"})
+                        logging.info(result,
+                                     {"message": f"Objects detection metadata of {image_name} saved successfully"})
+                        return jsonify(result,
+                                       {"message": f"Objects detection metadata of {image_name} saved successfully"})
                     except Exception as e:
                         return str(e)

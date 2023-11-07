@@ -1,14 +1,13 @@
-import mysql
-from flask import jsonify
-import face_recognition
 import cv2
+import face_recognition
+import mysql
 import numpy as np
-
+from flask import jsonify
 from werkzeug.utils import secure_filename
+
+from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
 from app.schema.image_schema import *
 from database.database import Database
-from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
-
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")
@@ -16,15 +15,19 @@ config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
+
 class FaceLandmarksDetection:
     def __init__(self):
         self.image_data = None
+
     def facelandmarks(self):
         image_np = np.frombuffer(self.image_data, np.uint8)
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         face_landmarks_list = face_recognition.face_landmarks(image)
         return face_landmarks_list
-    def get_face_landmarks(self,image_file):
+
+    def get_face_landmarks(self, image_file):
         landmarks_detector = FaceLandmarksDetection()
         if schema_test(image_file) == True:
             try:
