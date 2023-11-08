@@ -63,7 +63,7 @@ class NameRecognition:
                     min_distance = min(min_distance, distance[0])
                     recognized_face_name = known_face_names[face_loaded - 1]
                     elapsed_time = time.time() - start_time  # Measure elapsed time
-                    if min_distance <= 0.1:
+                    if min_distance <= (config.getfloat('face_function_config', 'high_accuracy_compare_face') - config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(-)')):
                         if high_accuracy_name and min_distance < last_min_distance:
                             high_accuracy_name[0] = str(recognized_face_name)
                             break
@@ -90,12 +90,10 @@ class NameRecognition:
                         else:
                             low_accuracy_name.append(str(recognized_face_name))
                     if elapsed_time >= config.getint('face_function_config',
-                                                     'recognition_elapsed_time') and increase_time_turn == 0:
-                        print(elapsed_time)
-                        if min_distance <= 0.33:
+                                                     'recognition_elapsed_time') and increase_time_turn < config.getint('face_function_config', 'increase_time_turn'):
+                        if min_distance <= (config.getfloat('face_function_config', 'high_accuracy_compare_face') + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)')):
                             increase_time_turn = 1
                             elapsed_time = elapsed_time - 10
-                            print(elapsed_time)
                         else:
                             break
 

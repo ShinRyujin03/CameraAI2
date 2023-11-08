@@ -67,8 +67,8 @@ class FaceVerification:
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            if config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat(
-                    'face_function_config', 'medium_accuracy_compare_face') + 0.03:
+            if config.getfloat('face_function_config', 'high_accuracy_compare_face') + 0.03 < min_distance <= config.getfloat(
+                    'face_function_config', 'medium_accuracy_compare_face'):
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
