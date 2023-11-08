@@ -25,7 +25,11 @@ class NameRecognition:
         self.image_data = None
 
     def face_name_recognition(self, unknown_face):
-        db = Database()
+        try:
+            db = Database()
+        except mysql.connector.Error:
+            logging.error(DatabaseNoneError())
+            raise DatabaseNoneError
         known_face_encodings, known_face_names = db.get_image_files_and_name()
         # Convert the uploaded face to an encoding
         unknown_face_image = cv2.imdecode(np.frombuffer(unknown_face, np.uint8), cv2.IMREAD_COLOR)
@@ -143,10 +147,7 @@ class NameRecognition:
                 print("Image name:", image_name)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
-                try:
-                    recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
-                except Exception as e:
-                    return str(e)
+                recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
 
                 print(" ")
                 # Create a response object
