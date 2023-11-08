@@ -52,8 +52,7 @@
 
 ### Pre-requisites
 
-- Python: Ensure Python 3.10 is installed on your system.
-
+- Python: Python 3 (recommend: 3.10+)
 ### Installation
 
 1. Clone the project from the repository:
@@ -75,7 +74,7 @@
     pip install -r requirements.txt
     ```
 
-4. Setup the database by run SQL script:
+4. Set up the database by run SQL script:
     ```
    database/metadata.sql
     ```
@@ -88,7 +87,7 @@
     /app/main/run.py
     ```
 
-2. The application will start, and you can now access the API at `http://localhost:1102`.
+2. The application will start, and you can now access the API at `http://localhost:1102` or http://127.0.0.1:1102.
 
 ### API Usage
 
@@ -124,7 +123,7 @@
 - **Fields**:
     - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
     - `image_name`: VARCHAR(255), NOT NULL
-    - `image_file`: LONGBLOB, NOT NULL
+    - `image_file`: MEDIUMBLOB, NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
 - **Description**: Stores image file after request as bytes strings file (`*.bin`).
 
@@ -135,7 +134,7 @@
     - `image_name`: VARCHAR(255), NOT NULL
     - `face_location`: VARCHAR(255), NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about detected face locations.
+- **Description**: Stores results of the `face detection` endpoint.
 
 ### face_landmark Table
 
@@ -152,7 +151,7 @@
     - `right_eyebrow`: VARCHAR(255), NOT NULL
     - `top_lip`: VARCHAR(255), NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about detected face landmarks.
+- **Description**: Stores results of the `face landmarks detection` endpoint.
 
 ### face_facial_attribute Table
 
@@ -163,7 +162,7 @@
     - `ages`: VARCHAR(255), NOT NULL
     - `gender`: VARCHAR(255), NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about detected face facial attribute.
+- **Description**: Stores results of the `facial attribute recognition` endpoint.
 
 ### face_verified Table
 
@@ -172,7 +171,7 @@
     - `image_name`: VARCHAR(255), NOT NULL
     - `verify_status`: VARCHAR(255), NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about face verification status of the image with face name.
+- **Description**: Stores results of the `face verification` endpoint
 
 ### face_metadata Table
 
@@ -198,7 +197,7 @@
     - `human_location_boxes`: VARCHAR(500), NOT NULL
     - `human_location_weights`: VARCHAR(255), NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about detected human locations.
+- **Description**: Stores results of the `human detection` endpoint
 
 ### detected_objects Table
 
@@ -209,7 +208,7 @@
     - `objects_location_boxes`: VARCHAR(500), NOT NULL
     - `objects_location_weights`: VARCHAR(255), NOT NULL
     - `created_at`: TIMESTAMP, NOT NULL, Default: current_timestamp()
-- **Description**: Stores information about multiple detected objects.
+- **Description**: Stores results of the `multiple objects detection` endpoint
 
 ## Model - Library
 
@@ -258,7 +257,7 @@
 ## Image Schema
 
 - **Datafield**: `image`
-- **Datatype**: `png`, `jpg`, `jpeg` (binary) - Can be configuring at `config.ini`
+- **Datatype**: `png`, `jpg`, `jpeg` (str)
 - **Mandatory**: `True` (bool)
 
 ## Endpoints
@@ -421,7 +420,7 @@
    [
      {
          "image_name": "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg",
-         "landmarks": [] //Avg: 5000 - 50000 line of face landmarks
+         "landmarks": [...] //Avg: 5000 - 50000 line of face landmarks
      },
      {
          "message": "Face landmarks of ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg saved successfully"
@@ -434,7 +433,7 @@
 - **Prefix**:`/face`
 - **Endpoint**: `/facial_attribute_recognition`
 - **Method**: POST
-- **Description**: Recognize ages, gender and emotions and save facial attribute metadata to the database.
+- **Description**: Recognize ages, gender and emotions of the image and save these results to the database.
 - **Example Response**:
     - ***Input***
       ```
@@ -534,7 +533,7 @@
 - The image will save in `image` table
 - The metadata will save in `human_location` table
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
-- The results is in `xywh` format
+- The results are in `xywh` format
 - You can configure the `humman_detection` to other type of object detection by change the values of `label_class` (The
   list of object class can be detected
   at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml)
@@ -545,7 +544,7 @@
 - The image will save in `image` table
 - The metadata will save in `detected_objects` table
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
-- The results is in `xywh` format
+- The results are in `xywh` format
 - The list of object can be detected
   at: https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml
 
@@ -553,7 +552,7 @@
 
 - To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`.
 - The image will save in `image` table
-- The results is in `xyxy` format
+- The results are in `xyxy` format
 - The metadata will save in `face_location` table
 
 ### Face Landmarks
@@ -581,10 +580,10 @@
 ### Face Verification
 
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`.
-- The face verification status and face name will save in `face_verified` table
+- The face verification status and valid face name will save in `face_verified` table
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%)
   and `low`(>60%)
-- The face verification status will return `verified` only when level of accuracy is `high`
+- The face verification status will return `verified` when in `high` level of accuracy only
 - The elapsed time can be configuring at `verification_elapsed_time` variable in `config.ini`  (Default = 1m)
 
 ### Name Recognition
@@ -598,8 +597,7 @@
 
 ### Face Location Test
 
-- **Description**: The Face Location Test is designed to locate and draw rectangles around faces in an image. It uses
-  the provided face locations and applies them to the input image. Below is the visual representation of the test:
+- **Description**: The Face Location Test is designed to draw rectangles around faces in images to visualize the results of the `face_location` endpoint. Below is the visual representation of the test:
 - **Example Result**:
     - ***Input***
        ```  
@@ -612,12 +610,10 @@
 ### Number of Face Image Test
 
 - **Description**:
-  -The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates
-  the occurrence of each face name and provides insights into the distribution. The test also determines the pass and
-  fail counts based on a predefined threshold.
+    - The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates the occurrence of each face name and provides insights into the distribution. The test also determines the pass and fail counts based on a predefined threshold.
     - The number of images per `face_name` in the database should be greater than or equal
       to `number_of_face_required` (recommended >= 4) to get the highest accuracy
-    - You can check if the name has a sufficient number of images by running the `numb_face_name_test.py` program at:
+    - You can do the test by running the `numb_face_name_test.py` program at:
     ```bash
     app/services/test/numb_face_name_test.py
     ```
