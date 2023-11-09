@@ -1,16 +1,34 @@
 import configparser
 import os
-
+import mysql.connector
 import matplotlib.pyplot as plt
 
-from database.database import Database
 
 # Construct the relative path to config.ini
-config_path = os.path.realpath("../config.ini")
+config_path = os.path.realpath("../../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
 
+class Test_database:
+    def __init__(self):
+        self.conn = mysql.connector.connect(
+            host=config.get('db_config', 'db_host'),
+            user=config.get('db_config', 'db_user'),
+            password=config.get('db_config', 'db_password'),
+            database=config.get('db_config', 'db_name')
+        )
+        self.cursor = self.conn.cursor()
+    def get_image_files_and_name(self):
+        query = "SELECT image_file, face_name FROM face_metadata WHERE face_name IS NOT NULL AND image_file IS NOT NULL"
+
+        self.cursor.execute(query)
+        results = self.cursor.fetchall()
+
+        image_files = [result[0] for result in results if result[0] is not None]
+        face_names = [result[1] for result in results if result[1] is not None]
+
+        return image_files, face_names
 
 def plot_face_names_histogram(face_names):
     # Count the occurrences of each face name
@@ -48,7 +66,7 @@ def plot_face_names_histogram(face_names):
 
 
 # Assuming you have your list of face names
-db = Database()
+db = Test_database()
 known_face_encodings, known_face_names = db.get_image_files_and_name()
 # Assuming you have queried and calculated percentages already
 face_names = known_face_names  # Example list of face_names

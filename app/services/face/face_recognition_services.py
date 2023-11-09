@@ -92,7 +92,10 @@ class NameRecognition:
                             low_accuracy_name[0] = str(recognized_face_name)
                         else:
                             low_accuracy_name.append(str(recognized_face_name))
-                    if elapsed_time >= config.getint('face_function_config','recognition_elapsed_time') and increase_time_turn < config.getint('face_function_config', 'increase_time_turn'):
+                    if elapsed_time >= config.getint('face_function_config','recognition_elapsed_time') and increase_time_turn <= config.getint('face_function_config', 'increase_time_turn'):
+                        print("turn:",increase_time_turn)
+                        print("dist:", min_distance)
+                        print("------")
                         if high_accuracy_threshold < min_distance <= (high_accuracy_threshold + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)')):
                             increase_time_turn += 1
                             elapsed_time = elapsed_time - config.getint('face_function_config', 'increase_time')
@@ -146,7 +149,6 @@ class NameRecognition:
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
                 recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
-
                 print(" ")
                 # Create a response object
                 result = {
