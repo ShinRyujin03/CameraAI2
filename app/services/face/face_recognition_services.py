@@ -46,12 +46,19 @@ class NameRecognition:
             raise NoDetection
 
         min_distance = float('inf')
+        
         face_loaded = 0
         high_accuracy_name = []
         medium_accuracy_name = []
         low_accuracy_name = []
+
+        high_accuracy_threshold = config.getfloat('face_function_config', 'high_accuracy_compare_face')
+        medium_accuracy_threshold = config.getfloat('face_function_config', 'medium_accuracy_compare_face')
+        low_accuracy_threshold = config.getfloat('face_function_config', 'low_accuracy_compare_face')
         increase_time_turn = 0
         start_time = time.time()
+        
+        
         for known_face in known_face_encodings:
             face_loaded = face_loaded + 1
             known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
@@ -63,35 +70,30 @@ class NameRecognition:
                     min_distance = min(min_distance, distance[0])
                     recognized_face_name = known_face_names[face_loaded - 1]
                     elapsed_time = time.time() - start_time  # Measure elapsed time
-                    if min_distance <= (config.getfloat('face_function_config', 'high_accuracy_compare_face') - config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(-)')):
+                    if min_distance <= (high_accuracy_threshold - config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(-)')):
                         if high_accuracy_name and min_distance < last_min_distance:
                             high_accuracy_name[0] = str(recognized_face_name)
                             break
                         else:
                             high_accuracy_name.append(str(recognized_face_name))
                             break
-                    if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
+                    if min_distance <= high_accuracy_threshold:
                         if high_accuracy_name and min_distance < last_min_distance:
                             high_accuracy_name[0] = str(recognized_face_name)
                         else:
                             high_accuracy_name.append(str(recognized_face_name))
-                    elif config.getfloat('face_function_config',
-                                         'high_accuracy_compare_face') < min_distance <= config.getfloat(
-                        'face_function_config', 'medium_accuracy_compare_face'):
+                    elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
                         if medium_accuracy_name and min_distance < last_min_distance:
                             medium_accuracy_name[0] = str(recognized_face_name)
                         else:
                             medium_accuracy_name.append(str(recognized_face_name))
-                    elif config.getfloat('face_function_config',
-                                         'medium_accuracy_compare_face') < min_distance <= config.getfloat(
-                        'face_function_config', 'low_accuracy_compare_face'):
+                    elif medium_accuracy_threshold < min_distance <= low_accuracy_threshold:
                         if low_accuracy_name and min_distance < last_min_distance:
                             low_accuracy_name[0] = str(recognized_face_name)
                         else:
                             low_accuracy_name.append(str(recognized_face_name))
-                    if elapsed_time >= config.getint('face_function_config',
-                                                     'recognition_elapsed_time') and increase_time_turn < config.getint('face_function_config', 'increase_time_turn'):
-                        if min_distance <= (config.getfloat('face_function_config', 'high_accuracy_compare_face') + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)')):
+                    if elapsed_time >= config.getint('face_function_config','recognition_elapsed_time') and increase_time_turn < config.getint('face_function_config', 'increase_time_turn'):
+                        if min_distance <= (high_accuracy_threshold + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)')):
                             increase_time_turn = 1
                             elapsed_time = elapsed_time - 10
                         else:
@@ -112,19 +114,17 @@ class NameRecognition:
         db.close_connection()
 
         # Determine accuracy level after all distances have been calculated
-        if min_distance <= config.getfloat('face_function_config', 'high_accuracy_compare_face'):
+        if min_distance <= high_accuracy_threshold:
             accuracy = "High"
             print("Accuracy: High")
             print("Min distance:", min_distance)
             return high_accuracy_name[0], accuracy
-        elif config.getfloat('face_function_config', 'high_accuracy_compare_face') < min_distance <= config.getfloat(
-                'face_function_config', 'medium_accuracy_compare_face'):
+        elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
             accuracy = "Medium"
             print("Accuracy: Medium")
             print("Min distance:", min_distance)
             return medium_accuracy_name[0], accuracy
-        elif config.getfloat('face_function_config', 'medium_accuracy_compare_face') < min_distance <= config.getfloat(
-                'face_function_config', 'low_accuracy_compare_face'):
+        elif medium_accuracy_threshold < min_distance <= low_accuracy_threshold:
             accuracy = "Low"
             print("Accuracy: Low")
             print("Min distance:", min_distance)
