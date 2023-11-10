@@ -92,11 +92,9 @@ class NameRecognition:
                         else:
                             low_accuracy_name.append(str(recognized_face_name))
                     if elapsed_time >= config.getint('face_function_config','recognition_elapsed_time'):
-                        print(elapsed_time)
                         if high_accuracy_threshold < min_distance <= (high_accuracy_threshold + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)')) and increase_time_turn == 0:
                             increase_time_turn = 1
                             elapsed_time = elapsed_time - config.getint('face_function_config', 'increase_time')
-                            print(elapsed_time)
                         else:
                             break
 

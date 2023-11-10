@@ -591,7 +591,7 @@
 - To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%)
   and `low`(>60%)
-- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default = 55s)
+- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default = 45s)
 
 ## Results visualize test
 
@@ -696,15 +696,23 @@ path = png, jpg, jpeg
 face_prefix = /face
 objects_prefix = /objects
 multiple_objects_prefix = /m_objects
-low_accuracy_compare_face = 0.46
-medium_accuracy_compare_face = 0.43
-high_accuracy_compare_face = 0.34
+
 upsample_image = 1
+
 ages_bias = -9
 ages_range = 5
-number_of_face_required = 4
-recognition_elapsed_time = 55
+
+low_accuracy_compare_face = 0.46
+medium_accuracy_compare_face = 0.42
+high_accuracy_compare_face = 0.33
+
 verification_elapsed_time = 60
+
+recognition_elapsed_time = 45
+increase_time = 10
+delta_distance_to_high_accuracy(-) = 0.03
+delta_distance_to_high_accuracy(+) = 0.02
+number_of_face_required = 4
 ```
 
 ### [human_detection_config]
