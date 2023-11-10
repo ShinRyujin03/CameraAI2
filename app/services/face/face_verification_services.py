@@ -49,9 +49,9 @@ class FaceVerification:
             face_loaded = 0
             start_time = time.time()
 
-            high_accuracy_threshold = config.getfloat('face_function_config', 'high_accuracy_compare_face')
-            medium_accuracy_threshold = config.getfloat('face_function_config', 'medium_accuracy_compare_face')
-            low_accuracy_threshold = config.getfloat('face_function_config', 'low_accuracy_compare_face')
+            high_accuracy_threshold = config.getfloat('verification_config', 'high_accuracy_verification')
+            medium_accuracy_threshold = config.getfloat('verification_config', 'medium_accuracy_verification')
+            low_accuracy_threshold = config.getfloat('verification_config', 'low_accuracy_verification')
 
             for known_face in known_face_encodings:
                 face_loaded = face_loaded + 1
@@ -62,14 +62,14 @@ class FaceVerification:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         min_distance = min(min_distance, distance[0])
                         elapsed_time = time.time() - start_time
-                        if min_distance <= high_accuracy_threshold or elapsed_time >= config.getint('face_function_config','verification_elapsed_time'):
+                        if min_distance <= high_accuracy_threshold or elapsed_time >= config.getint('verification_config','verification_elapsed_time'):
                             break
-            if min_distance <= high_accuracy_threshold + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)'):
+            if min_distance <= high_accuracy_threshold + config.getfloat('verification_config', 'delta_dist'):
                 print("Accuracy: High")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
                 return "verified"
-            if high_accuracy_threshold + config.getfloat('face_function_config', 'delta_distance_to_high_accuracy(+)') < min_distance <= medium_accuracy_threshold:
+            if high_accuracy_threshold + config.getfloat('verification_config', 'delta_dist') < min_distance <= medium_accuracy_threshold:
                 print("Accuracy: Medium")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)

@@ -689,25 +689,38 @@ objects_detected_boxes = 490
 emotions = 250
 ```
 
-### [face_function_config]
-
+[function_config]
 ```ini
 path = png, jpg, jpeg
 face_prefix = /face
 objects_prefix = /objects
 multiple_objects_prefix = /m_objects
+```
 
+[face_detection_config]
+```ini
 upsample_image = 1
+```
 
+[age_config]
+```ini
 ages_bias = -9
 ages_range = 5
-
-low_accuracy_compare_face = 0.46
-medium_accuracy_compare_face = 0.42
-high_accuracy_compare_face = 0.33
-
+```
+[verification_config]
+```ini
+low_accuracy_verification = 0.48
+medium_accuracy_verification = 0.44
+high_accuracy_verification = 0.35
 verification_elapsed_time = 60
+delta_dist = 0.03
+```
 
+[name_recognition_config]
+```ini
+low_accuracy_recognition = 0.46
+medium_accuracy_recognition = 0.42
+high_accuracy_recognition = 0.33
 recognition_elapsed_time = 45
 increase_time = 10
 delta_distance_to_high_accuracy(-) = 0.03

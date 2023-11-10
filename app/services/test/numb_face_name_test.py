@@ -35,7 +35,7 @@ def plot_face_names_histogram(face_names):
     face_name_counts = {name: face_names.count(name) for name in set(face_names)}
 
     # Set the threshold for passing
-    threshold = config.getint('face_function_config', 'number_of_face_required')
+    threshold = config.getint('name_recognition_config', 'number_of_face_required')
 
     # Calculate pass and fail counts
     pass_count = len([count for count in face_name_counts.values() if count > threshold])

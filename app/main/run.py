@@ -20,10 +20,10 @@ app = Flask(__name__)
 app.register_error_handler(Exception, handle_generic_error)
 
 # Register the funtion_router blueprint
-app.register_blueprint(face_router, url_prefix=config.get('face_function_config', 'face_prefix'))
-app.register_blueprint(objects_router, url_prefix=config.get('face_function_config', 'objects_prefix'))
+app.register_blueprint(face_router, url_prefix=config.get('function_config', 'face_prefix'))
+app.register_blueprint(objects_router, url_prefix=config.get('function_config', 'objects_prefix'))
 app.register_blueprint(multiple_objects_router,
-                       url_prefix=config.get('face_function_config', 'multiple_objects_prefix'))
+                       url_prefix=config.get('function_config', 'multiple_objects_prefix'))
 
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
