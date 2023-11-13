@@ -13,11 +13,11 @@ def binary_to_image(bin_data, output_path):
 
 # Example usage:
 # Read binary data from a file
-with open('/Users/macbookairm1/Desktop/image-image_file.bin', 'rb') as file:
+with open('/Users/macbookairm1/Desktop/face_metadata-image_file (2).bin', 'rb') as file:
     binary_data = file.read()
 
 # Specify the path for the output image
-output_image_path = 'test_image.jpg'
+output_image_path = 'image.jpg'
 
 # Convert binary data to an image and save it
 binary_to_image(binary_data, output_image_path)

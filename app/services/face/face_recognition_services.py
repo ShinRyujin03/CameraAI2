@@ -69,20 +69,15 @@ class NameRecognition:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         last_min_distance = min_distance
                         min_distance = min(min_distance, distance[0])
-                        recognized_face_name = known_face_names[face_loaded - 1]
-                        if min_distance <= (high_accuracy_threshold - config.getfloat('name_recognition_config',
-                                                                                      'delta_distance_to_high_accuracy(-)')):
-                            if high_accuracy_name and min_distance < last_min_distance:
-                                high_accuracy_name[0] = str(recognized_face_name)
-                                break
-                            else:
-                                high_accuracy_name.append(str(recognized_face_name))
-                                break
+                        recognized_face_name = known_face_names[face_loaded-1]
                         if min_distance <= high_accuracy_threshold:
                             if high_accuracy_name and min_distance < last_min_distance:
                                 high_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 high_accuracy_name.append(str(recognized_face_name))
+                            if min_distance <= (high_accuracy_threshold - 0.03):
+                                high_accuracy_name[0] = str(recognized_face_name)
+                                break
                         elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
                             if medium_accuracy_name and min_distance < last_min_distance:
                                 medium_accuracy_name[0] = str(recognized_face_name)
