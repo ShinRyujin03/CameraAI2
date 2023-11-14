@@ -80,14 +80,19 @@
     ```
 
 ### Running the Application
-
-1. Start the application using the provided run script:
-
+- Please replace `path_to_the_project` with your actual path
+1. Set the environment variable on each device:
+    ```bash
+    export CAMERA_AI_PATH=path_to_the_project/CameraAI2
     ```
-    /app/main/run.py
+2. Start the application using the provided run script:
+
+    ```bash
+    cd path_to_the_project/CameraAI2
+    python app/main/main.py
     ```
 
-2. The application will start, and you can now access the API at `http://localhost:1102` or http://127.0.0.1:1102.
+3. The application will start, and you can now access the API at http://localhost:1102 or http://127.0.0.1:1102.
 
 ### API Usage
 
@@ -581,7 +586,7 @@
 
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`.
 - The face verification status and valid face name will save in `face_verified` table
-- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%)
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>95%), `medium`(>=85%)
   and `low`(>60%)
 - The face verification status will return `verified` when in `high` level of accuracy only
 - The elapsed time can be configuring at `verification_elapsed_time` variable in `config.ini`  (Default = 1m)
@@ -589,9 +594,9 @@
 ### Name Recognition
 
 - To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
-- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>98%), `medium`(>=85%)
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>95%), `medium`(>=85%)
   and `low`(>60%)
-- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default = 45s)
+- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default is 1m. Add 15s if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
 
 ## Results visualize test
 
@@ -718,13 +723,13 @@ delta_dist = 0.03
 
 [name_recognition_config]
 ```ini
-low_accuracy_recognition = 0.46
-medium_accuracy_recognition = 0.42
+low_accuracy_recognition = 0.43
+medium_accuracy_recognition = 0.38
 high_accuracy_recognition = 0.33
-recognition_elapsed_time = 45
-increase_time = 10
-delta_distance_to_high_accuracy(-) = 0.03
-delta_distance_to_high_accuracy(+) = 0.02
+recognition_elapsed_time = 60
+increase_time = 15
+delta_distance_to_high_accuracy(-) = 0.04
+delta_distance_to_high_accuracy(+) = 0.03
 number_of_face_required = 4
 ```
 
