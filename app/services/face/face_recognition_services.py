@@ -75,7 +75,7 @@ class NameRecognition:
                                 high_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 high_accuracy_name.append(str(recognized_face_name))
-                            if min_distance <= (high_accuracy_threshold - config.getint('name_recognition_config','delta_distance_to_high_accuracy(-)')):
+                            if min_distance <= (high_accuracy_threshold - 0.03):
                                 high_accuracy_name[0] = str(recognized_face_name)
                                 break
                         elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
@@ -88,7 +88,7 @@ class NameRecognition:
                                 low_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 low_accuracy_name.append(str(recognized_face_name))
-            elif (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')) < min_distance < (high_accuracy_threshold + config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(+)')) and increase_time_turn == 0:
+            elif (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')) <= min_distance <= (high_accuracy_threshold + config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(+)')) and increase_time_turn == 0:
                 start_time = time.time() - ((config.getint('name_recognition_config','recognition_elapsed_time')) - config.getint('name_recognition_config','increase_time'))
                 elapsed_time = 1
                 increase_time_turn = 1
