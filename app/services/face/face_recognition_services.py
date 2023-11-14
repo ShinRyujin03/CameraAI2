@@ -75,7 +75,7 @@ class NameRecognition:
                                 high_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 high_accuracy_name.append(str(recognized_face_name))
-                            if min_distance <= (high_accuracy_threshold - config.getint('name_recognition_config','delta_distance_to_high_accuracy(-)')):
+                            if min_distance <= (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')):
                                 high_accuracy_name[0] = str(recognized_face_name)
                                 break
                         elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:

@@ -8,7 +8,6 @@ if project_path is not None:
 else:
     print("Error: Environment variable CAMERA_AI_PATH not set.")
 
-print(project_path)
 import configparser
 import logging
 import os
