@@ -73,8 +73,9 @@
     ```bash
     pip install -r requirements.txt
     ```
+4. Create a database with name is 'metadata'
 
-4. Set up the database by run SQL script:
+5. Set up the database by run SQL script:
     ```
    database/metadata.sql
     ```
@@ -600,11 +601,41 @@
 
 ## Results visualize test
 
-### Face Location Test
+### Image Test
+- **Description**: This test is used to convert bytes strings file (`*.bin`) into image
+- **Running the Application**
+  1. Download bytes strings file (`*.bin`) from the database (in `face_metadata` or `image` table)
 
-- **Description**: The Face Location Test is designed to draw rectangles around faces in images to visualize the results of the `face_location` endpoint. Below is the visual representation of the test:
+  2. Open file `app/services/test/img_test.py` (not run)
+
+  3. Replace actual input at `image path`
+
+  4. Close the file and run the command (Please replace `path_to_the_project` with your actual path):
+    ```bash
+    python3 path_to_the_project/CameraAI2/app/services/test/img_test.py
+    ```
+  5. The output is the `image.jpg`
 - **Example Result**:
-    - ***Input***
+    - ***Input (Please replace actual input in the code file)***
+       ```  
+       file = "face_metadata-image_file.bin"
+       ```
+    - ***Output***:    
+      ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md%20image/Test%20output.png)
+
+### Face Location Test
+- **Description**: The Face Location Test is designed to draw rectangles around faces in images to visualize the results of the `face_location` endpoint. Below is the visual representation of the test:
+- **Running the Application**
+  1. Open file `app/services/test/face_location_test.py` (not run)
+
+  2. Replace actual input at `image path` and `face_location`
+
+  3. Close the file and run the command (Please replace `path_to_the_project` with your actual path):
+    ```bash
+    python3 path_to_the_project/CameraAI2/app/services/test/face_location_test.py
+    ```
+- **Example Result**: 
+    - ***Input*** 
        ```  
        image = "image/yujin 4.jpeg"
        face_locations = [(73, 128, 135, 66)] 
@@ -672,57 +703,43 @@
     - Message: Output size exceeds the maximum allowed limit. Please upload a less complex image.
 
 ## Config
-
-### [db_config]
-
 ```ini
+[db_config]
 host = 0.0.0.0
 port = 1102
 db_host = localhost
 db_user = root
 db_password =
 db_name = metadata
-```
 
-### [db_limit_config]
-
-```ini
+[db_limit_config]
 face_locations = 250
 landmarks = 250
 face_name = 250
 objects_detected_boxes = 490
 emotions = 250
-```
 
 [function_config]
-```ini
 path = png, jpg, jpeg
 face_prefix = /face
 objects_prefix = /objects
 multiple_objects_prefix = /m_objects
-```
 
 [face_detection_config]
-```ini
 upsample_image = 1
-```
 
 [age_config]
-```ini
 ages_bias = -9
 ages_range = 5
-```
+
 [verification_config]
-```ini
 low_accuracy_verification = 0.48
 medium_accuracy_verification = 0.44
 high_accuracy_verification = 0.35
 verification_elapsed_time = 60
 delta_dist = 0.03
-```
 
 [name_recognition_config]
-```ini
 low_accuracy_recognition = 0.43
 medium_accuracy_recognition = 0.38
 high_accuracy_recognition = 0.33
@@ -731,20 +748,15 @@ increase_time = 15
 delta_distance_to_high_accuracy(-) = 0.04
 delta_distance_to_high_accuracy(+) = 0.03
 number_of_face_required = 4
-```
 
-### [human_detection_config]
-
-```ini
+[human_detection_config]
 model_path = ../../model/yolov8n.pt
 round_result = 5
 label_class = 0
-```
 
-### [objects_detection_config]
 
-```ini
+[objects_detection_config]
 model_path = ../../model/yolov8n.pt
 round_result = 5
-```
 
+```
