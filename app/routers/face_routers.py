@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-
+from app.handle.app_error import FileUnreachable
 from app.services.face.face_detection_services import FaceLocationDetection
 from app.services.face.face_landmarks_sevices import FaceLandmarksDetection
 from app.services.face.face_recognition_services import NameRecognition
@@ -13,7 +13,10 @@ face_router = Blueprint('face_router', __name__)
 # Route for face location
 @face_router.route('/face_location', methods=['POST'])
 def request_face_location():
-    image_file = request.files['image']  # Access the uploaded file
+    try:
+        image_file = request.files['image']  # Access the uploaded file
+    except Exception:
+        raise FileUnreachable
     face_detector = FaceLocationDetection()
     face_result = face_detector.get_face_location(image_file)
     return face_result
@@ -22,7 +25,10 @@ def request_face_location():
 # Route for face landmarks
 @face_router.route('/face_landmarks', methods=['POST'])
 def request_face_landmarks():
-    image_file = request.files['image']  # Access the uploaded file
+    try:
+        image_file = request.files['image']  # Access the uploaded file
+    except Exception:
+        raise FileUnreachable
     face_landmarks = FaceLandmarksDetection()
     landmarks_result = face_landmarks.get_face_landmarks(image_file)
     return landmarks_result
@@ -30,7 +36,10 @@ def request_face_landmarks():
 
 @face_router.route('/facial_attribute_recognition', methods=['POST'])
 def request_facial_attribute_recognition():
-    image_file = request.files['image']  # Access the uploaded file
+    try:
+        image_file = request.files['image']  # Access the uploaded file
+    except Exception:
+        raise FileUnreachable
     face_facial_attribute = FacialAttributeRecognition()
     facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
     return facial_attribute_result
@@ -39,7 +48,10 @@ def request_facial_attribute_recognition():
 @face_router.route('/face_verify', methods=['POST'])
 def request_face_verification():
     face_name = request.form['face_name']
-    image_file = request.files['image']  # Access the uploaded file
+    try:
+        image_file = request.files['image']  # Access the uploaded file
+    except Exception:
+        raise FileUnreachable
     face_verify = FaceVerification()
     face_verify_result = face_verify.get_face_verification(image_file, face_name)
     return face_verify_result
@@ -47,7 +59,10 @@ def request_face_verification():
 
 @face_router.route('/face_name_recognition', methods=['POST'])
 def request_name_recognition():
-    image_file = request.files['image']  # Access the uploaded file
+    try:
+        image_file = request.files['image']  # Access the uploaded file
+    except Exception:
+        raise FileUnreachable
     name_recognition = NameRecognition()
     name_recognition_result = name_recognition.get_face_name_recognition(image_file)
     return name_recognition_result

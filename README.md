@@ -106,8 +106,7 @@
 
 #### Sending Image Files
 
-- When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG. You can configure it
-  at `path` in `config.ini`
+- When sending image files, ensure they are in one of the supported formats: PNG, JPG, or JPEG.
 
 #### API Responses
 
@@ -182,8 +181,7 @@
 ### face_metadata Table
 
 - **Fields**:
-    - `id`: INT(11), NOT NULL, Primary Key, AUTO_INCREMENT
-    - `image_name`: VARCHAR(255), NOT NULL
+    - `image_name`: VARCHAR(255), Primary Key, NOT NULL
     - `image_file`: LONGBLOB, NULL
     - `face_name`: VARCHAR(255), NULL
     - `face_location`: VARCHAR(255), NULL
@@ -725,7 +723,6 @@ objects_detected_boxes = 490
 emotions = 250
 
 [function_config]
-path = png, jpg, jpeg
 face_prefix = /face
 objects_prefix = /objects
 multiple_objects_prefix = /m_objects

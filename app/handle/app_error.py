@@ -37,7 +37,7 @@ class NoImageError(AppError):
     def __init__(self):
         super().__init__(CustomError.NO_IMAGE['message'], CustomError.NO_IMAGE['code'])
 
-class File_Unreachable(AppError):
+class FileUnreachable(AppError):
     def __init__(self):
         super().__init__(CustomError.FILE_UNREACHABLE['message'], CustomError.FILE_UNREACHABLE['code'])
 
