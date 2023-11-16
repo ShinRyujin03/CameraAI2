@@ -535,7 +535,7 @@
 
 ### Human Detection
 
-- To detect human locations, upload the `image` and make a POST request to `{prefix}` `/human_location`.
+- To detect human locations, upload the `image` and make a POST request to `{url}/object/human_location`.
 - The image will save in `image` table
 - The metadata will save in `human_location` table
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
@@ -546,7 +546,7 @@
 
 ### Multiple Objects Detection
 
-- To detect objects, upload the `image` and make a POST request to `{prefix}` `/objects_location`.
+- To detect objects, upload the `image` and make a POST request to `{url}/m_object/objects_location`.
 - The image will save in `image` table
 - The metadata will save in `detected_objects` table
 - Results can be rounded to `n` numbers after the comma. `n` can be configuring at the variable `round_result`
@@ -556,21 +556,21 @@
 
 ### Face Location
 
-- To detect face locations, upload the `image` and make a POST request to `{prefix}` `/face_location`.
+- To detect face locations, upload the `image` and make a POST request to `{url}/face/face_location`.
 - The image will save in `image` table
 - The results are in `xyxy` format
 - The metadata will save in `face_location` table
 
 ### Face Landmarks
 
-- To encode face landmarks, upload the `image` and make a POST request to `{prefix}` `/face_landmarks`.
+- To encode face landmarks, upload the `image` and make a POST request to `{url}/face/face_landmarks`.
 - The image will save in `image` table
 - The metadata will save in `face_landmarks` table
 
 ### Facial Attribute Recognition
 
 - To recognize face facial attribute, upload the `image` and make a POST request
-  to `{prefix}` `/facial_attribute_recognition`.
+  to `{url}/face/facial_attribute_recognition`.
 - The image will save in `image` table
 - The metadata will save in `face_facial_attribute` table
 - The list of emotions can be detected: `angry`, `disgust`, `fear`, `happy`, `sad`, `surprise`, `neutral`
@@ -585,7 +585,7 @@
 
 ### Face Verification
 
-- To verify face, upload the `image`, input the `face_name` and make a POST request to `{prefix}` `/face_verify`.
+- To verify face, upload the `image`, input the `face_name` and make a POST request to `{url}/face/face_verify`.
 - The face verification status and valid face name will save in `face_verified` table
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>95%), `medium`(>=85%)
   and `low`(>60%)
@@ -594,7 +594,7 @@
 
 ### Name Recognition
 
-- To recognize face name, upload the `image` and make a POST request to `{prefix}` `/face_name_recognition`.
+- To recognize face name, upload the `image` and make a POST request to `{url}/face/face_name_recognition`.
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>95%), `medium`(>=85%)
   and `low`(>60%)
 - The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default is 1m. Add 15s if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
