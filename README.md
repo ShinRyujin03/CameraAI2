@@ -679,6 +679,11 @@
     - HTTP Code: `404 Not Found`
     - Code: "i03"
     - Message: No face detected in the image. Please upload an image with a visible face.
+- **FILE_UNREACHABLE**
+    - HTTP Code: `405 Method Not Allowed`
+    - Code: "i04"
+    - Message: Image unreachable. Make sure the file exists and is accessible.
+
 
 ### Face name code status - fXX
 

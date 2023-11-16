@@ -12,6 +12,8 @@ class CustomError:
     NO_IMAGE = {'code': "i02", 'message': 'Image not found. Please upload a valid image file.'}
     NO_DETECTION = {'code': "i03",
                     'message': 'No face detected in the image. Please upload an image with a visible face.'}
+    FILE_UNREACHABLE = {'code': "i04", 'message': 'Image unreachable. Make sure the file exists and is accessible.'}
+
     NO_FACE_NAME = {'code': "f01", 'message': "Face name not found. Please provide a valid name for the face."}
     INVALID_FACE_NAME = {'code': "f02", 'message': "Invalid image face name. Please provide a valid name for the face."}
     DATABASE_IS_NONE = {'code': "d01",
@@ -35,9 +37,12 @@ class NoImageError(AppError):
     def __init__(self):
         super().__init__(CustomError.NO_IMAGE['message'], CustomError.NO_IMAGE['code'])
 
+class File_Unreachable(AppError):
+    def __init__(self):
+        super().__init__(CustomError.FILE_UNREACHABLE['message'], CustomError.FILE_UNREACHABLE['code'])
 
 class NoFaceNameError(AppError):
-    def __init__(self):
+    def __init__(self):       
         super().__init__(CustomError.NO_FACE_NAME['message'], CustomError.NO_FACE_NAME['code'])
 
 
@@ -62,6 +67,8 @@ def handle_generic_error(error):
         0] == 'Image not found. Please upload a valid image file.' or error.args[
         0] == "No face detected in the image. Please upload an image with a visible face.":
         return jsonify(response), 404
+    elif error.args[0] == 'Image unreachable. Make sure the file exists and is accessible.':
+        return jsonify(response), 405
     elif error.args[0] == 'Invalid image face name. Please provide a valid name for the face.':
         return jsonify(response), 406
     elif error.args[0] == 'Invalid image file format. Supported formats are PNG, JPG, and JPEG.':
