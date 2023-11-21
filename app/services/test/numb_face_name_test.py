@@ -57,6 +57,8 @@ def plot_face_names_histogram(face_names):
 
     fig, ax = plt.subplots(figsize=(16, 9))
     ax.bar(labels, counts, color='blue')
+    # Draw a horizontal line at the threshold value
+    ax.axhline(y=threshold, color='red', linestyle='--', label=f'Threshold: {threshold}')
     ax.set_xlabel('Face Names')
     ax.set_ylabel('Frequency')
     ax.set_title('Frequency of Face Names')

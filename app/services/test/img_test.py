@@ -1,14 +1,9 @@
 from PIL import Image
-import io
+from io import BytesIO
 
-def binary_to_image(bin_data, output_path):
-    # Create a BytesIO object from the binary data
-    byte_stream = io.BytesIO(bin_data)
-
-    # Use PIL to open the image from the BytesIO stream
-    image = Image.open(byte_stream)
-
-    # Save the image to the specified output path
+def binary_to_image(binary_data, output_path):
+    # Assuming binary_data contains the image data in RGBA mode
+    image = Image.open(BytesIO(binary_data)).convert('RGB')
     image.save(output_path)
 
 # Example usage:
