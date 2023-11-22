@@ -258,6 +258,73 @@ ALTER TABLE `image`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 COMMIT;
 
+CREATE TRIGGER `after_insert_face_emotions` AFTER INSERT ON `face_facial_attribute`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, emotions)
+    VALUES (NEW.image_name, NEW.emotions)
+    ON DUPLICATE KEY UPDATE emotions = NEW.emotions;
+END
+
+CREATE TRIGGER `after_insert_face_location` AFTER INSERT ON `face_location`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, face_location)
+    VALUES (NEW.image_name, NEW.face_location)
+    ON DUPLICATE KEY UPDATE face_location = NEW.face_location;
+END
+
+CREATE TRIGGER `after_insert_face_verified` AFTER INSERT ON `face_verified`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, verify_status)
+    VALUES (NEW.image_name, NEW.verify_status)
+    ON DUPLICATE KEY UPDATE verify_status = NEW.verify_status;
+END
+
+CREATE TRIGGER `after_insert_image` AFTER INSERT ON `image`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, image_file)
+    VALUES (NEW.image_name, NEW.image_file)
+    ON DUPLICATE KEY UPDATE image_file = NEW.image_file;
+END
+
+CREATE TRIGGER `insert_gender_age` AFTER INSERT ON `face_facial_attribute`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, gender, ages)
+    VALUES (NEW.image_name, NEW.gender, NEW.ages)
+    ON DUPLICATE KEY UPDATE
+        gender = NEW.gender,
+        ages = NEW.ages;
+END
+
+CREATE TRIGGER `update_face_emotions` AFTER INSERT ON `face_facial_attribute`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, emotions)
+    VALUES (NEW.image_name, NEW.emotions)
+    ON DUPLICATE KEY UPDATE emotions = NEW.emotions;
+END
+
+CREATE TRIGGER `update_face_location` AFTER INSERT ON `face_location`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, face_location)
+    VALUES (NEW.image_name, NEW.face_location)
+    ON DUPLICATE KEY UPDATE face_location = NEW.face_location;
+END
+
+CREATE TRIGGER `update_face_verified` AFTER INSERT ON `face_verified`
+ FOR EACH ROW BEGIN
+    INSERT INTO face_metadata (image_name, face_name, verify_status)
+    VALUES (NEW.image_name, NEW.face_name, NEW.verify_status)
+    ON DUPLICATE KEY UPDATE face_name = NEW.face_name, verify_status = NEW.verify_status;
+END
+
+CREATE TRIGGER `update_gender_age` AFTER UPDATE ON `face_facial_attribute`
+ FOR EACH ROW BEGIN
+    UPDATE face_metadata
+    SET
+        gender = NEW.gender,
+        ages = NEW.ages
+    WHERE image_name = NEW.image_name;
+END
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
