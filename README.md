@@ -654,10 +654,10 @@
 
 - **Example Result**:
     ```
-    Passed faces: Sumin (4 times), Yuna (8 times), Yeji (7 times), Jennie (5 times), NaNa (4 times), Rosé (13 times), Jisoo (5 times), Jiwoo (8 times), Sakura (7 times), Irene (4 times), IU (14 times), Kazuha (6 times), Wonyoung (10 times), Ryujin (10 times), Lisa (11 times), Yujin (7 times), Rei (9 times)
-    Failed faces: Lily (2 times), Nayeon (2 times), Test Img (1 times), Chaeyeon (1 times), Hyein (2 times), Lia (3 times), Minji (2 times), Haerin (1 times), Yuqi (2 times), ITZY (2 times), Joy (2 times), Chaeryeong (3 times), Hanni (2 times), IVE (1 times), Haewon (2 times), Tsuki (2 times), Eunchae (3 times), Soyeon (1 times)
-    Face Pass: 14
-    Face Fail: 21
+    Passed faces: Rosé (13 times), Jennie (5 times), Ryujin (13 times), Chaeryeong (5 times), NaNa (4 times), Lisa (11 times), Kazuha (6 times), Eunchae (4 times), Yeji (8 times), Irene (4 times), Rei (14 times), Yujin (7 times), IU (14 times), Sumin (4 times), Jisoo (5 times), Jiwoo (8 times), Wonyoung (10 times), Yuna (8 times), Sakura (8 times)
+    Failed faces: Haewon (3 times), Minji (2 times), ITZY (2 times), Haerin (1 times), Miyeon (1 times), Joy (2 times), Test Img (1 times), Soyeon (1 times), Lia (3 times), Nayeon (2 times), Chaeyeon (1 times), Yuqi (2 times), Hyein (2 times), Hanni (2 times), Lily (2 times), Danielle (1 times), Tsuki (2 times), IVE (1 times)
+    Face Pass: 15
+    Face Fail: 22
     ```
   ![Figure_1.png](database/image/README.md%20image/Figure.png)
 
