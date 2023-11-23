@@ -69,7 +69,13 @@ class NameRecognition:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         last_min_distance = min_distance
                         min_distance = min(min_distance, distance[0])
-                        recognized_face_name = known_face_names[face_loaded-1]
+                        if min_distance == 0 and medium_accuracy_name:
+                            if not high_accuracy_name:
+                                recognized_face_name = known_face_names[face_loaded - 1]
+                            else:
+                                recognized_face_name = known_face_names[face_loaded]
+                        else:
+                            recognized_face_name = known_face_names[face_loaded - 1]
                         if min_distance <= high_accuracy_threshold:
                             if high_accuracy_name and min_distance < last_min_distance:
                                 high_accuracy_name[0] = str(recognized_face_name)
