@@ -61,7 +61,6 @@ class NameRecognition:
         for known_face in known_face_encodings:
             if elapsed_time <= (config.getint('name_recognition_config','recognition_elapsed_time')):
                 elapsed_time = time.time() - start_time
-                face_loaded = face_loaded + 1
                 known_face_image = cv2.imdecode(np.frombuffer(known_face, np.uint8), cv2.IMREAD_COLOR)
                 if known_face_image is not None:
                     known_encoding = face_recognition.face_encodings(known_face_image, None, model="large")
@@ -69,13 +68,7 @@ class NameRecognition:
                         distance = face_recognition.face_distance(known_encoding, unknown_encoding[0])
                         last_min_distance = min_distance
                         min_distance = min(min_distance, distance[0])
-                        if min_distance == 0 and medium_accuracy_name:
-                            if not high_accuracy_name:
-                                recognized_face_name = known_face_names[face_loaded - 1]
-                            else:
-                                recognized_face_name = known_face_names[face_loaded]
-                        else:
-                            recognized_face_name = known_face_names[face_loaded - 1]
+                        recognized_face_name = known_face_names[face_loaded]
                         if min_distance <= high_accuracy_threshold:
                             if high_accuracy_name and min_distance < last_min_distance:
                                 high_accuracy_name[0] = str(recognized_face_name)
@@ -94,6 +87,7 @@ class NameRecognition:
                                 low_accuracy_name[0] = str(recognized_face_name)
                             else:
                                 low_accuracy_name.append(str(recognized_face_name))
+                face_loaded = face_loaded + 1
             elif (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')) < min_distance < (high_accuracy_threshold + config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(+)')) and increase_time_turn == 0:
                 start_time = time.time() - ((config.getint('name_recognition_config','recognition_elapsed_time')) - config.getint('name_recognition_config','increase_time'))
                 elapsed_time = 1
