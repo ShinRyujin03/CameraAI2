@@ -63,7 +63,7 @@ class FaceVerification:
                         elapsed_time = time.time() - start_time
                         if min_distance <= high_accuracy_threshold or elapsed_time >= config.getint('verification_config','verification_elapsed_time'):
                             break
-            if min_distance <= high_accuracy_threshold + config.getfloat('verification_config', 'delta_dist'):
+            if min_distance <= high_accuracy_threshold + config.getfloat('verification_config', 'delta_distance'):
                 if min_distance <= high_accuracy_threshold:
                     accuracy = "High"
                     print("Accuracy: High")
