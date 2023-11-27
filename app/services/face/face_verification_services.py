@@ -48,7 +48,6 @@ class FaceVerification:
             min_distance = float('inf')
             face_loaded = 0
             start_time = time.time()
-
             high_accuracy_threshold = config.getfloat('verification_config', 'high_accuracy_verification')
             medium_accuracy_threshold = config.getfloat('verification_config', 'medium_accuracy_verification')
             low_accuracy_threshold = config.getfloat('verification_config', 'low_accuracy_verification')
@@ -65,23 +64,35 @@ class FaceVerification:
                         if min_distance <= high_accuracy_threshold or elapsed_time >= config.getint('verification_config','verification_elapsed_time'):
                             break
             if min_distance <= high_accuracy_threshold + config.getfloat('verification_config', 'delta_dist'):
-                print("Accuracy: High")
+                if min_distance <= high_accuracy_threshold:
+                    accuracy = "High"
+                    print("Accuracy: High")
+                else:
+                    accuracy = "Medium-high"
+                    print("Accuracy: Medium-high")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
-                return "verified"
-            if high_accuracy_threshold + config.getfloat('verification_config', 'delta_dist') < min_distance <= medium_accuracy_threshold:
-                print("Accuracy: Medium")
+                verify = "verified"
+                return accuracy, verify
+            if high_accuracy_threshold + config.getfloat('verification_config', 'delta_distance') < min_distance <= medium_accuracy_threshold:
+                accuracy = "Medium-low"
+                print("Accuracy: Medium-low")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
-                return "not verified"
+                verify = "not verified"
+                return accuracy, verify
             elif medium_accuracy_threshold < min_distance <= low_accuracy_threshold:
+                accuracy = "Low"
                 print("Accuracy: Low")
                 print("Min distance:", min_distance)
                 print("Number of loaded face:", face_loaded)
-                return "not verified"
+                verify = "not verified"
+                return accuracy, verify
             else:
+                accuracy = "Low"
                 print("Min distance:", min_distance)
-                return "not verified"
+                verify = "not verified"
+                return accuracy, verify
         except Exception as e:
             return str(e)
         finally:
@@ -104,11 +115,12 @@ class FaceVerification:
                 print("Image name:", image_name)
                 logging.info(f'image_name: {image_name}')
                 # Process the image using face_detector
-                verify = face_detector.face_verification(image_data)
+                accuracy, verify = face_detector.face_verification(image_data)
                 print(" ")
                 # Create a response object
                 result = {
                     'face_verification': verify,
+                    'Accuracy': accuracy,
                     'Name': face_name,
                     'image_name': image_name
                 }
@@ -121,9 +133,11 @@ class FaceVerification:
                 raise DatabaseNoneError
             else:
                 try:
-                    db.insert_face_verify_status(image_name, face_name, verify)
-                    db.close_connection()
                     logging.info(result)
+                    db.insert_face_verify_status(image_name, face_name, verify)
+                    if accuracy == "High":
+                        db.insert_image_file(image_name, image_data)
+                    db.close_connection()
                     return jsonify(result)
                 except Exception as e:
                     return str(e)

@@ -7,7 +7,7 @@ def binary_to_image(binary_data, output_path):
     image.save(output_path)
 
 # Example usage:
-with open('/Users/macbookairm1/Desktop/face_metadata-image_file.bin', 'rb') as file:
+with open('/Users/macbookairm1/Desktop/image-image_file.bin', 'rb') as file:
     binary_data = file.read()
 
 # Specify the path for the output image

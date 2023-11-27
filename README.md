@@ -482,9 +482,10 @@
     - ***Output***
       ```json lines
       {
-      "Name": "Haewon",
-      "face_verification": "verified",
-      "image_name": "IMG_0587.JPG"
+          "Accuracy": "High",
+          "Name": "Haewon",
+          "face_verification": "verified",
+          "image_name": "IMG_0587.JPG"
       }
       ```
     - ***Back-end messenger***
@@ -585,18 +586,27 @@
 
 - To verify face, upload the `image`, input the `face_name` and make a POST request to `{url}/face/face_verify`.
 - The face verification status and valid face name will save in `face_verified` table
-- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>95%), `medium`(>=85%)
-  and `low`(>60%)
-- The face verification status will return `verified` when in `high` level of accuracy only
+- The level of accuracy can be configuring in `config.ini`, has 4 level of accuracy are `high`, `medium-high` `medium-low`
+  and `low`
+- The face verification status will return `verified` when in `high` or `medium-high` level of accuracy
+- The image will save in the database when in `high` level of accuracy only
 - The elapsed time can be configuring at `verification_elapsed_time` variable in `config.ini`  (Default = 1m)
-
+- Accuracy level rule:
+  - `Low` level : `min_distance` < `medium_accuracy_verification`
+  - `Medium-low` level: (`high_accuracy_verification` + `delta_distance`) < `min_distance` <= `medium_accuracy_verification`
+  - `Medium-high` level: `high_accuracy_verification` < `min_distance` <= (`high_accuracy_verification` + `delta_distance`)
+  - `High` level: `min_distance` <= `high_accuracy_verification`
 ### Name Recognition
 
 - To recognize face name, upload the `image` and make a POST request to `{url}/face/face_name_recognition`.
-- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`(>95%), `medium`(>=85%)
-  and `low`(>60%)
+- The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`, `medium`
+  and `low`
+- The image will save in the database when in `high` level of accuracy only
 - The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default is 1m. Add 15s if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
-
+- Accuracy level rule:
+  - `Low` level : `min_distance` < `medium_accuracy_recognition`
+  - `Medium` level: `high_accuracy_recognition` < `min_distance` <= `medium_accuracy_recognition`
+  - `High` level: `min_distance` <= `high_accuracy_recognition`
 ## Results visualize test
 
 ### Image Test
@@ -735,11 +745,11 @@ ages_bias = -9
 ages_range = 5
 
 [verification_config]
-low_accuracy_verification = 0.48
-medium_accuracy_verification = 0.44
-high_accuracy_verification = 0.35
+low_accuracy_verification = 0.49
+medium_accuracy_verification = 0.45
+high_accuracy_verification = 0.37
 verification_elapsed_time = 60
-delta_dist = 0.03
+delta_distance = 0.03
 
 [name_recognition_config]
 low_accuracy_recognition = 0.43
@@ -747,7 +757,7 @@ medium_accuracy_recognition = 0.38
 high_accuracy_recognition = 0.33
 recognition_elapsed_time = 60
 increase_time = 15
-delta_distance_to_high_accuracy(-) = 0.04
+delta_distance_to_high_accuracy(-) = 0.05
 delta_distance_to_high_accuracy(+) = 0.03
 number_of_face_required = 4
 
@@ -760,5 +770,6 @@ label_class = 0
 [objects_detection_config]
 model_path = ../../model/yolov8n.pt
 round_result = 5
+
 
 ```
