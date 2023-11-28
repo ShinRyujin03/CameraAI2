@@ -134,26 +134,23 @@ class NameRecognition:
     def get_face_name_recognition(self, image_file):
         face_detector = NameRecognition()
         if schema_test(image_file) == True:
-            try:
-                # Read the image data from the file
-                image_data = image_file.read()
-                image_name = secure_filename(image_file.filename)
-                print("Image name:", image_name)
-                logging.info(f'image_name: {image_name}')
-                # Process the image using face_detector
-                recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
-                print(" ")
-                # Create a response object
-                result = {
-                    'recognized_face_name': recognized_face_name,
-                    'image_name': image_name,
-                    'accuracy': accuracy
-                }
-                if len(recognized_face_name) == 0:
-                    logging.error(NoDetection())
-                    raise NoDetection
-            except Exception as e:
-                return str(e)
+            # Read the image data from the file
+            image_data = image_file.read()
+            image_name = secure_filename(image_file.filename)
+            print("Image name:", image_name)
+            logging.info(f'image_name: {image_name}')
+            # Process the image using face_detector
+            recognized_face_name, accuracy = face_detector.face_name_recognition(image_data)
+            print(" ")
+            # Create a response object
+            result = {
+                'recognized_face_name': recognized_face_name,
+                'image_name': image_name,
+                'accuracy': accuracy
+            }
+            if len(recognized_face_name) == 0:
+                logging.error(NoDetection())
+                raise NoDetection
             else:
                 try:
                     logging.info(result)

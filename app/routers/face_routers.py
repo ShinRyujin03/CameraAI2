@@ -1,3 +1,4 @@
+import logging
 from flask import Blueprint, request
 from app.handle.app_error import FileUnreachable
 from app.services.face.face_detection_services import FaceLocationDetection
@@ -16,6 +17,7 @@ def request_face_location():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     face_detector = FaceLocationDetection()
     face_result = face_detector.get_face_location(image_file)
@@ -28,6 +30,7 @@ def request_face_landmarks():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     face_landmarks = FaceLandmarksDetection()
     landmarks_result = face_landmarks.get_face_landmarks(image_file)
@@ -39,6 +42,7 @@ def request_facial_attribute_recognition():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     face_facial_attribute = FacialAttributeRecognition()
     facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
@@ -51,6 +55,7 @@ def request_face_verification():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     face_verify = FaceVerification()
     face_verify_result = face_verify.get_face_verification(image_file, face_name)
@@ -62,6 +67,7 @@ def request_name_recognition():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     name_recognition = NameRecognition()
     name_recognition_result = name_recognition.get_face_name_recognition(image_file)

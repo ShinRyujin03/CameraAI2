@@ -1,3 +1,4 @@
+import logging
 from flask import Blueprint, request
 from app.handle.app_error import FileUnreachable
 from app.services.objects.multiple_objects_detection_services import MultipleObjectDetection
@@ -12,6 +13,7 @@ def request_objects_location():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     objects_location = MultipleObjectDetection()
     objects_result = objects_location.get_objects_location(image_file)

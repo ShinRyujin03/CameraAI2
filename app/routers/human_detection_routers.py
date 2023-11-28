@@ -1,3 +1,4 @@
+import logging
 from flask import Blueprint, request
 from app.handle.app_error import FileUnreachable
 from app.services.objects.human_detection_services import HumanDetection
@@ -12,6 +13,7 @@ def request_human_location():
     try:
         image_file = request.files['image']  # Access the uploaded file
     except Exception:
+        logging.error(FileUnreachable())
         raise FileUnreachable
     human_location = HumanDetection()
     human_result = human_location.get_human_location(image_file)
