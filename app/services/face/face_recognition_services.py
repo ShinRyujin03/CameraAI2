@@ -148,19 +148,15 @@ class NameRecognition:
                 'image_name': image_name,
                 'accuracy': accuracy
             }
-            if len(recognized_face_name) == 0:
-                logging.error(NoDetection())
-                raise NoDetection
-            else:
-                try:
-                    logging.info(result)
-                    if accuracy == "High":
-                        db = Database()
-                        db.insert_image_file(image_name, image_data)
-                        db.close_connection()
-                    return jsonify(result)
-                except mysql.connector.Error:
-                    logging.error(DatabaseNoneError())
-                    raise DatabaseNoneError
-                except Exception as e:
-                    return str(e)
+            try:
+                logging.info(result)
+                if accuracy == "High":
+                    db = Database()
+                    db.insert_image_file(image_name, image_data)
+                    db.close_connection()
+                return jsonify(result)
+            except mysql.connector.Error:
+                logging.error(DatabaseNoneError())
+                raise DatabaseNoneError
+            except Exception as e:
+                return str(e)
