@@ -102,7 +102,7 @@
 - Use tools like `curl`, `Postman`, or your preferred HTTP client to send requests to the API endpoints.
   See the [Endpoint Usage](#endpoint-usage) for more information
 
-![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/image/README.md%20image/API%20input.png)
+![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/README.md%20image/API%20input.png)
 
 #### Sending Image Files
 
@@ -280,7 +280,7 @@
       ```
       image: "images.jpeg"
       ```
-      ![Jiwoo%20md.png](/database/image/README.md%20image/Jiwoo%20md.png)
+      ![Jiwoo%20md.png](/database/README.md%20image/Jiwoo%20md.png)
     - ***Output***
       ```json lines
       [
@@ -320,7 +320,7 @@
       ```
       image: "images.jpeg"
       ```
-      ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](/database/image/README.md%20image/Jiwoo%20md.png)
+      ![Ảnh màn hình 2023-11-01 lúc 14.38.03.png](/database/README.md%20image/Jiwoo%20md.png)
     - ***Output***
       ```json lines
       [
@@ -381,7 +381,7 @@
       ```
       image: "images.jpeg"
       ```
-      ![Ảnh màn hình 2023-11-01 lúc 14.29.14.png](/database/image/README.md%20image/Kazuha%202.png)
+      ![Ảnh màn hình 2023-11-01 lúc 14.29.14.png](/database/README.md%20image/Kazuha%202.png)
     - ***Output***
       ```json lines
       [
@@ -418,7 +418,7 @@
       ```
        image: "ITZY-CHECKMATE-Album-Scans-Yeji-ver-documents-11.jpeg"
       ```
-      ![Ảnh màn hình 2023-11-01 lúc 14.23.56.png](database/image/README.md%20image/Yeji%20md.png)
+      ![Ảnh màn hình 2023-11-01 lúc 14.23.56.png](database/README.md%20image/Yeji%20md.png)
     - ***Output***
    ```json lines
    [
@@ -443,7 +443,7 @@
       ```
       image: "Wonyoung.jpg"
       ```
-      ![Wonyoung md.png](database/image/README.md%20image/Wonyoung%20md.png)
+      ![Wonyoung md.png](database/README.md%20image/Wonyoung%20md.png)
     - ***Output***
        ```json lines
       [
@@ -478,7 +478,7 @@
       face_name: Haewon
       image: "IMG_0587.JPG"
       ```
-      ![Ảnh màn hình 2023-11-01 lúc 14.03.30.png](database/image/README.md%20image/Haewon%20md.png)
+      ![Ảnh màn hình 2023-11-01 lúc 14.03.30.png](database/README.md%20image/Haewon%20md.png)
     - ***Output***
       ```json lines
       {
@@ -510,7 +510,7 @@
       ```
       image: "IMG_3716.JPG"
       ```
-      ![Rei md.png](/database/image/README.md%20image/Rei%20md.png)
+      ![Rei md.png](/database/README.md%20image/Rei%20md.png)
     - ***Output***
       ```json lines
       {
@@ -590,7 +590,7 @@
   and `low`
 - The face verification status will return `verified` when in `high` or `medium-high` level of accuracy
 - The image will save in the database when in `high` level of accuracy only
-- The elapsed time can be configuring at `verification_elapsed_time` variable in `config.ini`  (Default = 1m)
+- The elapsed time can be configuring at `verification_elapsed_time` variable in `config.ini` (Default = 1m)
 - Accuracy level rule:
   - `Low` level : `min_distance` < `medium_accuracy_verification`
   - `Medium-low` level: (`high_accuracy_verification` + `delta_distance`) < `min_distance` <= `medium_accuracy_verification`
@@ -602,7 +602,7 @@
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`, `medium`
   and `low`
 - The image will save in the database when in `high` level of accuracy only
-- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini`  (Default is 1m. Add 15s if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
+- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini` (Minimum elapsed time by default is 55 seconds and up to 90 seconds (32 seconds added) if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
 - Accuracy level rule:
   - `Low` level : `min_distance` < `medium_accuracy_recognition`
   - `Medium` level: `high_accuracy_recognition` < `min_distance` <= `medium_accuracy_recognition`
@@ -629,7 +629,7 @@
        file = "face_metadata-image_file.bin"
        ```
     - ***Output***:    
-      ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md%20image/Test%20output.png)
+      ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/README.md%20image/Test%20output.png)
 
 ### Face Location Test
 - **Description**: The Face Location Test is designed to draw rectangles around faces in images to visualize the results of the `face_location` endpoint. Below is the visual representation of the test:
@@ -649,7 +649,7 @@
        face_locations = [(73, 128, 135, 66)] 
        ```
     - ***Output***:    
-      ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/image/README.md%20image/Yujin%20md.png)
+      ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/README.md%20image/Yujin%20md.png)
 
 ### Number of Face Image Test
 
@@ -669,7 +669,7 @@
     Face Pass: 15
     Face Fail: 22
     ```
-  ![Figure_1.png](database/image/README.md%20image/Figure.png)
+  ![Figure_1.png](database/README.md%20image/Figure.png)
 
 ## Error Handle
 
@@ -755,9 +755,9 @@ delta_distance = 0.03
 low_accuracy_recognition = 0.43
 medium_accuracy_recognition = 0.38
 high_accuracy_recognition = 0.33
-recognition_elapsed_time = 60
-increase_time = 15
-delta_distance_to_high_accuracy(-) = 0.05
+recognition_elapsed_time = 55
+increase_time = 32
+delta_distance_to_high_accuracy(-) = 0.15
 delta_distance_to_high_accuracy(+) = 0.03
 number_of_face_required = 4
 
