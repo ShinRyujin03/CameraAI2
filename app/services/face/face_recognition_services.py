@@ -75,7 +75,6 @@ class NameRecognition:
                             else:
                                 high_accuracy_name.append(str(recognized_face_name))
                             if min_distance <= (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')):
-                                high_accuracy_name[0] = str(recognized_face_name)
                                 break
                         elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
                             if medium_accuracy_name and min_distance < last_min_distance:
@@ -154,6 +153,7 @@ class NameRecognition:
                     db = Database()
                     db.insert_image_file(image_name, image_data)
                     db.close_connection()
+                    return jsonify(result, {"message": f"Image {image_name} saved successfully"})
                 return jsonify(result)
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())

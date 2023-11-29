@@ -124,9 +124,6 @@ class FaceVerification:
                     'Name': face_name,
                     'image_name': image_name
                 }
-                if len(face_name) == 0:
-                    logging.error(NoDetection())
-                    raise NoDetection
                 db = Database()
             except mysql.connector.Error:
                 logging.error(DatabaseNoneError())
@@ -137,6 +134,7 @@ class FaceVerification:
                     db.insert_face_verify_status(image_name, face_name, verify)
                     if accuracy == "High":
                         db.insert_image_file(image_name, image_data)
+                        return jsonify(result, {"message": f"Image {image_name} saved successfully"})
                     db.close_connection()
                     return jsonify(result)
                 except Exception as e:
