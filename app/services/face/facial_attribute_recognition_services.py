@@ -6,6 +6,7 @@ from flask import jsonify
 from werkzeug.utils import secure_filename
 
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
+from app.services.face.face_detection_services import FaceLocationDetection
 from app.schema.image_schema import *
 from database.database import Database
 
@@ -56,12 +57,12 @@ class FacialAttributeRecognition:
                 image_name = secure_filename(image_file.filename)
                 logging.info(f'image_name: {image_name}')
 
-                try:
-                    # Process the image using emotions_detector
-                    emotions_detector.image_data = image_data
-                    emotions, age, gender = emotions_detector.facial_attribute_recognition()
-                except Exception as e:
-                    return str(e)
+                face_detector = FaceLocationDetection()
+                face_detector.image_data = image_data
+                face_locations = face_detector.facelocation()
+                # Process the image using emotions_detector
+                emotions_detector.image_data = image_data
+                emotions, age, gender = emotions_detector.facial_attribute_recognition()
 
                 # Create a response object
                 result = {
@@ -71,7 +72,7 @@ class FacialAttributeRecognition:
                     'gender': gender,
                 }
 
-                if not emotions:  # Check if no face locations were detected
+                if not face_locations:  # Check if no face locations were detected
                     logging.error(NoDetection())
                     raise NoDetection
 
