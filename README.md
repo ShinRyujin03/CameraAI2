@@ -607,7 +607,7 @@
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`, `medium`
   and `low`
 - The image will save in the database when in `high` level of accuracy only
-- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini` (Minimum elapsed time by default is 60 seconds and up to 80 seconds (20 seconds added) if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
+- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini` (Minimum elapsed time by default is 75 seconds and up to 90 seconds (15 seconds added) if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
 - Accuracy level rule:
   - `Low` level : `min_distance` < `medium_accuracy_recognition`
   - `Medium` level: `high_accuracy_recognition` < `min_distance` <= `medium_accuracy_recognition`
