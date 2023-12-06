@@ -8,6 +8,7 @@
     - [Installation](#installation)
     - [Running the Application](#running-the-application)
     - [API Usage](#api-usage)
+    - [Training and Testing image guide](#training-and-testing-image-guide)
 - [Default Database Information ](#default-database-information)
 - [Database Tables](#database-tables)
     - [`image` Table](#image-table)
@@ -113,6 +114,20 @@
 - The API returns JSON responses containing the requested data or error messages.
   See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more information
 
+### Training and Testing image guide
+- This guide is use for [Face Verification Endpoint](#face-verification)  and [Name Recognition Endpoint](#name-recognition) only
+#### Training Image
+- The path of `Training Image` folder is
+    ```
+    model/Training image
+    ```
+- You can request to either the  [Face Location Endpoint](#face-location) or [Facial Attribute Recognition Endpoint](#facial-attribute-recognition) in order to include the image in the database then type the person's name (sub-folder name) in the `face_name` column.
+#### Testing Image
+- The path of `Testing Image` folder is
+    ```
+    app/services/test/Testing image
+    ```
+- Thís folder used to test accuracy of [Face Verification Endpoint](#face-verification) and [Name Recognition Endpoint](#name-recognition) 
 ## Default Database Information
 
 - **Database Host**: localhost or 127.0.0.1
@@ -624,7 +639,7 @@
   3. Replace actual input at `image path`
 
   4. Close the file and run the command (Please replace `path_to_the_project` with your actual path):
-    ```bash
+    ```
     python3 path_to_the_project/CameraAI2/app/services/test/img_test.py
     ```
   5. The output is the `image.jpg`
@@ -663,7 +678,7 @@
     - The number of images per `face_name` in the database should be greater than or equal
       to `number_of_face_required` (recommended >= 4) to get the highest accuracy
     - You can do the test by running the `numb_face_name_test.py` program at:
-    ```bash
+    ```
     app/services/test/numb_face_name_test.py
     ```
 
