@@ -51,10 +51,14 @@ class NameRecognition:
         high_accuracy_name = []
         medium_accuracy_name = []
         low_accuracy_name = []
+        recognized_dict = {}
 
         high_accuracy_threshold = config.getfloat('name_recognition_config', 'high_accuracy_recognition')
+        highest_accuracy_threshold = high_accuracy_threshold - config.getfloat('name_recognition_config',
+                                                                                              'delta_distance_to_high_accuracy(-)')
         medium_accuracy_threshold = config.getfloat('name_recognition_config', 'medium_accuracy_recognition')
         low_accuracy_threshold = config.getfloat('name_recognition_config', 'low_accuracy_recognition')
+
         increase_time_turn = 0
         start_time = time.time()
         elapsed_time = 1
@@ -69,23 +73,18 @@ class NameRecognition:
                         last_min_distance = min_distance
                         min_distance = min(min_distance, distance[0])
                         recognized_face_name = known_face_names[face_loaded]
-                        if min_distance <= high_accuracy_threshold:
-                            if high_accuracy_name and min_distance < last_min_distance:
-                                high_accuracy_name[0] = str(recognized_face_name)
-                            else:
-                                high_accuracy_name.append(str(recognized_face_name))
-                            if min_distance <= (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')):
-                                break
-                        elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
-                            if medium_accuracy_name and min_distance < last_min_distance:
-                                medium_accuracy_name[0] = str(recognized_face_name)
-                            else:
-                                medium_accuracy_name.append(str(recognized_face_name))
-                        elif medium_accuracy_threshold < min_distance <= low_accuracy_threshold:
-                            if low_accuracy_name and min_distance < last_min_distance:
-                                low_accuracy_name[0] = str(recognized_face_name)
-                            else:
-                                low_accuracy_name.append(str(recognized_face_name))
+                        recognized_dict[min_distance] = recognized_face_name
+                        if min_distance < last_min_distance:
+                            if min_distance <= high_accuracy_threshold:
+                                if min_distance <= highest_accuracy_threshold:
+                                    high_accuracy_name.append(str(recognized_dict.get(min_distance)))
+                                    break
+                                else:
+                                    high_accuracy_name.append(str(recognized_dict.get(min_distance)))
+                            elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
+                                    medium_accuracy_name.append(str(recognized_dict.get(min_distance)))
+                            elif medium_accuracy_threshold < min_distance <= low_accuracy_threshold:
+                                    low_accuracy_name.append(str(recognized_dict.get(min_distance)))
                 face_loaded = face_loaded + 1
             elif (high_accuracy_threshold - config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(-)')) < min_distance < (high_accuracy_threshold + config.getfloat('name_recognition_config','delta_distance_to_high_accuracy(+)')) and increase_time_turn == 0:
                 start_time = time.time() - ((config.getint('name_recognition_config','recognition_elapsed_time')) - config.getint('name_recognition_config','increase_time'))
@@ -95,15 +94,15 @@ class NameRecognition:
             else:
                 break
         if high_accuracy_name:
-            print("high_accuracy_name:", high_accuracy_name[0])
+            print("high_accuracy_name:", high_accuracy_name[-1])
         else:
             print("high_accuracy_name: None")
         if medium_accuracy_name:
-            print("medium_accuracy_name:", medium_accuracy_name[0])
+            print("medium_accuracy_name:", medium_accuracy_name[-1])
         else:
             print("medium_accuracy_name: None")
         if low_accuracy_name:
-            print("low_accuracy_name:", low_accuracy_name[0])
+            print("low_accuracy_name:", low_accuracy_name[-1])
         else:
             print("low_accuracy_name: None")
         db.close_connection()
@@ -113,17 +112,17 @@ class NameRecognition:
             accuracy = "High"
             print("Accuracy: High")
             print("Min distance:", min_distance)
-            return high_accuracy_name[0], accuracy
+            return high_accuracy_name[-1], accuracy
         elif high_accuracy_threshold < min_distance <= medium_accuracy_threshold:
             accuracy = "Medium"
             print("Accuracy: Medium")
             print("Min distance:", min_distance)
-            return medium_accuracy_name[0], accuracy
+            return medium_accuracy_name[-1], accuracy
         elif medium_accuracy_threshold < min_distance <= low_accuracy_threshold:
             accuracy = "Low"
             print("Accuracy: Low")
             print("Min distance:", min_distance)
-            return low_accuracy_name[0], accuracy
+            return low_accuracy_name[-1], accuracy
         else:
             accuracy = "Low"
             print("Accuracy: Low")
