@@ -37,13 +37,11 @@ class FaceVerification:
             unknown_face_detector = FaceLocationDetection()
             unknown_face_detector.image_data = unknown_face
             unknown_face_locations = unknown_face_detector.facelocation()
-
-            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,
-                                                               model="large")
-
-            if not unknown_encoding:
+            if len(unknown_face_locations) == 0:
                 logging.error(NoDetection())
                 raise NoDetection
+            unknown_encoding = face_recognition.face_encodings(unknown_face_image, unknown_face_locations,
+                                                               model="large")
 
             min_distance = float('inf')
             face_loaded = 0
@@ -93,8 +91,6 @@ class FaceVerification:
                 print("Min distance:", min_distance)
                 verify = "not verified"
                 return accuracy, verify
-        except Exception as e:
-            return str(e)
         finally:
             db.close_connection()
 
