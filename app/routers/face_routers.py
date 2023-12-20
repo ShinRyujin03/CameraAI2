@@ -1,5 +1,5 @@
 import logging
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.handle.app_error import FileUnreachable
 from app.services.face.face_detection_services import FaceLocationDetection
 from app.services.face.face_landmarks_sevices import FaceLandmarksDetection
@@ -11,42 +11,59 @@ from app.services.face.facial_attribute_recognition_services import FacialAttrib
 face_router = Blueprint('face_router', __name__)
 
 
-# Route for face location
+
 @face_router.route('/face_location', methods=['POST'])
 def request_face_location():
     try:
-        image_file = request.files['image']  # Access the uploaded file
+        image_files = request.files.getlist('image')  # Access the list of uploaded files
     except Exception:
         logging.error(FileUnreachable())
         raise FileUnreachable
+
+    results = []
+
     face_detector = FaceLocationDetection()
-    face_result = face_detector.get_face_location(image_file)
-    return face_result
+    for image_file in image_files:
+        face_result = face_detector.get_face_location(image_file)
+        results.append(face_result.get_json())  # Extract JSON content from each response
+
+    return jsonify(results)
 
 
 # Route for face landmarks
 @face_router.route('/face_landmarks', methods=['POST'])
 def request_face_landmarks():
     try:
-        image_file = request.files['image']  # Access the uploaded file
+        image_files = request.files.getlist('image')  # Access the list of uploaded files
     except Exception:
         logging.error(FileUnreachable())
         raise FileUnreachable
+
+    results = []
+
     face_landmarks = FaceLandmarksDetection()
-    landmarks_result = face_landmarks.get_face_landmarks(image_file)
-    return landmarks_result
+    for image_file in image_files:
+        landmarks_result = face_landmarks.get_face_landmarks(image_file)
+        results.append(landmarks_result.get_json())  # Extract JSON content from each response
+    return jsonify(results)
 
 
 @face_router.route('/facial_attribute_recognition', methods=['POST'])
 def request_facial_attribute_recognition():
     try:
-        image_file = request.files['image']  # Access the uploaded file
+        image_files = request.files.getlist('image')  # Access the list of uploaded files
     except Exception:
         logging.error(FileUnreachable())
         raise FileUnreachable
+
+    results = []
+
     face_facial_attribute = FacialAttributeRecognition()
-    facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
-    return facial_attribute_result
+    for image_file in image_files:
+        facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
+        results.append(facial_attribute_result.get_json())  # Extract JSON content from each response
+    return jsonify(results)
+
 
 
 @face_router.route('/face_verify', methods=['POST'])
@@ -65,10 +82,16 @@ def request_face_verification():
 @face_router.route('/face_name_recognition', methods=['POST'])
 def request_name_recognition():
     try:
-        image_file = request.files['image']  # Access the uploaded file
+        image_files = request.files.getlist('image')  # Access the list of uploaded files
     except Exception:
         logging.error(FileUnreachable())
         raise FileUnreachable
-    name_recognition = NameRecognition()
-    name_recognition_result = name_recognition.get_face_name_recognition(image_file)
-    return name_recognition_result
+
+    name_recognition = NameRecognition()  # Create a single instance
+
+    results = []
+
+    for image_file in image_files:
+        name_recognition_result = name_recognition.get_face_name_recognition(image_file)
+        results.append(name_recognition_result.get_json())  # Extract JSON content from each response
+    return jsonify(results)

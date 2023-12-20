@@ -103,6 +103,8 @@
 - Use tools like `curl`, `Postman`, or your preferred HTTP client to send requests to the API endpoints.
   See the [Endpoint Usage](#endpoint-usage) for more information
 
+- Each requests can handling multiple image files (except [Face Verification Endpoint](#face-verification))
+
 ![Ảnh màn hình 2023-11-01 lúc 14.49.21.png](database/README.md%20image/API%20input.png)
 
 #### Sending Image Files
@@ -622,7 +624,7 @@
 - The level of accuracy can be configuring in `config.ini`, has 3 level of accuracy are `high`, `medium`
   and `low`
 - The image will save in the database when in `high` level of accuracy only
-- The elapsed time can be configuring at `recognition_elapsed_time` variable in `config.ini` (Minimum elapsed time by default is 75 seconds and up to 90 seconds (15 seconds added) if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
+- The elapsed time for each input image can be configuring at `recognition_elapsed_time` variable in `config.ini` (Minimum elapsed time by default is 75 seconds and up to 90 seconds for each image (15 seconds added) if `high_distance`-`delta(-)`<`min_distance`<`high_distance`+`delta(+)`)
 - Accuracy level rule:
   - `Low` level : `min_distance` < `medium_accuracy_recognition`
   - `Medium` level: `high_accuracy_recognition` < `min_distance` <= `medium_accuracy_recognition`
