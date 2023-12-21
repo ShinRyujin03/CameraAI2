@@ -21,7 +21,7 @@ def request_objects_location():
     objects_location = MultipleObjectDetection()
     for image_file in image_files:
         objects_result = objects_location.get_objects_location(image_file)
-        results.append(objects_result.get_json())  # Extract JSON content from each response
+        results.append(objects_result)  # Extract JSON content from each response
 
-    return jsonify(results)
+    return jsonify([result.get_json() for result in results])
 

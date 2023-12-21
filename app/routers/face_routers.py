@@ -25,9 +25,9 @@ def request_face_location():
     face_detector = FaceLocationDetection()
     for image_file in image_files:
         face_result = face_detector.get_face_location(image_file)
-        results.append(face_result.get_json())  # Extract JSON content from each response
+        results.append(face_result)  # Extract JSON content from each response
 
-    return jsonify(results)
+    return jsonify([result.get_json() for result in results])
 
 
 # Route for face landmarks
@@ -44,8 +44,8 @@ def request_face_landmarks():
     face_landmarks = FaceLandmarksDetection()
     for image_file in image_files:
         landmarks_result = face_landmarks.get_face_landmarks(image_file)
-        results.append(landmarks_result.get_json())  # Extract JSON content from each response
-    return jsonify(results)
+        results.append(landmarks_result)  # Extract JSON content from each response
+    return jsonify([result.get_json() for result in results])
 
 
 @face_router.route('/facial_attribute_recognition', methods=['POST'])
@@ -61,8 +61,8 @@ def request_facial_attribute_recognition():
     face_facial_attribute = FacialAttributeRecognition()
     for image_file in image_files:
         facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
-        results.append(facial_attribute_result.get_json())  # Extract JSON content from each response
-    return jsonify(results)
+        results.append(facial_attribute_result)  # Extract JSON content from each response
+    return jsonify([result.get_json() for result in results])
 
 
 
@@ -93,5 +93,6 @@ def request_name_recognition():
 
     for image_file in image_files:
         name_recognition_result = name_recognition.get_face_name_recognition(image_file)
-        results.append(name_recognition_result.get_json())  # Extract JSON content from each response
-    return jsonify(results)
+        results.append(name_recognition_result)  # Append each response object
+
+    return jsonify([result.get_json() for result in results])

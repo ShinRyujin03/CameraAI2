@@ -21,7 +21,7 @@ def request_human_location():
     human_location = HumanDetection()
     for image_file in image_files:
         human_result = human_location.get_human_location(image_file)
-        results.append(human_result.get_json())  # Extract JSON content from each response
+        results.append(human_result)  # Extract JSON content from each response
 
-    return jsonify(results)
+    return jsonify([result.get_json() for result in results])
 
