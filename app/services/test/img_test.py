@@ -1,17 +1,15 @@
 from PIL import Image
 from io import BytesIO
 
-def binary_to_image(binary_data, output_path):
-    # Assuming binary_data contains the image data in RGBA mode
-    image = Image.open(BytesIO(binary_data)).convert('RGB')
-    image.save(output_path)
+class BinaryToImage:
+    def binary_to_image(self,binary_file):
+        binary_data = binary_file.read()
 
-# Example usage:
-with open('/Users/macbookairm1/Desktop/face_metadata-image_file.bin', 'rb') as file:
-    binary_data = file.read()
+        # Convert binary data to an image
+        image = Image.open(BytesIO(binary_data)).convert('RGB')
 
-# Specify the path for the output image
-output_image_path = 'image.jpg'
-
-# Convert binary data to an image and save it
-binary_to_image(binary_data, output_image_path)
+        # Convert the PIL image to bytes
+        image_bytes = BytesIO()
+        image.save(image_bytes, format='JPEG')
+        image_bytes = image_bytes.getvalue()
+        return image_bytes

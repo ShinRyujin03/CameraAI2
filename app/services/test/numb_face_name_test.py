@@ -1,77 +1,63 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from io import BytesIO
 import configparser
 import os
-import mysql.connector
-import matplotlib.pyplot as plt
-
+from database.database import Database
 
 # Construct the relative path to config.ini
-config_path = os.path.realpath("../../config.ini")
+config_path = os.path.realpath("../config.ini")
+
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
 
-class Test_database:
-    def __init__(self):
-        self.conn = mysql.connector.connect(
-            host=config.get('db_config', 'db_host'),
-            user=config.get('db_config', 'db_user'),
-            password=config.get('db_config', 'db_password'),
-            database=config.get('db_config', 'db_name')
-        )
-        self.cursor = self.conn.cursor()
-    def get_image_files_and_name(self):
-        query = "SELECT image_file, face_name FROM face_metadata WHERE face_name IS NOT NULL AND image_file IS NOT NULL"
+class Plot:
+    def plot_face_names_histogram(self):
+        db = Database()
+        _, known_face_names = db.get_image_files_and_name()
 
-        self.cursor.execute(query)
-        results = self.cursor.fetchall()
+        # Assuming you have queried and calculated percentages already
+        face_names = known_face_names  # Example list of face_names
+        # Count the occurrences of each face name
+        face_name_counts = {name: face_names.count(name) for name in set(face_names)}
 
-        image_files = [result[0] for result in results if result[0] is not None]
-        face_names = [result[1] for result in results if result[1] is not None]
+        # Set the threshold for passing
+        threshold = config.getint('name_recognition_config', 'number_of_face_required')
 
-        return image_files, face_names
+        # Calculate pass and fail counts
+        pass_count = len([count for count in face_name_counts.values() if count > threshold])
+        fail_count = len(face_name_counts) - pass_count
 
-def plot_face_names_histogram(face_names):
-    # Count the occurrences of each face name
-    face_name_counts = {name: face_names.count(name) for name in set(face_names)}
+        # Print the results for each face name
+        pass_faces = [f"{name} ({count} times)" for name, count in face_name_counts.items() if count >= threshold]
+        fail_faces = [f"{name} ({count} times)" for name, count in face_name_counts.items() if count < threshold]
 
-    # Set the threshold for passing
-    threshold = config.getint('name_recognition_config', 'number_of_face_required')
+        print(f"Passed faces: {', '.join(pass_faces)}")
+        print(f"Failed faces: {', '.join(fail_faces)}")
 
-    # Calculate pass and fail counts
-    pass_count = len([count for count in face_name_counts.values() if count > threshold])
-    fail_count = len(face_name_counts) - pass_count
+        print(f"Face Pass: {pass_count}")
+        print(f"Face Fail: {fail_count}")
 
-    # Print the results for each face name
-    pass_faces = [f"{name} ({count} times)" for name, count in face_name_counts.items() if count >= threshold]
-    fail_faces = [f"{name} ({count} times)" for name, count in face_name_counts.items() if count < threshold]
+        # Create a bar chart
+        labels = list(face_name_counts.keys())
+        counts = list(face_name_counts.values())
 
-    print(f"Passed faces: {', '.join(pass_faces)}")
-    print(f"Failed faces: {', '.join(fail_faces)}")
+        fig, ax = plt.subplots(figsize=(16/2.2, 9/2.2))
+        ax.bar(labels, counts, color='blue')
+        # Draw a horizontal line at the threshold value
+        ax.axhline(y=threshold, color='red', linestyle='--', label=f'Threshold: {threshold}')
+        ax.set_xlabel('Face Names')
+        ax.set_ylabel('Frequency')
+        ax.set_title('Frequency of Face Names')
+        plt.xticks(rotation=45)
 
-    print(f"Face Pass: {pass_count}")
-    print(f"Face Fail: {fail_count}")
+        # Save the plot to a BytesIO object
+        img_stream = BytesIO()
+        plt.savefig(img_stream, format='png', bbox_inches='tight', pad_inches=0.1)
+        img_stream.seek(0)
 
-    # Create a bar chart
-    labels = list(face_name_counts.keys())
-    counts = list(face_name_counts.values())
+        plt.close()  # Close the figure to free up resources
 
-    fig, ax = plt.subplots(figsize=(16, 9))
-    ax.bar(labels, counts, color='blue')
-    # Draw a horizontal line at the threshold value
-    ax.axhline(y=threshold, color='red', linestyle='--', label=f'Threshold: {threshold}')
-    ax.set_xlabel('Face Names')
-    ax.set_ylabel('Frequency')
-    ax.set_title('Frequency of Face Names')
-    plt.xticks(rotation=45)
-
-    plt.show()
-
-
-# Assuming you have your list of face names
-db = Test_database()
-known_face_encodings, known_face_names = db.get_image_files_and_name()
-# Assuming you have queried and calculated percentages already
-face_names = known_face_names  # Example list of face_names
-
-# Call the function to plot and print results
-plot_face_names_histogram(face_names)
+        return img_stream

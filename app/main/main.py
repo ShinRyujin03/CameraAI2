@@ -16,6 +16,7 @@ from app.handle.app_error import handle_generic_error
 from app.routers.face_routers import face_router
 from app.routers.human_detection_routers import objects_router
 from app.routers.multiple_objects_detection_routers import multiple_objects_router
+from app.routers.test_routers import test_router
 
 
 # Construct the relative path to config.ini
@@ -33,7 +34,8 @@ app.register_blueprint(face_router, url_prefix=config.get('function_config', 'fa
 app.register_blueprint(objects_router, url_prefix=config.get('function_config', 'objects_prefix'))
 app.register_blueprint(multiple_objects_router,
                        url_prefix=config.get('function_config', 'multiple_objects_prefix'))
-
+app.register_blueprint(test_router,
+                       url_prefix=config.get('function_config', 'test_prefix'))
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
