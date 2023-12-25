@@ -18,10 +18,11 @@ def draw_face_locations():
         raise FileUnreachable
 
     face_locations = request.form['face_location']
-    # Draw face locations
+    zoom_factor = request.form['zoom']
+    # Draw face locations with zoom
     drawer = FaceLocationDrawer()
-    result_image_bytes = drawer.draw_face_locations(image_file, face_locations)
-    # Return the image data as part of the response
+    result_image_bytes = drawer.draw_face_locations(image_file, face_locations, zoom_factor)
+    # Return the zoomed image data as part of the response
     return send_file(io.BytesIO(result_image_bytes), mimetype='image/jpeg')
 
 @test_router.route('/binary_to_image', methods=['POST'])
@@ -31,9 +32,13 @@ def get_binary_to_image():
     except Exception:
         logging.error(FileUnreachable())
         raise FileUnreachable
-
-    bin_file = BinaryToImage()
-    image = bin_file.binary_to_image(binary_file)
+    zoom_factor = request.form['zoom']
+    try:
+        bin_file = BinaryToImage()
+        image = bin_file.binary_to_image(binary_file, zoom_factor)
+    except Exception as e:
+        print(e)
+        return "e"
     return send_file(BytesIO(image), mimetype='image/jpeg')
 
 
