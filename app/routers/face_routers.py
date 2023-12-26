@@ -8,6 +8,7 @@ from app.services.face.face_landmarks_sevices import FaceLandmarksDetection
 from app.services.face.face_recognition_services import NameRecognition
 from app.services.face.face_verification_services import FaceVerification
 from app.services.face.facial_attribute_recognition_services import FacialAttributeRecognition
+from app.handle.app_error import NoDetection,InvalidImageError
 
 # Create instances of the function classes
 face_router = Blueprint('face_router', __name__)
@@ -25,10 +26,20 @@ def request_face_location():
 
     face_detector = FaceLocationDetection()
     for image_file in image_files:
-        face_result = face_detector.get_face_location(image_file)
-        results.append(face_result)  # Extract JSON content from each response
-
-    return jsonify([result.get_json() for result in results])
+        try:
+            face_result = face_detector.get_face_location(image_file)
+            results.append(face_result)  # Extract JSON content from each response
+        except NoDetection:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise NoDetection
+        except InvalidImageError:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise InvalidImageError
+    return jsonify({"message": f"{len(results)} of {len(image_files)} photo processed successfully"},[result.get_json() for result in results])
 
 
 # Route for face landmarks
@@ -44,9 +55,20 @@ def request_face_landmarks():
 
     face_landmarks = FaceLandmarksDetection()
     for image_file in image_files:
-        landmarks_result = face_landmarks.get_face_landmarks(image_file)
-        results.append(landmarks_result)  # Extract JSON content from each response
-    return jsonify([result.get_json() for result in results])
+        try:
+            landmarks_result = face_landmarks.get_face_landmarks(image_file)
+            results.append(landmarks_result)  # Extract JSON content from each response
+        except NoDetection:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise NoDetection
+        except InvalidImageError:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise InvalidImageError
+    return jsonify({"message": f"{len(results)} of {len(image_files)} photo processed successfully"},[result.get_json() for result in results])
 
 
 @face_router.route('/facial_attribute_recognition', methods=['POST'])
@@ -61,9 +83,20 @@ def request_facial_attribute_recognition():
 
     face_facial_attribute = FacialAttributeRecognition()
     for image_file in image_files:
-        facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
-        results.append(facial_attribute_result)  # Extract JSON content from each response
-    return jsonify([result.get_json() for result in results])
+        try:
+            facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
+            results.append(facial_attribute_result)  # Extract JSON content from each response
+        except NoDetection:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise NoDetection
+        except InvalidImageError:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise InvalidImageError
+    return jsonify({"message": f"{len(results)} of {len(image_files)} photo processed successfully"},[result.get_json() for result in results])
 
 
 @face_router.route('/face_verify', methods=['POST'])
@@ -92,7 +125,18 @@ def request_name_recognition():
     results = []
 
     for image_file in image_files:
-        name_recognition_result = name_recognition.get_face_name_recognition(image_file)
-        results.append(name_recognition_result)  # Append each response object
+        try:
+            name_recognition_result = name_recognition.get_face_name_recognition(image_file)
+            results.append(name_recognition_result)  # Append each response object
+        except NoDetection:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise NoDetection
+        except InvalidImageError:
+            if len(image_files) > 1:
+                pass
+            else:
+                raise InvalidImageError
 
-    return jsonify([result.get_json() for result in results])
+    return jsonify({"message": f"{len(results)} of {len(image_files)} photo processed successfully"},[result.get_json() for result in results])

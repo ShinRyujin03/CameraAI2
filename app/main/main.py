@@ -1,5 +1,5 @@
-import os
 import sys
+import os
 
 project_path = os.environ.get('CAMERA_AI_PATH')
 
@@ -17,6 +17,7 @@ from app.routers.face_routers import face_router
 from app.routers.human_detection_routers import objects_router
 from app.routers.multiple_objects_detection_routers import multiple_objects_router
 from app.routers.test_routers import test_router
+
 
 # Construct the relative path to config.ini
 config_path = os.path.realpath("../config.ini")

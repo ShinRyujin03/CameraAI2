@@ -1,7 +1,5 @@
-import logging
-
 from flask import jsonify
-
+import logging
 
 class AppError(Exception):
     def __init__(self, message, status_code):
@@ -39,11 +37,9 @@ class NoImageError(AppError):
     def __init__(self):
         super().__init__(CustomError.NO_IMAGE['message'], CustomError.NO_IMAGE['code'])
 
-
 class FileUnreachable(AppError):
     def __init__(self):
         super().__init__(CustomError.FILE_UNREACHABLE['message'], CustomError.FILE_UNREACHABLE['code'])
-
 
 class NoFaceNameError(AppError):
     def __init__(self):
@@ -67,9 +63,7 @@ class OutputTooLongError(AppError):
 
 def handle_generic_error(error):
     response = {'error': error.args[0], 'status_code': getattr(error, 'status_code', 500)}
-    if error.args[0] == 'Face name not found. Please provide a valid name for the face.' or error.args[
-        0] == 'Image not found. Please upload a valid image file.' or error.args[
-        0] == "No face detected in the image. Please upload an image with a visible face.":
+    if error.args[0] == 'Face name not found. Please provide a valid name for the face.' or error.args[0] == 'Image not found. Please upload a valid image file.' or error.args[0] == "No face detected in the image. Please upload an image with a visible face.":
         logging.critical("404 Not Found")
         return jsonify(response), 404
     elif error.args[0] == 'Image unreachable. Make sure the file exists and is accessible.':
