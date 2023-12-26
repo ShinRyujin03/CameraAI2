@@ -1,13 +1,16 @@
-from app.services.test.face_location_test import FaceLocationDrawer
-from app.services.test.img_test import BinaryToImage
-from app.services.test.numb_face_name_test import Plot
-from app.handle.app_error import FileUnreachable
-from flask import Blueprint, request, send_file, jsonify
 import io
 import logging
 from io import BytesIO
 
+from flask import Blueprint, request, send_file
+
+from app.handle.app_error import FileUnreachable
+from app.services.test.face_location_test import FaceLocationDrawer
+from app.services.test.img_test import BinaryToImage
+from app.services.test.numb_face_name_test import Plot
+
 test_router = Blueprint('test_router', __name__)
+
 
 @test_router.route('/draw_face_locations', methods=['POST'])
 def draw_face_locations():
@@ -25,6 +28,7 @@ def draw_face_locations():
     # Return the zoomed image data as part of the response
     return send_file(io.BytesIO(result_image_bytes), mimetype='image/jpeg')
 
+
 @test_router.route('/binary_to_image', methods=['POST'])
 def get_binary_to_image():
     try:
@@ -33,12 +37,8 @@ def get_binary_to_image():
         logging.error(FileUnreachable())
         raise FileUnreachable
     zoom_factor = request.form['zoom']
-    try:
-        bin_file = BinaryToImage()
-        image = bin_file.binary_to_image(binary_file, zoom_factor)
-    except Exception as e:
-        print(e)
-        return "e"
+    bin_file = BinaryToImage()
+    image = bin_file.binary_to_image(binary_file, zoom_factor)
     return send_file(BytesIO(image), mimetype='image/jpeg')
 
 

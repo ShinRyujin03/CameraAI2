@@ -1,5 +1,7 @@
-from PIL import Image
 from io import BytesIO
+
+from PIL import Image
+
 
 class BinaryToImage:
     def binary_to_image(self, binary_file, zoom_factor):

@@ -1,4 +1,5 @@
 import matplotlib
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -12,6 +13,7 @@ config_path = os.path.realpath("../config.ini")
 # Create a configuration object
 config = configparser.ConfigParser()
 config.read(config_path)
+
 
 class Plot:
     def plot_face_names_histogram(self):
@@ -44,7 +46,7 @@ class Plot:
         labels = list(face_name_counts.keys())
         counts = list(face_name_counts.values())
 
-        fig, ax = plt.subplots(figsize=(16/2.2, 9/2.2))
+        fig, ax = plt.subplots(figsize=(16 / 2.2, 9 / 2.2))
         ax.bar(labels, counts, color='blue')
         # Draw a horizontal line at the threshold value
         ax.axhline(y=threshold, color='red', linestyle='--', label=f'Threshold: {threshold}')

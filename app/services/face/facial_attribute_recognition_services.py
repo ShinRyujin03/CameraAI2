@@ -6,8 +6,8 @@ from flask import jsonify
 from werkzeug.utils import secure_filename
 
 from app.handle.app_error import DatabaseNoneError, NoDetection, OutputTooLongError
-from app.services.face.face_detection_services import FaceLocationDetection
 from app.schema.image_schema import *
+from app.services.face.face_detection_services import FaceLocationDetection
 from database.database import Database
 
 # Construct the relative path to config.ini

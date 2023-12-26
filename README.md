@@ -633,7 +633,6 @@
 
 ## Testing Endpoints
 - **Prefix**:`/test`
-- **Description**: 
 
 ### Image Test (binary to image)
 - **Description**: This test is used to convert bytes strings file (`*.bin`) into image

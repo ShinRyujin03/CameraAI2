@@ -1,5 +1,7 @@
 import logging
+
 from flask import Blueprint, request, jsonify
+
 from app.handle.app_error import FileUnreachable
 from app.services.objects.human_detection_services import HumanDetection
 
@@ -24,4 +26,3 @@ def request_human_location():
         results.append(human_result)  # Extract JSON content from each response
 
     return jsonify([result.get_json() for result in results])
-

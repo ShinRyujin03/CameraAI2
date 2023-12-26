@@ -1,5 +1,7 @@
 import logging
+
 from flask import Blueprint, request, jsonify
+
 from app.handle.app_error import FileUnreachable
 from app.services.face.face_detection_services import FaceLocationDetection
 from app.services.face.face_landmarks_sevices import FaceLandmarksDetection
@@ -9,7 +11,6 @@ from app.services.face.facial_attribute_recognition_services import FacialAttrib
 
 # Create instances of the function classes
 face_router = Blueprint('face_router', __name__)
-
 
 
 @face_router.route('/face_location', methods=['POST'])
@@ -63,7 +64,6 @@ def request_facial_attribute_recognition():
         facial_attribute_result = face_facial_attribute.get_facial_attribute_recognition(image_file)
         results.append(facial_attribute_result)  # Extract JSON content from each response
     return jsonify([result.get_json() for result in results])
-
 
 
 @face_router.route('/face_verify', methods=['POST'])
