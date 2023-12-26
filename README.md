@@ -24,7 +24,7 @@
     - [`DeepFace` library](#deepface-library)
     - [`Yolo v8 nano` model](#yolo-v8-nano-model)
 - [Image Schema](#image-schema)
-- [Endpoints](#endpoints)
+- [Function Endpoints](#function-endpoints)
     - [Human Detection](#human-detection)
     - [Multiple Objects Detection](#multiple-objects-detection)
     - [Face Location](#face-location)
@@ -33,7 +33,8 @@
     - [Face Verification](#face-verification)
     - [Name Recognition](#name-recognition)
 - [Endpoint Usage](#endpoint-usage)
-- [Results visualize test](#results-visualize-test)
+- [Testing Endpoints](#testing-endpoints)
+    - [Image Test (binary to image)](#image-test-binary-to-image)
     - [Face Location Test](#face-location-test)
     - [Number of Face Image Test](#number-of-face-image-test)
 - [Error Handle](#error-handle)
@@ -114,7 +115,7 @@
 #### API Responses
 
 - The API returns JSON responses containing the requested data or error messages.
-  See the [Endpoints](#endpoints) and [Error Handle](#error-handle) for more information
+  See the [Function Endpoints](#function-endpoints) and [Error Handle](#error-handle) for more information
 
 ### Training and Testing image guide
 - This guide is use for [Face Verification Endpoint](#face-verification)  and [Name Recognition Endpoint](#name-recognition) only
@@ -281,7 +282,7 @@
 - **Datatype**: `png`, `jpg`, `jpeg` (str)
 - **Mandatory**: `True` (bool)
 
-## Endpoints
+## Function Endpoints
 
 - Postman
   workspace: https://www.postman.com/technical-observer-13837837/workspace/cameraai/collection/29180513-362c36ef-6fd3-4f9f-aa98-0976c5cbdb80?action=share&creator=29180513
@@ -629,46 +630,34 @@
   - `Low` level : `min_distance` < `medium_accuracy_recognition`
   - `Medium` level: `high_accuracy_recognition` < `min_distance` <= `medium_accuracy_recognition`
   - `High` level: `min_distance` <= `high_accuracy_recognition`
-## Results visualize test
 
-### Image Test
+## Testing Endpoints
+- **Prefix**:`/test`
+- **Description**: 
+
+### Image Test (binary to image)
 - **Description**: This test is used to convert bytes strings file (`*.bin`) into image
-- **Running the Application**
-  1. Download bytes strings file (`*.bin`) from the database (in `face_metadata` or `image` table)
-
-  2. Open file `app/services/test/img_test.py` (not run)
-
-  3. Replace actual input at `image path`
-
-  4. Close the file and run the command (Please replace `path_to_the_project` with your actual path):
-    ```
-    python3 path_to_the_project/CameraAI2/app/services/test/img_test.py
-    ```
-  5. The output is the `image.jpg`
+- **Endpoint**: `/binary_to_image`
+- **Method**: POST
 - **Example Result**:
-    - ***Input (Please replace actual input in the code file)***
+    - ***Input***
        ```  
        file = "face_metadata-image_file.bin"
+       zoom = 0.5
        ```
     - ***Output***:    
       ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/README.md%20image/Test%20output.png)
 
 ### Face Location Test
-- **Description**: The Face Location Test is designed to draw rectangles around faces in images to visualize the results of the `face_location` endpoint. Below is the visual representation of the test:
-- **Running the Application**
-  1. Open file `app/services/test/face_location_test.py` (not run)
-
-  2. Replace actual input at `image path` and `face_location`
-
-  3. Close the file and run the command (Please replace `path_to_the_project` with your actual path):
-    ```bash
-    python3 path_to_the_project/CameraAI2/app/services/test/face_location_test.py
-    ```
+- **Description**: The Face Location Test is designed to draw rectangles around faces in images to visualize the results of the `face_location` endpoint.
+- **Endpoint**: `/draw_face_locations`
+- **Method**: POST
 - **Example Result**: 
     - ***Input*** 
        ```  
-       image = "image/yujin 4.jpeg"
-       face_locations = [(73, 128, 135, 66)] 
+       image = "yujin 4.jpeg"
+       face_locations = 73, 128, 135, 66 
+       zoom = 2
        ```
     - ***Output***:    
       ![Ảnh màn hình 2023-11-01 lúc 15.47.52.png](database/README.md%20image/Yujin%20md.png)
@@ -679,11 +668,8 @@
     - The Number of Face Image Test analyzes the frequency of different face names detected in the dataset. It calculates the occurrence of each face name and provides insights into the distribution. The test also determines the pass and fail counts based on a predefined threshold.
     - The number of images per `face_name` in the database should be greater than or equal
       to `number_of_face_required` (recommended >= 4) to get the highest accuracy
-    - You can do the test by running the `numb_face_name_test.py` program at:
-    ```
-    app/services/test/numb_face_name_test.py
-    ```
-
+- **Endpoint**: `/plot_face_names_histogram`
+- **Method**: GET
 - **Example Result**:
     ```
     Passed faces: Rosé (13 times), Jennie (5 times), Ryujin (13 times), Chaeryeong (5 times), NaNa (4 times), Lisa (11 times), Kazuha (6 times), Eunchae (4 times), Yeji (8 times), Irene (4 times), Rei (14 times), Yujin (7 times), IU (14 times), Sumin (4 times), Jisoo (5 times), Jiwoo (8 times), Wonyoung (10 times), Yuna (8 times), Sakura (8 times)
@@ -758,6 +744,7 @@ emotions = 250
 face_prefix = /face
 objects_prefix = /objects
 multiple_objects_prefix = /m_objects
+test_prefix = /test
 
 [face_detection_config]
 upsample_image = 1
@@ -771,7 +758,7 @@ low_accuracy_verification = 0.49
 medium_accuracy_verification = 0.45
 high_accuracy_verification = 0.37
 verification_elapsed_time = 60
-delta_distance = 0.03
+delta_distance = 0.035
 
 [name_recognition_config]
 low_accuracy_recognition = 0.43
@@ -788,9 +775,7 @@ model_path = ../../model/yolov8n.pt
 round_result = 5
 label_class = 0
 
-
 [objects_detection_config]
 model_path = ../../model/yolov8n.pt
 round_result = 5
-
 ```
